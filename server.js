@@ -6,6 +6,7 @@ app.http().io();
 app.use(express.cookieParser());
 app.use(express.session({secret: '1234567890QWERTY'}));
 
+var port = process.env.PORT || 3000;
 var usersOnline = [];
 var questionIds = {};
 var idIndex = 0;
@@ -16,7 +17,7 @@ var tempObject5 = [];
 
 app.io.route('readyToLogin', function (req) {
     if (req.session.lognum == 1) {
-        req.io.emit("goToChat", "http://localhost:3000/chat.html");
+        req.io.emit("goToChat", "http://localhost:" + port + "/chat.html");
         console.log("redirected client to chat page - user is already logged in");
     }
 });
@@ -28,7 +29,7 @@ app.io.route('readyInput', function (req) {
     console.log('got readyInput status - user not logged in. User is assigned the username ' + req.session.username);
     req.session.lognum = 1;
     req.session.save(function () {
-        req.io.emit("goToChat", "http://localhost:3000/chat.html");
+        req.io.emit("goToChat", "http://localhost:" + port + "/chat.html");
     });
 });
 
@@ -36,7 +37,7 @@ app.io.route('readyInput', function (req) {
 
 app.io.route('readyToChat', function (req) {
     if (req.session.lognum != 1) {
-        req.io.emit("goToLogin", "http://localhost:3000");
+        req.io.emit("goToLogin", "http://localhost:" + port);
         console.log("redirected client to login page - user not logged in");
     } else {
         var username = req.session.username;
@@ -90,7 +91,7 @@ app.io.route('logout', function (req) {
     req.session.lognum = 0;
     req.session.save(function () {
         app.io.broadcast('logoutUser', username);
-        req.io.emit("goToLogin", "http://localhost:3000/");
+        req.io.emit("goToLogin", "http://localhost:" + port);
         console.log("redirected client to login page due to logout");
         console.log(username + "has been logged out");
     });
@@ -173,4 +174,4 @@ app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
 
-app.listen(3000);
+app.listen(port);

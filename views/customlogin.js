@@ -3,7 +3,7 @@ $(document).ready(function () {
     var myUsername;
     var code;
 
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect(window.location.hostname);
 
     socket.emit('readyToLogin');
 
