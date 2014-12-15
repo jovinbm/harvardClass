@@ -113,65 +113,76 @@ app.io.route('clientMessage', function (req) {
     console.log(questionIds[questionId]);
 });
 
-
+//handling login.html and chat.html requests
 app.get('/', function (req, res) {
-    res.sendfile("views/login.html");
+    res.sendfile("public/login.html");
 });
 
 app.get('/login.html', function (req, res) {
-    res.sendfile("views/login.html");
+    res.sendfile("public/login.html");
 });
 
 app.get('/chat.html', function (req, res) {
-    res.sendfile("views/chat.html");
+    res.sendfile("public/chat.html");
 });
 
-app.get('/css/bootstrap.min.css', function (req, res) {
-    res.sendfile("views/bootstrap.min.css");
-});
 
-app.get('/js/jquery-2.1.1.min.js', function (req, res) {
-    res.sendfile("views/jquery-2.1.1.min.js");
-});
-
-app.get('/js/bootstrap.min.js', function (req, res) {
-    res.sendfile("views/bootstrap.min.js");
+//handling css requests
+app.get('/css/assets/bootstrap.min.css', function (req, res) {
+    res.sendfile("css/assets/bootstrap.min.css");
 });
 
 app.get('/css/custom.css', function (req, res) {
-    res.sendfile("views/custom.css");
+    res.sendfile("css/custom.css");
 });
 
-app.get('/js/respond.js', function (req, res) {
-    res.sendfile("views/respond.js");
+
+//handling font requests
+app.get('/css/fonts/glyphicons-halflings-regular.woff', function (req, res) {
+    res.sendfile("css/fonts/glyphicons-halflings-regular.woff");
 });
 
-app.get('/js/customchat.js', function (req, res) {
-    res.sendfile("views/customchat.js");
+app.get('/css/fonts/glyphicons-halflings-regular.eot', function (req, res) {
+    res.sendfile("css/fonts/glyphicons-halflings-regular.eot");
+});
+
+app.get('/css/fonts/glyphicons-halflings-regular.svg', function (req, res) {
+    res.sendfile("css/fonts/glyphicons-halflings-regular.svg");
+});
+
+app.get('/css/fonts/glyphicons-halflings-regular.ttf', function (req, res) {
+    res.sendfile("css/fonts/glyphicons-halflings-regular.ttf");
+});
+
+
+//handling js requests
+app.get('/js/assets/jquery-2.1.1.min.js', function (req, res) {
+    res.sendfile("js/assets/jquery-2.1.1.min.js");
+});
+
+app.get('/js/assets/bootstrap.min.js', function (req, res) {
+    res.sendfile("js/assets/bootstrap.min.js");
+});
+
+app.get('/js/assets/respond.js', function (req, res) {
+    res.sendfile("js/assets/respond.js");
 });
 
 app.get('/js/customlogin.js', function (req, res) {
-    res.sendfile("views/customlogin.js");
+    res.sendfile("js/customlogin.js");
 });
 
-app.get('/fonts/glyphicons-halflings-regular.woff', function (req, res) {
-    res.sendfile("views/fonts/glyphicons-halflings-regular.woff");
+app.get('/js/customchat.js', function (req, res) {
+    res.sendfile("js/customchat.js");
 });
 
-app.get('/fonts/glyphicons-halflings-regular.eot', function (req, res) {
-    res.sendfile("views/fonts/glyphicons-halflings-regular.eot");
-});
 
-app.get('/fonts/glyphicons-halflings-regular.svg', function (req, res) {
-    res.sendfile("views/fonts/glyphicons-halflings-regular.svg");
-});
 
-app.get('/fonts/glyphicons-halflings-regular.ttf', function (req, res) {
-    res.sendfile("views/fonts/glyphicons-halflings-regular.ttf");
-});
-
+//handling the socket.io request
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
 
+
+//setup server to listen at port
 app.listen(port);
