@@ -17,7 +17,7 @@ var tempObject5 = [];
 
 app.io.route('readyToLogin', function (req) {
     if (req.session.lognum == 1) {
-        req.io.emit("goToChat", "http://localhost:" + port + "/chat.html");
+        req.io.emit("goToChat", "/chat.html");
         console.log("redirected client to chat page - user is already logged in");
     }
 });
@@ -29,7 +29,7 @@ app.io.route('readyInput', function (req) {
     console.log('got readyInput status - user not logged in. User is assigned the username ' + req.session.username);
     req.session.lognum = 1;
     req.session.save(function () {
-        req.io.emit("goToChat", "http://localhost:" + port + "/chat.html");
+        req.io.emit("goToChat", "/chat.html");
     });
 });
 
@@ -37,7 +37,7 @@ app.io.route('readyInput', function (req) {
 
 app.io.route('readyToChat', function (req) {
     if (req.session.lognum != 1) {
-        req.io.emit("goToLogin", "http://localhost:" + port);
+        req.io.emit("goToLogin", "/login.html");
         console.log("redirected client to login page - user not logged in");
     } else {
         var username = req.session.username;
@@ -91,7 +91,7 @@ app.io.route('logout', function (req) {
     req.session.lognum = 0;
     req.session.save(function () {
         app.io.broadcast('logoutUser', username);
-        req.io.emit("goToLogin", "http://localhost:" + port);
+        req.io.emit("goToLogin", "/login.html");
         console.log("redirected client to login page due to logout");
         console.log(username + "has been logged out");
     });

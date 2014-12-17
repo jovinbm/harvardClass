@@ -19,7 +19,8 @@ $(document).ready(function () {
     });
 
     socket.on('goToChat', function (content) {
-        window.location.href = content;
+        // window.location.href = window.location.host + content;
+        window.location.replace(content);
     });
 
 });
