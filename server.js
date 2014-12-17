@@ -1,12 +1,18 @@
-var express = require('express');
-var app = express();
-var app = require('express.io')();
-app.http().io();
+/**
+ * Module dependencies.
+ */
+
+var express = require('express.io')
+var app = express().http().io()
+var port = process.env.PORT || 3000;
+
+var routes = require('./routes');
+var path = require('path');
+
 
 app.use(express.cookieParser());
 app.use(express.session({secret: '1234567890QWERTY'}));
 
-var port = process.env.PORT || 3000;
 var usersOnline = [];
 var questionIds = {};
 var idIndex = 0;
@@ -114,74 +120,23 @@ app.io.route('clientMessage', function (req) {
 });
 
 //handling login.html and chat.html requests
-app.get('/', function (req, res) {
-    res.sendfile("public/login.html");
-});
-
-app.get('/login.html', function (req, res) {
-    res.sendfile("public/login.html");
-});
-
-app.get('/chat.html', function (req, res) {
-    res.sendfile("public/chat.html");
-});
-
+app.get('/', routes.loginHtml);
+app.get('/login.html', routes.loginHtml);
+app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
-app.get('/css/assets/bootstrap.min.css', function (req, res) {
-    res.sendfile("css/assets/bootstrap.min.css");
-});
-
-app.get('/css/custom.css', function (req, res) {
-    res.sendfile("css/custom.css");
-});
-
-
-//handling font requests
-app.get('/css/fonts/glyphicons-halflings-regular.woff', function (req, res) {
-    res.sendfile("css/fonts/glyphicons-halflings-regular.woff");
-});
-
-app.get('/css/fonts/glyphicons-halflings-regular.eot', function (req, res) {
-    res.sendfile("css/fonts/glyphicons-halflings-regular.eot");
-});
-
-app.get('/css/fonts/glyphicons-halflings-regular.svg', function (req, res) {
-    res.sendfile("css/fonts/glyphicons-halflings-regular.svg");
-});
-
-app.get('/css/fonts/glyphicons-halflings-regular.ttf', function (req, res) {
-    res.sendfile("css/fonts/glyphicons-halflings-regular.ttf");
-});
-
+app.get('/css/assets/bootstrap.min.css', routes.bootstrapCss);
+app.get('/css/custom.css', routes.customCss);
 
 //handling js requests
-app.get('/js/assets/jquery-2.1.1.min.js', function (req, res) {
-    res.sendfile("js/assets/jquery-2.1.1.min.js");
-});
-
-app.get('/js/assets/bootstrap.min.js', function (req, res) {
-    res.sendfile("js/assets/bootstrap.min.js");
-});
-
-app.get('/js/assets/respond.js', function (req, res) {
-    res.sendfile("js/assets/respond.js");
-});
-
-app.get('/js/customlogin.js', function (req, res) {
-    res.sendfile("js/customlogin.js");
-});
-
-app.get('/js/customchat.js', function (req, res) {
-    res.sendfile("js/customchat.js");
-});
-
-
+app.get('/js/assets/jquery-2.1.1.min.js', routes.jqueryJs);
+app.get('/js/assets/bootstrap.min.js', routes.bootstrapJs);
+app.get('/js/assets/respond.js', routes.respondJs);
+app.get('/js/customlogin.js', routes.loginJs);
+app.get('/js/customchat.js', routes.chatJs);
 
 //handling the socket.io request
-app.get('/socket.io/socket.io.js', function (req, res) {
-    res.sendfile("socket.io/socket.io.js");
-});
+app.get('/socket.io/socket.io.js', routes.socketIo);
 
 
 //setup server to listen at port
