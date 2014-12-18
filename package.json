@@ -1,20 +1,19 @@
 {
   "author": "Jovin Mwilanga",
   "license": "ISC",
-
   "name": "theHarvardClassroom",
   "version": "1.0.0",
   "description": "Harvard Question Website",
   "main": "server.js",
   "dependencies": {
-    "express": "^3.4.8",
+    "express": "^3.18.6",
     "express.io": "^1.1.13",
-    "socket.io": "^1.2.1",
-    "jade": "^1.8.1"
+    "jade": "^1.8.1",
+    "socket.io": "^1.2.1"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server"
   }
 }
