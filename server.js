@@ -140,4 +140,6 @@ app.get('/socket.io/socket.io.js', routes.socketIo);
 
 
 //setup server to listen at port
-app.listen(port);
+app.listen(port, function(){
+    console.log("Server listening on port : " + port);
+});
