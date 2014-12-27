@@ -51,6 +51,7 @@
 </div>
 <!--end of nav-->
 
+<!--start of jumbotron-->
 <div class='container'>
 
     <!--the text-center class centers everything in it-->
@@ -67,8 +68,18 @@
     </div>
 
 </div>
+<!--end of jumbotron-->
 
-<div class="container">
+<!--start of login with Harvard ID-->
+<div class="container text-center">
+    <button type="submit" class="btn btn-default btn-danger btn-lg" id="harvardID">Log in with Harvard ID</button>
+</div>
+<!--end of login with Harvard ID-->
+
+
+
+<!--start of custom student login form-->
+<div class="container" style="display: none">
     <form>
         <div class="form-group">
             <label for="customUsername">Username</label>
@@ -83,10 +94,29 @@
         <button type="submit" class="btn btn-default btn-block" id="toClass">Get in Class</button>
     </form>
 </div>
+<!--end of custom student login form-->
 
+
+
+<!--start of instructor login form-->
+<div class="container" style="display: none">
+    <form>
+        <div class="form-group">
+            <label for="email">Instructor's Email</label>
+            <input type="text" class="form-control" id="email" placeholder="Please enter your Email Address">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+
+        <button type="submit" class="btn btn-default btn-block" id="toClass">Sign In</button>
+    </form>
+</div>
+<!--end of instructor login form-->
 
 <!--start of footer-->
-
 <div class='navbar navbar-default navbar-fixed-bottom'>
     <!--'container div makes sure of correct alignment-->
     <div class="container">
