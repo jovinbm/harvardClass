@@ -17,7 +17,6 @@ var sessions = require('./functions/sessions.js');
 //load the event Handlers
 var event_handlers = require('./event_handlers/event_handlers.js');
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
