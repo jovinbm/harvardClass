@@ -19,27 +19,12 @@ exports.chatHtml = function (req, res) {
 };
 
 //handling css requests
-exports.bootstrapCss = function (req, res) {
-    res.sendfile("public/stylesheets/assets/bootstrap.min.css");
-};
-
 exports.customCss = function (req, res) {
     res.sendfile("public/stylesheets/custom.css");
 };
 
 
 //handling js requests
-exports.jqueryJs = function (req, res) {
-    res.sendfile("public/javascripts/assets/jquery-2.1.1.min.js");
-};
-
-exports.bootstrapJs = function (req, res) {
-    res.sendfile("public/javascripts/assets/bootstrap.min.js");
-};
-
-exports.respondJs = function (req, res) {
-    res.sendfile("public/javascripts/assets/respond.js");
-};
 exports.loginJs = function (req, res) {
     res.sendfile("public/javascripts/customlogin.js");
 };
