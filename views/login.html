@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>theHarvardClass - Login</title>
+
+    <!-- loads bootstrap.css -->
+    <!-- <link href="css/assets/bootstrap.min.css" rel="stylesheet"> : Offline Version -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- loads custom css file -->
+    <link rel="stylesheet" href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div id="welcome">
+    <h1>the HARVARD CLASSROOM</h1>
+</div>
+
+<div class = "col-md-3"></div>
+
+<form class="col-md-6" id="loginform">
+    <div class="form-group">
+        <input type="text" class="form-control input-lg" placeholder="Custom Username" id="customUsername">
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control input-lg" placeholder="Class Code" id="customCode">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary btn-lg btn-block" class="buttonback" id="toClass">Get in Class</button>
+    </div>
+</form>
+
+<div class = "col-md-3"></div>
+
+
+<!-- JAVASCRIPT -->
+
+<!-- socket.io javascript -->
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+
+<!-- jquery -->
+<!-- <script src="js/assets/jquery-2.1.1.min.js"></script> = Offline version -->
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- Boostrap.js -->
+<!-- <script src="js/assets/bootstrap.min.js"></script> = Offline Version -->
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
+<!-- <script src="js/assets/respond.js"></script> = Offline Version -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
+<!-- customlogin javascript file: should be loaded after jquery-->
+<script type="text/javascript" src="js/customlogin.js"></script>
+
+
+</body>
+</html>

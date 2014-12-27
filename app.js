@@ -1,0 +1,145 @@
+var express = require('express.io');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+var routes = require('./routes/index');
+
+var app = express().http().io();
+
+// load the functions
+var functions = require('./functions/functions.js');
+var sessions = require('./functions/sessions.js');
+
+
+//load the event Handlers
+var event_handlers = require('./event_handlers/event_handlers.js');
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(express.session({secret: '1234567890QWERTY'}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+//define all routing
+//handling login.html and chat.html requests
+app.get('/', routes.loginHtml);
+app.get('/login.html', routes.loginHtml);
+app.get('/chat.html', routes.chatHtml);
+
+//handling css requests
+app.get('/css/assets/bootstrap.min.css', routes.bootstrapCss);
+app.get('/css/custom.css', routes.customCss);
+
+//handling js requests
+app.get('/js/assets/jquery-2.1.1.min.js', routes.jqueryJs);
+app.get('/js/assets/bootstrap.min.js', routes.bootstrapJs);
+app.get('/js/assets/respond.js', routes.respondJs);
+app.get('/js/customlogin.js', routes.loginJs);
+app.get('/js/customchat.js', routes.chatJs);
+
+//handling the socket.io request
+app.get('/socket.io/socket.io.js', routes.socketIo);
+
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+//handling events
+app.io.route('readyInput', function (req) {
+    functions.consoleLogger('READY_INPUT event received');
+    req.session.username = req.data;
+    sessions.toggleLoggedInSession(req, 1);
+    req.session.save();
+    var r_username;
+    r_username = req.session.username;
+
+    event_handlers.readyInput(req, app, r_username);
+});
+
+app.io.route('readyToChat', function (req) {
+    functions.consoleLogger('READY_TO_CHAT event received');
+    var r_username;
+    r_username = req.session.username;
+
+    event_handlers.readyToChat(req, app, r_username);
+});
+
+app.io.route('clientMessage', function (req) {
+    functions.consoleLogger('CLIENT_MESSAGE event received');
+    var r_username;
+    r_username = req.session.username;
+    var r_question;
+    r_question = req.data;
+
+    event_handlers.clientMessage(app, req, r_username, r_question);
+});
+
+app.io.route('upvote', function (req) {
+    functions.consoleLogger('UPVOTE event received');
+    var r_username;
+    r_username = req.session.username;
+    var r_id;
+    r_id = req.data;
+
+    event_handlers.upvote(req, app, r_username, r_id);
+});
+
+app.io.route('logout', function (req) {
+    functions.consoleLogger('LOGOUT event received');
+    sessions.toggleLoggedInSession(req, 0);
+    req.session.save();
+    var r_username;
+    r_username = req.data;
+
+    event_handlers.logout(req, app, r_username);
+});
+
+
+//start the server
+var port = process.env.PORT || 3000;
+
+//setup server to listen at port
+app.listen(port, function () {
+    console.log("Server listening on port : " + port);
+});
