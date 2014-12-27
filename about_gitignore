@@ -32,6 +32,9 @@ Temporary Items
 
 
 
+#ignoring node_modules
+node_modules/
+
 
 
 
@@ -235,6 +238,7 @@ xcuserdata
 *.moved-aside
 DerivedData
 *.xcuserstate
+
 
 
 #end======================================================================
