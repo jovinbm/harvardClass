@@ -43,8 +43,8 @@ module.exports = {
 
         functions.eventBroadcaster(app, 'sender', r_username);
         functions.eventEmit(app, 'sender', r_username);
-        functions.eventBroadcaster(app, 'serverMessage', r_username);
-        functions.eventEmit(app, 'serverMessage', r_username);
+        functions.eventBroadcaster(app, 'serverMessage', r_question);
+        functions.eventEmit(app, 'serverMessage', r_question);
 
         questionId = functions.makeQuestionId(idIndex);
         functions.consoleLogger("clientMessage: Generated the index " + idIndex);

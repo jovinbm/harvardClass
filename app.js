@@ -39,15 +39,11 @@ app.get('/login.html', routes.loginHtml);
 app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
-app.get('/css/assets/bootstrap.min.css', routes.bootstrapCss);
-app.get('/css/custom.css', routes.customCss);
+app.get('/custom.css', routes.customCss);
 
 //handling js requests
-app.get('/js/assets/jquery-2.1.1.min.js', routes.jqueryJs);
-app.get('/js/assets/bootstrap.min.js', routes.bootstrapJs);
-app.get('/js/assets/respond.js', routes.respondJs);
-app.get('/js/customlogin.js', routes.loginJs);
-app.get('/js/customchat.js', routes.chatJs);
+app.get('/customlogin.js', routes.loginJs);
+app.get('/customchat.js', routes.chatJs);
 
 //handling the socket.io request
 app.get('/socket.io/socket.io.js', routes.socketIo);
