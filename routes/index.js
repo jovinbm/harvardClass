@@ -4,7 +4,7 @@ var sessions = require('../functions/sessions.js');
 //handling login.html and chat.html requests
 exports.loginHtml = function (req, res) {
     if(sessions.checkIfLoggedIn(req)){
-        res.redirect("chat.html");
+        res.redirect("chat2.html");
     }else {
         res.sendfile("views/login.html");
     }
@@ -12,7 +12,7 @@ exports.loginHtml = function (req, res) {
 
 exports.chatHtml = function (req, res) {
     if (sessions.checkIfLoggedIn(req)) {
-        res.sendfile("views/chat.html");
+        res.sendfile("views/chat2.html");
     }else{
         res.redirect("login.html");
     }
@@ -20,7 +20,7 @@ exports.chatHtml = function (req, res) {
 
 //handling css requests
 exports.customCss = function (req, res) {
-    res.sendfile("public/stylesheets/custom.css");
+    res.sendfile("public/stylesheets/custom2.css");
 };
 
 exports.loginCss = function (req, res) {
@@ -34,7 +34,7 @@ exports.loginJs = function (req, res) {
 };
 
 exports.chatJs = function (req, res) {
-    res.sendfile("public/javascripts/customchat.js");
+    res.sendfile("public/javascripts/customchat2.js");
 };
 
 //handling the socket.io request

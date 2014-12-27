@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Harvard Website to ask questions in class"/>
+    <meta name="author" content="Jovin Mwilanga"/>
+
+    <title>HarvardClass</title>
+
+    <!-- loads bootstrap.css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!--loads font awesome-->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- loads custom css file -->
+    <link rel="stylesheet" href="custom.css" rel="stylesheet">
+
+</head>
+<body>
+
+
+<!--start of nav-->
+
+<!--the class static-top sticks nav bar at top, and fixed-top just fixes it at top-->
+<div class="navbar navbar-inverse navbar-static-top">
+
+    <!--'container' div makes sure our content is well centered on the screen-->
+    <div class="container">
+        <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> ClassName</a>
+
+        <!--button to target the navbar-right which will appear on collapse of navbar items-->
+        <button class='navbar-toggle' data-toggle="collapse" data-target=".navHeaderCollapse">
+
+            <!--create the breadcrumb-->
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+
+        </button>
+
+        <!--this navbar will be collapsed on mobile-->
+        <div class="collapse navbar-collapse navHeaderCollapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li id='signInName'><a href="#">About</a></li>
+                <li id="logout"><a href="#">Beta!</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--end of nav-->
+
+<!--middle container for newsfeed, top voted questions and online users-->
+<div class="container">
+
+    <div class="row">
+
+        <!--column for newsfeed-->
+        <div class="col-lg-7 col-md-6 col-sm-6">
+
+            <p><span>Question Feed: </span><span>Date</span></p>
+            <table class="table table-striped question_feed">
+
+                <tr class="a13">
+                    <td class="senderName">Jovin</td>
+                    <td>Thank you all</td>
+                    <td class="questionTime">20:10</p></td>
+                    <td align='center'>
+                        <button type="button" class="a13b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a12">
+                    <td class="senderName">Prasad</td>
+                    <td>It's always better to learn theory and simultaneously put that theory into practise by working
+                        on some projects(basically apply what you have studied in the projects). That way things you
+                        study will be in your head for long time.
+                    </td>
+                    <td class="questionTime">20:07</p></td>
+                    <td align='center'>
+                        <button type="button" class="a12b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a11">
+                    <td class="senderName">Jovin</td>
+                    <td>Is it better to work on projects and do coding problems or learn more theory (e.g. operating
+                        systems, compilers)?
+                    </td>
+                    <td class="questionTime">20:06</p></td>
+                    <td align='center'>
+                        <button type="button" class="a11b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a10">
+                    <td class="senderName">Simon</td>
+                    <td>Reading a lot of programming books and never touching the keyboard.</td>
+                    <td class="questionTime">20:06</p></td>
+                    <td align='center'>
+                        <button type="button" class="a10b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a9">
+                    <td class="senderName">Phil</td>
+                    <td>What's the worst way to learn programming?</td>
+                    <td class="questionTime">20:05</p></td>
+                    <td align='center'>
+                        <button type="button" class="a9b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a8">
+                    <td class="senderName">Mwilanga</td>
+                    <td>The flippant (but obligatory) short answer is, "Whatever they tell you to." Of course, within
+                        this there is nuance and some other considerations to be made. Most important: Stay. Calm. There
+                        is no way you're going to remember all of the stuff I'm about to say, but if you remember
+                        anything, remember to remain calm. If clarity of thought was ever important, it will be in the
+                        proceeding moments.
+                    </td>
+                    <td class="questionTime">20:01</p></td>
+                    <td align='center'>
+                        <button type="button" class="a8b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a7">
+                    <td class="senderName">Mwilanga</td>
+                    <td>Haha, nice one!</td>
+                    <td class="questionTime">20:01</p></td>
+                    <td align='center'>
+                        <button type="button" class="a7b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a6">
+                    <td class="senderName">Jovin</td>
+                    <td>What should you do if someone puts a gun to your head? By pointing a gun to your head, rather
+                        than outright killing you, they are most likely after something other than your life, therefore
+                        in such a situation, rules #1-10 are to stay calm.
+                    </td>
+                    <td class="questionTime">19:56</p></td>
+                    <td align='center'>
+                        <button type="button" class="a6b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a5">
+                    <td class="senderName">Jovin</td>
+                    <td>Here comes the real question</td>
+                    <td class="questionTime">19:54</p></td>
+                    <td align='center'>
+                        <button type="button" class="a5b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a4">
+                    <td class="senderName">Mwilanga</td>
+                    <td>Hello there! I am well thank you</td>
+                    <td class="questionTime">19:53</p></td>
+                    <td align='center'>
+                        <button type="button" class="a4b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a3">
+                    <td class="senderName">Jovin</td>
+                    <td>Hello, How are you all feeling today?</td>
+                    <td class="questionTime">19:53</p></td>
+                    <td align='center'>
+                        <button type="button" class="a3b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a2">
+                    <td class="senderName">Jovin</td>
+                    <td>Guys, I'll ask a lot more questions tomorrow</td>
+                    <td class="questionTime">19:50</p></td>
+                    <td align='center'>
+                        <button type="button" class="a2b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a1">
+                    <td class="senderName">Mwilanga</td>
+                    <td>How much wood could a woodchuck chuck If a woodchuck could chuck wood?As much wood as a
+                        woodchuck could chuck, If a woodchuck could chuck wood.
+                    </td>
+                    <td class="questionTime">19:45</p></td>
+                    <td align='center'>
+                        <button type="button" class="a1b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+                <tr class="a0">
+                    <td class="senderName">Mwilanga</td>
+                    <td>How are you all feeling today?</td>
+                    <td class="questionTime">19:30</p></td>
+                    <td align='center'>
+                        <button type="button" class="a0b btn btn-info upvote" style="width:100%"><span
+                                class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+        <!--end of newsfeed-->
+
+        <!--start of top voted questions-->
+        <div class="col-lg-3 col-md-3 col-sm-5">
+            <p>Top Voted Questions</p>
+            <table class="table table-striped topQuestions" >
+                <tr class="a6">
+                    <td>What should you do if someone puts a gun to your head? By pointing a gun to your head, rather
+                        than outright killing you...
+                    </td>
+                    <td align='center'>
+                        <button type="button" class="a6b btn btn-info upvote" style="width:100%"><span
+                                class="voteNumber">12</span></button>
+                    </td>
+                </tr>
+
+                <tr class="a12">
+                    <td>It's always better to learn theory and simultaneously put that theory into practise by working
+                        on some projects(basically apply wh...
+                    </td>
+                    <td align='center'>
+                        <button type="button" class="a12b btn btn-info upvote" style="width:100%"><span
+                                class="voteNumber">5</span></button>
+                    </td>
+                </tr>
+
+                <tr class="a1">
+                    <td>How much wood could a woodchuck chuck If a woodchuck could chuck wood?As much wood as a
+                        woodchuck could chuck, If a woodchuck coul...
+                    </td>
+                    <td align='center'>
+                        <button type="button" class="a1b btn btn-info upvote" style="width:100%"><span
+                                class="voteNumber">36</span></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--end of top voted questions-->
+
+        <!--start of online users column-->
+        <div class="col-lg-2 col-md-2 col-sm-1 col-xs-2">
+
+            <p>Online</p>
+            <table class="table table-striped onlineUsers">
+
+                <tr>
+                    <td><i class="fa fa-user"></i></td>
+                    <td class="onlineUser">Jovin</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-user"></i></td>
+                    <td class="onlineUser">Simon</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-user"></i></td>
+                    <td class="onlineUser">Phil</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-user"></i></td>
+                    <td class="onlineUser">Mwilanga</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-user"></i></td>
+                    <td class="onlineUser">Prasad</td>
+                </tr>
+            </table>
+
+        </div>
+        <!--end of online users column-->
+
+
+    </div>
+    <!--end of row-->
+
+</div>
+<!--end of mid container-->
+
+<!--start of question input field-->
+<div class="container navbar-fixed-bottom">
+    <div class="panel-footer" id="footerconst">
+        <p>Please Professor, can you
+            <span><button class="btn btn-align btn-warning btn-xs">clarify?</button></span>
+            <span><button class="btn btn-align btn-warning btn-xs">give an example?</button></span>
+        </p>
+
+        <div class="input-group input-group-sm">
+            <textarea class="form-control" id="qfield" placeholder="Type your question" rows="1"></textarea>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info" type="button" id="ask">ASK</button>
+                                    </span>
+        </div>
+
+    </div>
+</div>
+<!--end of question input field-->
+
+
+<!-- JAVASCRIPT -->
+
+<!-- socket.io javascript -->
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+
+<!-- jquery -->
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- Boostrap.js -->
+<script type="text/javascript"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
+<!-- customlogin javascript file: should be loaded after jquery-->
+<script type="text/javascript" src="customchat.js"></script>
+</body>
+</html>
