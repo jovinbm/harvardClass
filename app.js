@@ -40,6 +40,7 @@ app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
 app.get('/custom.css', routes.customCss);
+app.get('/logincss.css', routes.loginCss);
 
 //handling js requests
 app.get('/customlogin.js', routes.loginJs);

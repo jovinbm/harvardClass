@@ -15,64 +15,50 @@
     <!-- loads bootstrap.css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
+    <!--loads font awesome-->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
     <!-- loads custom css file -->
     <link rel="stylesheet" href="custom.css" rel="stylesheet">
 
 </head>
-<body style="font-family:Verdana">
-<div id="wrap">
-    <!--start of top nav bar-->
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">CS50</a>
-            </div>
+<body>
+<!--start of navbar-->
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+        <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>  HarvardClass</a>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home<span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Classes</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">More
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" id="logout">Register</a></li>
-                    <li><a href="#" id="signInName">Sign In</a></li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+        <!--button to target the navbar-right which will appear on collapse of navbar items-->
+        <button class = 'navbar-toggle' data-toggle="collapse" data-target=".navHeaderCollapse">
+
+            <!--create the breadcrumb-->
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+
+        </button>
+
+        <!--this navbar will be collapsed on mobile-->
+        <div class="collapse navbar-collapse navHeaderCollapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://canvas.harvard.edu/" target="_blank">Canvas</a></li>
+                <li><a href="https://my.harvard.edu" target="_blank">my.harvard.edu</a></li>
+                <li id= 'signInName'><a href="#">About</a></li>
+                <li id="logout"><a href="#">Beta!</a></li>
+            </ul>
         </div>
-        <!-- /.container-fluid -->
-    </nav>
-    <!-- end of top nav bar-->
+    </div>
+</div>
+<!-- end of top nav bar-->
 
 
+
+
+
+
+
+<div id="wrap">
     <div class="container">
         <div class="row">
 
@@ -142,7 +128,6 @@
 
 </div>
 <!--end of footer-->
-
 
 
 <!-- JAVASCRIPT -->

@@ -23,6 +23,10 @@ exports.customCss = function (req, res) {
     res.sendfile("public/stylesheets/custom.css");
 };
 
+exports.loginCss = function (req, res) {
+    res.sendfile("public/stylesheets/logincss.css");
+};
+
 
 //handling js requests
 exports.loginJs = function (req, res) {

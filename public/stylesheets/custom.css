@@ -1,27 +1,24 @@
-/*body*/
-body {
-    padding: 50px 0em 0em 0em;
-    height: 100%;
-    width: 100%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    font-family: "Lucida Grande",arial,sans-serif;
-    font-size: 12px;
-    line-height: 20px;
+/*chat body*/
+/*#chatBody {*/
+    /*padding: 50px 0em 0em 0em;*/
+    /*height: 100%;*/
+    /*width: 100%;*/
+    /*max-width: 1200px;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*font-family: "Lucida Grande",arial,sans-serif;*/
+    /*font-size: 12px;*/
+    /*line-height: 20px;*/
     /*background-color: rgb(217,237,247);*/
-}
-/*end of body*/
+/*}*/
+/*end of chat body*/
 
 /*navigation bar start*/
-.navbar.navbar-default {
-    background-color: darkgray;
-    color: #ffffff;
-    margin-bottom: 0em;
-}
-
-#wrap > nav > div {
-}
+/*.navbar.navbar-default {*/
+    /*background-color: darkgray;*/
+    /*color: #ffffff;*/
+    /*margin-bottom: 0em;*/
+/*}*/
 
 /*#logout {*/
     /*visibility: hidden;*/
@@ -40,8 +37,6 @@ body {
 /*end of welcome of login*/
 
 /*the log in form*/
-body > form {
-}
 
 .btn.btn-primary.btn-lg.btn-block {
     background-color: darkgray;
@@ -49,10 +44,10 @@ body > form {
 /*end of log in form*/
 
 
-div.container {
-    margin: 0em 0em;
-    padding: 0em 0em;
-}
+/*div.container {*/
+    /*margin: 0em 0em;*/
+    /*padding: 0em 0em;*/
+/*}*/
 
 /*questions column*/
 #wrap > div > div > div.col-md-7 {

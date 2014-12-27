@@ -103,8 +103,9 @@ $(document).ready(function () {
     function loggedIn(content) {
         console.log("loggedIn called");
         var name = content;
+        content = "<a href='#'>" + content + "</a>";
         $('#signInName').html(content);
-        $('#logout').html("Logout");
+        $('#logout').html("<a href='#'>Logout</a>");
     }
 
     var socket = io.connect(window.location.hostname);
