@@ -18,6 +18,7 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 var mongoose = require('mongoose');
 var dbURL = 'mongodb://localhost:27017';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
+//var dbURL =  'mongo ds043200.mongolab.com:43200/harvardclassdev -u jovinbm -p paka1995';
 
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
