@@ -34,7 +34,10 @@ $(document).ready(function () {
         });
 
         //send upvote event with the question index to server
-        socket.emit('upvote', upvoteId.substring(1, 3));
+        // first check if upvoteId has 4 chars(for classes like .a4b)
+        //5 chars(for classes like .a40b etc
+        var stringLimit = upvoteId.length;
+        socket.emit('upvote', upvoteId.substring(1, stringLimit));
     });
 
     $("table.topQuestions").delegate("button", "click", function () {
