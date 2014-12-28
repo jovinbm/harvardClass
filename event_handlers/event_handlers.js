@@ -39,6 +39,16 @@ module.exports = {
 
         //broadcasts to all, client needs to check if user is not yet displayed
         functions.broadcastOnlineUsers(app, usersOnline, r_username);
+
+        //broadcasts the currently top questions
+        Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+            if (err) {
+                functions.consoleLogger("ERROR: upvote: Question.find: " + err)
+            } else {
+                functions.eventEmit(req, 'arrangement', topFiveObject);
+                functions.consoleLogger('upvote: Success');
+            }
+        });
         functions.consoleLogger('readyToChat: Success');
     },
 
@@ -103,6 +113,13 @@ module.exports = {
         functions.eventEmit(req, "goToLogin", "/login.html");
         functions.removeOnline(usersOnline, r_username);
         functions.consoleLogger('logout: Success');
+    },
+
+    close: function (req, app, r_username) {
+        functions.consoleLogger('CLOSE event handler called');
+        functions.eventBroadcaster(app, 'logoutUser', r_username);
+        functions.removeOnline(usersOnline, r_username);
+        functions.consoleLogger('close: Success');
     },
 
     getHistory: function (req, app, r_username, currentQuestionIndex) {
