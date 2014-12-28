@@ -6,11 +6,8 @@ $(document).ready(function () {
     var socket = io.connect(window.location.hostname);
 
     $("#toClass").click(function () {
-        console.log("submit clicked");
         myUsername = $("#customUsername").val();
-        console.log(myUsername);
         code = $("#customCode").val();
-        console.log(code);
         socket.emit('readyInput', myUsername)
 
         return false;

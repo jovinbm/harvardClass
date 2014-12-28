@@ -1,83 +1,107 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-//import all functions
 var functions = require('../functions/functions.js');
-var sessions = require('../functions/sessions.js');
+var mongoose = require('mongoose');
+var Question = require("../database/questions/question_model.js");
 
+var makeNewQuestion = function (questionObject, thisQuestionIndex) {
+    question = new Question({
+        questionIndex: thisQuestionIndex,
+        senderName: questionObject.senderName,
+        message: questionObject.message,
+        shortMessage: questionObject.shortMessage,
+        messageClass: "a" + thisQuestionIndex,
+        buttonClass: "a" + thisQuestionIndex + "b btn btn-info upvote",
+        votes: 0
+    });
+    return question;
+};
+
+//holds online users
 var usersOnline = [];
-var questionIds = {};
-var idIndex = 0;
-var questionId;
-var tempObject = [];
-var tempObject5 = [];
 
-
-//define all the event handlers
-
+//define and export all the event handlers
 module.exports = {
     readyInput: function (req, app, r_username) {
         functions.consoleLogger('readyInput: READY_INPUT event handler called');
         functions.eventEmit(req, "goToChat", "/chat.html");
-        functions.consoleLogger("readyInput: Saved the new session");
-        functions.consoleLogger('readyInput: r_username = ' + r_username);
-        functions.consoleLogger('readyInput: req.session.loggedInStatus = ' + req.session.loggedInStatus);
-
-        functions.consoleLogger('readyInput: DONE');
+        functions.consoleLogger('readyInput: Success');
     },
 
     readyToChat: function (req, app, r_username) {
         functions.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
-        functions.consoleLogger('readyToChat: r_username = ' + r_username);
         functions.eventEmit(req, 'loggedin', r_username);
         functions.addOnline(usersOnline, r_username);
-        functions.consoleLogger('readyToChat: usersOnline array =  ' + usersOnline);
-        functions.broadcastOnlineUsers(app, usersOnline, r_username);
 
-        functions.consoleLogger('readyToChat: DONE');
+        //broadcasts to all, client needs to check if user is not yet displayed
+        functions.broadcastOnlineUsers(app, usersOnline, r_username);
+        functions.consoleLogger('readyToChat: Success');
     },
 
-    clientMessage: function (req, app, r_username, r_question) {
+    clientMessage: function (req, app, r_username, theQuestion) {
         functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
-        functions.consoleLogger("clientMessage: Question received: " + r_question);
+        var question;
 
-        functions.eventBroadcaster(app, 'sender', r_username);
-        functions.eventEmit(app, 'sender', r_username);
-        functions.eventBroadcaster(app, 'serverMessage', r_question);
-        functions.eventEmit(app, 'serverMessage', r_question);
+        //query to get new index
+        Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
+            var thisQuestionIndex;
+            if (err || theObject == null || theObject == undefined) {
+                functions.consoleLogger("getNewQuestion: if statement executed");
+                thisQuestionIndex = 0;
+            } else {
+                functions.consoleLogger("getNewQuestion: else statement executed");
+                thisQuestionIndex = theObject.questionIndex + 1;
+            }
 
-        questionId = functions.makeQuestionId(idIndex);
-        functions.consoleLogger("clientMessage: Generated the index " + idIndex);
-        functions.consoleLogger(questionId);
-        idIndex++;
+            //save the question
+            functions.consoleLogger("consoleLogger: thisQuestionIndex = " + thisQuestionIndex);
+            question = makeNewQuestion(theQuestion, thisQuestionIndex);
+            question.save(function (err, UpdatedQuestion) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
+                    functions.consoleLogger('clientMessage: Success');
+                }
+            });
 
-        //forgot what this does
-        questionIds[questionId] = 0;
-        functions.consoleLogger(questionIds[questionId]);
+        });
 
-        functions.consoleLogger('clientMessage: DONE');
+
     },
 
     upvote: function (req, app, r_username, r_id) {
         functions.consoleLogger('upvote: UPVOTE event handler called');
-        functions.consoleLogger("upvote: Received upvote of " + r_id);
-        functions.incrementVote(questionIds, r_id);
+        var incrementVotes = function (r_id) {
+            Question.update({"messageClass": r_id}, {"$inc": {"votes": 1}},
+                function (err, qObject) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+                            if (err) {
+                                functions.consoleLogger(err)
+                            } else {
+                                app.io.broadcast('arrangement', topFiveObject);
+                                functions.consoleLogger('upvote: Success');
+                            }
+                        });
 
-        //this function sorts and broadcasts automatically
-        functions.sortQuestionsByID(app, questionIds);
+                    }
+                });
+        };
+        incrementVotes(r_id);
 
-        functions.consoleLogger('upvote: DONE');
+
     },
 
     logout: function (req, app, r_username) {
         functions.consoleLogger('LOGOUT event handler called');
-        functions.consoleLogger("logout: " + r_username + " is logging out");
         functions.eventBroadcaster(app, 'logoutUser', r_username);
         functions.eventEmit(req, "goToLogin", "/login.html");
-        functions.consoleLogger("logout: Redirected client to login.html page due to logout");
         functions.removeOnline(usersOnline, r_username);
-
-        functions.consoleLogger('logout: DONE');
+        functions.consoleLogger('logout: Success');
     }
 
 };

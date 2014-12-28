@@ -29,6 +29,5 @@ module.exports = {
     toggleLoggedInSession: function (req, status) {
         consoleLogger('s.toggleLoggedInSession: Function "toggleLoggedInSession" called');
         req.session.loggedInStatus = status;
-        consoleLogger('s.toggleLoggedInSession: req.session.loggedInStatus = ' + req.session.loggedInStatus);
     }
 };
