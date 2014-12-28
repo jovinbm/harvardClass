@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
+var routes = require('./routes/router.js');
 
 var app = express().http().io();
 
@@ -17,6 +17,9 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 //defining database
 var mongoose = require('mongoose');
 var dbURL = 'mongodb://localhost:27017'; //put your own database url
+//var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
+//var dbURL =  'mongo ds043200.mongolab.com:43200/harvardclassdev -u jovinbm -p paka1995';
+
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
 var db = mongoose.connection;
@@ -58,6 +61,9 @@ app.get('/customchat.js', routes.chatJs);
 
 //handling the socket.io request
 app.get('/socket.io/socket.io.js', routes.socketIo);
+
+//redirect everyother request to home
+app.get('*', routes.loginHtml);
 
 
 // catch 404 and forward to error handler
@@ -107,6 +113,14 @@ app.io.route('readyToChat', function (req) {
     var r_username;
     r_username = req.session.username;
     event_handlers.readyToChat(req, app, r_username);
+});
+
+app.io.route('getHistory', function (req) {
+    functions.consoleLogger('READY_TO_CHAT event received');
+    var r_username;
+    r_username = req.session.username;
+    var currentQuestionIndex = req.data;
+    event_handlers.getHistory(req, app, r_username, currentQuestionIndex);
 });
 
 app.io.route('clientMessage', function (req) {
