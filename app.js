@@ -53,7 +53,7 @@ app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
 app.get('/login.css', routes.loginCss);
-app.get('/chat.css.css', routes.chatCss);
+app.get('/chat.css', routes.chatCss);
 
 //handling js requests
 app.get('/login.js', routes.loginJs);

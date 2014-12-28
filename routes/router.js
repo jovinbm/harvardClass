@@ -20,7 +20,7 @@ exports.chatHtml = function (req, res) {
 
 //handling css requests
 exports.chatCss = function (req, res) {
-    res.sendfile("public/stylesheets/custom.css");
+    res.sendfile("public/stylesheets/chat.css");
 };
 
 exports.loginCss = function (req, res) {
@@ -30,11 +30,11 @@ exports.loginCss = function (req, res) {
 
 //handling js requests
 exports.loginJs = function (req, res) {
-    res.sendfile("public/javascripts/customlogin.js");
+    res.sendfile("public/javascripts/login.js");
 };
 
 exports.chatJs = function (req, res) {
-    res.sendfile("public/javascripts/customchat.js");
+    res.sendfile("public/javascripts/chat.js");
 };
 
 //handling the socket.io request
