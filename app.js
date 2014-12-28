@@ -52,17 +52,17 @@ app.get('/login.html', routes.loginHtml);
 app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
-app.get('/custom.css', routes.customCss);
-app.get('/logincss.css', routes.loginCss);
+app.get('/login.css', routes.loginCss);
+app.get('/chat.css.css', routes.chatCss);
 
 //handling js requests
-app.get('/customlogin.js', routes.loginJs);
-app.get('/customchat.js', routes.chatJs);
+app.get('/login.js', routes.loginJs);
+app.get('/chat.js', routes.chatJs);
 
 //handling the socket.io request
 app.get('/socket.io/socket.io.js', routes.socketIo);
 
-//redirect everyother request to home
+//redirect every other request to home
 app.get('*', routes.loginHtml);
 
 

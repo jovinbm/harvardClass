@@ -19,12 +19,12 @@ exports.chatHtml = function (req, res) {
 };
 
 //handling css requests
-exports.customCss = function (req, res) {
+exports.chatCss = function (req, res) {
     res.sendfile("public/stylesheets/custom.css");
 };
 
 exports.loginCss = function (req, res) {
-    res.sendfile("public/stylesheets/logincss.css");
+    res.sendfile("public/stylesheets/login.css");
 };
 
 
