@@ -16,7 +16,9 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 
 //defining database
 var mongoose = require('mongoose');
-var dbURL = 'mongodb://localhost:27017'; //*******your database URL goes here
+var dbURL = 'mongodb://localhost:27017';
+//var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
+//var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
@@ -146,6 +148,23 @@ app.io.route('logout', function (req) {
     var r_username;
     r_username = req.data;
     event_handlers.logout(req, app, r_username);
+});
+
+//handle disconnections
+//closed unexpectedly
+app.io.route('close', function(req) {
+    functions.consoleLogger('CLOSE event received');
+    var r_username;
+    r_username = req.session.username;
+    event_handlers.close(req, app, r_username);
+});
+
+//request ended normally
+app.io.route('end', function(req){
+    functions.consoleLogger('END event received');
+    var r_username;
+    r_username = req.session.username;
+    event_handlers.close(req, app, r_username);
 });
 
 
