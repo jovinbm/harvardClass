@@ -115,7 +115,7 @@ app.io.route('clientMessage', function (req) {
     r_username = req.session.username;
     var theQuestion;
     theQuestion = req.data;
-    event_handlers.clientMessage(app, req, r_username, theQuestion);
+    event_handlers.clientMessage(req, app, r_username, theQuestion);
 });
 
 app.io.route('upvote', function (req) {

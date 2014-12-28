@@ -41,7 +41,6 @@ module.exports = {
 
     clientMessage: function (req, app, r_username, theQuestion) {
         functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
-
         var question;
 
         //query to get new index
@@ -50,26 +49,19 @@ module.exports = {
             if (err || theObject == null || theObject == undefined) {
                 functions.consoleLogger("getNewQuestion: if statement executed");
                 thisQuestionIndex = 0;
-                makeNewQuestion(theQuestion, thisQuestionIndex);
             } else {
                 functions.consoleLogger("getNewQuestion: else statement executed");
-                functions.consoleLogger("getNewQuestion: theObject.questionIndex = " + theObject.questionIndex);
                 thisQuestionIndex = theObject.questionIndex + 1;
             }
 
             //save the question
             functions.consoleLogger("consoleLogger: thisQuestionIndex = " + thisQuestionIndex);
             question = makeNewQuestion(theQuestion, thisQuestionIndex);
-            functions.consoleLogger("Made" + question + " before proceeding");
             question.save(function (err, UpdatedQuestion) {
                 if (err) {
                     console.log(err);
                 } else {
-                    app.io.broadcast('serverMessage', UpdatedQuestion);
-                    functions.consoleLogger("makeNewQuestion: broadcasted " + UpdatedQuestion);
-                    req.io.emit('serverMessage', UpdatedQuestion);
-                    functions.consoleLogger("makeNewQuestion: eventEmit called");
-
+                    functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
                     functions.consoleLogger('clientMessage: Success');
                 }
             });
