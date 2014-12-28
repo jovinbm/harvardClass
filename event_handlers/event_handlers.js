@@ -18,6 +18,7 @@ var makeNewQuestion = function (questionObject, thisQuestionIndex) {
         buttonClass: "a" + thisQuestionIndex + "b btn btn-info upvote",
         votes: 0
     });
+    functions.consoleLogger("makeNewQuestion: question = " + JSON.stringify(question));
     return question;
 };
 
@@ -83,7 +84,7 @@ module.exports = {
     },
 
     upvote: function (req, app, r_username, r_id) {
-        functions.consoleLogger('upvote: UPVOTE event handler called');
+        functions.consoleLogger('upvote: UPVOTE event handler called with r_id = ' + r_id);
         var incrementVotes = function (r_id) {
             Question.update({"messageClass": r_id}, {"$inc": {"votes": 1}},
                 function (err, qObject) {
