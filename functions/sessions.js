@@ -1,8 +1,11 @@
 /**
  * Created by jovinbm on 12/26/14.
  */
-var routes = require('./../routes');
+//import modules
+var routes = require('./../routes/router.js');
+var Question = require("../database/questions/question_model.js");
 
+//define logger
 var consoleLogger = function (data) {
     console.log(data);
 };

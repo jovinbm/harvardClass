@@ -2,13 +2,18 @@
  * Created by jovinbm on 12/27/14.
  */
 $(document).ready(function () {
-    var socket = io.connect(window.location.hostname);
-    socket.emit('readyToChat');
-
     //******define global variables************
     var myGlobalUsername;
     var usersOnline = [];
+    //stores the current question index
+    var currentQuestionIndex = 0;
 
+    var socket = io.connect(window.location.hostname);
+    socket.emit('readyToChat');
+
+    socket.emit('getHistory', currentQuestionIndex);
+
+    //defining functions
     function searchArray(name, theArray) {
         for (var j = 0; j < theArray.length; j++) {
             if (theArray[j].match(name)) {
@@ -79,9 +84,25 @@ $(document).ready(function () {
 
     //prepends a new message to the question feed
     function addMessage(messageObject) {
-        var nextQuestion = "<tr class=" + messageObject.messageClass + "><td class='senderName'>" + messageObject.senderName + "</td><td>" + messageObject.message + "</td><td class='questionTime'>" + messageObject.time + "</p></td><td align='center'><button type='button' class='" + messageObject.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+
+        //change timestring from mongodb to actual time
+        var mongoDate = new Date(messageObject.time);
+        var questionTime = mongoDate.getHours() + ":" + mongoDate.getMinutes();
+
+        var nextQuestion = "<tr class=" + messageObject.messageClass + "><td class='senderName'>" + messageObject.senderName + "</td><td>" + messageObject.message + "</td><td class='questionTime'>" + questionTime + "</p></td><td align='center'><button type='button' class='" + messageObject.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
 
         $(".question_feed").prepend(nextQuestion);
+    }
+
+    //deals with adding history
+    function addHistory(historyArray) {
+        console.log("addHistory called");
+
+        //reverse array to correct prepending of the function addMessage
+        historyArray.reverse();
+        historyArray.forEach(function (messageObject) {
+            addMessage(messageObject);
+        });
     }
 
 
@@ -111,6 +132,18 @@ $(document).ready(function () {
     socket.on('serverMessage', function (messageObject) {
         console.log("'serverMessage' event received");
         addMessage(messageObject);
+    });
+
+    //receive recent history
+    socket.on('serverHistory', function (historyArray) {
+        console.log("'serverHistory' event received");
+        addHistory(historyArray);
+    });
+
+    //increments currentQuestionIndex
+    socket.on('incrementCurrentIndex', function (num) {
+        console.log("'incrementCurrentIndex' event received");
+        currentQuestionIndex = currentQuestionIndex + num;
     });
 
     //receives logoutUser event from server

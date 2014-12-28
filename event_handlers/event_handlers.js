@@ -1,10 +1,13 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-var functions = require('../functions/functions.js');
+//import modules
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var Question = require("../database/questions/question_model.js");
+var functions = require('../functions/functions.js');
 
+//function to make new question
 var makeNewQuestion = function (questionObject, thisQuestionIndex) {
     question = new Question({
         questionIndex: thisQuestionIndex,
@@ -18,7 +21,7 @@ var makeNewQuestion = function (questionObject, thisQuestionIndex) {
     return question;
 };
 
-//holds online users
+//variable to hold online users
 var usersOnline = [];
 
 //define and export all the event handlers
@@ -47,19 +50,17 @@ module.exports = {
         Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
             var thisQuestionIndex;
             if (err || theObject == null || theObject == undefined) {
-                functions.consoleLogger("getNewQuestion: if statement executed");
+                functions.consoleLogger("ERROR: getNewQuestion: " + err);
                 thisQuestionIndex = 0;
             } else {
-                functions.consoleLogger("getNewQuestion: else statement executed");
                 thisQuestionIndex = theObject.questionIndex + 1;
             }
 
             //save the question
-            functions.consoleLogger("consoleLogger: thisQuestionIndex = " + thisQuestionIndex);
             question = makeNewQuestion(theQuestion, thisQuestionIndex);
             question.save(function (err, UpdatedQuestion) {
                 if (err) {
-                    console.log(err);
+                    console.log("ERROR: clientMessage: question.save: " + err);
                 } else {
                     functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
                     functions.consoleLogger('clientMessage: Success');
@@ -77,11 +78,11 @@ module.exports = {
             Question.update({"messageClass": r_id}, {"$inc": {"votes": 1}},
                 function (err, qObject) {
                     if (err) {
-                        console.log(err);
+                        console.log("ERROR: upvote: Question.update: " + err);
                     } else {
                         Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
                             if (err) {
-                                functions.consoleLogger(err)
+                                functions.consoleLogger("ERROR: upvote: Question.find: " + err)
                             } else {
                                 app.io.broadcast('arrangement', topFiveObject);
                                 functions.consoleLogger('upvote: Success');
@@ -102,6 +103,22 @@ module.exports = {
         functions.eventEmit(req, "goToLogin", "/login.html");
         functions.removeOnline(usersOnline, r_username);
         functions.consoleLogger('logout: Success');
+    },
+
+    getHistory: function (req, app, r_username, currentQuestionIndex) {
+        //define limit: How many do you want?
+        var historyLimit = 10;
+
+        functions.consoleLogger("getHistory: getHistory called");
+        Question.find({questionIndex: {$gt: currentQuestionIndex}}).sort({questionIndex: -1}).limit(historyLimit).exec(function (err, historyArray) {
+            if (err) {
+                console.log("ERROR: getHistory: Question.find: " + err);
+            } else {
+                functions.eventEmit(req, "serverHistory", historyArray);
+                functions.eventEmit(req, "incrementCurrentIndex", currentQuestionIndex + historyLimit);
+            }
+            functions.consoleLogger('getHistory: Success');
+        });
     }
 
 };

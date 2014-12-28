@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
+var routes = require('./routes/router.js');
 
 var app = express().http().io();
 
@@ -59,6 +59,9 @@ app.get('/customchat.js', routes.chatJs);
 //handling the socket.io request
 app.get('/socket.io/socket.io.js', routes.socketIo);
 
+//redirect everyother request to home
+app.get('*', routes.loginHtml);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -107,6 +110,14 @@ app.io.route('readyToChat', function (req) {
     var r_username;
     r_username = req.session.username;
     event_handlers.readyToChat(req, app, r_username);
+});
+
+app.io.route('getHistory', function (req) {
+    functions.consoleLogger('READY_TO_CHAT event received');
+    var r_username;
+    r_username = req.session.username;
+    var currentQuestionIndex = req.data;
+    event_handlers.getHistory(req, app, r_username, currentQuestionIndex);
 });
 
 app.io.route('clientMessage', function (req) {
