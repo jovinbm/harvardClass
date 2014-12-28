@@ -2,10 +2,14 @@
  * Created by jovinbm on 12/25/14.
  */
 // this file defines most functions used int the project
-
+var mongoose = require('mongoose');
+//initiate the schema prototype
+var Schema = mongoose.Schema;
+var models = require("../database/questions/question_model.js");
 var consoleLogger = function (data) {
     console.log(data);
 };
+
 
 module.exports = {
     consoleLogger: function (data) {
@@ -18,11 +22,6 @@ module.exports = {
     handleError: function () {
     },
 
-    makeQuestionId: function (questionIndex) {
-        consoleLogger("f.makeQuestionId: Function 'makeQuestionId' called");
-        return "#a" + questionIndex + "a";
-    },
-
     incrementVote: function (voteObject, voteId) {
         consoleLogger("f.incrementVote: Function 'incrementVote' called");
         consoleLogger("f.incrementVote: Increment " + voteId + ". Current value = " + voteObject[voteId]);
@@ -31,33 +30,6 @@ module.exports = {
 
         consoleLogger("f.incrementVote: The final value of " + voteId + " is " + voteObject[voteId]);
         consoleLogger("f.incrementVote: questionIds = " + JSON.stringify(voteObject));
-    },
-
-    //The following makes new object with sorted questions by ID
-    //this new object - tempObject5 is passed to a broadcaster function
-    //to be that broadcasts the updated sort to all clients
-    sortQuestionsByID: function (app, voteObject) {
-        consoleLogger("f.sortQuestionsByID: Function 'sortQuestionsByID' called");
-        tempObject = [];
-        for (var id in voteObject) {
-            tempObject.push([id, voteObject[id]]);
-            tempObject.sort(function (a, b) {
-                return a[1] - b[1]
-            });
-        }
-
-        //sort the new made array to a reverse order
-        tempObject5 = [];
-        tempObject.reverse();
-
-        tempObject.forEach(function (entry) {
-            for (var i = 0; i < 5; i++) {
-                tempObject5[i] = tempObject[i];
-            }
-        });
-        consoleLogger("f.sortQuestionsByID: tempObject5 = " + tempObject5);
-        app.io.broadcast('arrangement', tempObject5);
-        consoleLogger("f.sortQuestionsByID : Broadcasted 'tempObject' successfully")
     },
 
     eventEmit: function (req, serverEvent, content) {

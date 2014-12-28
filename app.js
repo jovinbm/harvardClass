@@ -12,10 +12,23 @@ var app = express().http().io();
 // load the functions
 var functions = require('./functions/functions.js');
 var sessions = require('./functions/sessions.js');
-
-
 //load the event Handlers
 var event_handlers = require('./event_handlers/event_handlers.js');
+
+
+//defining database
+var mongoose = require('mongoose');
+var dbURL = 'mongodb://localhost:27017';
+mongoose.connect(dbURL);
+var mongoose = require('mongoose');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+    console.log("Succesfully connected to server");
+});
+//initiate the schema prototype
+var Question = require("./database/questions/question_model.js");
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -105,10 +118,10 @@ app.io.route('clientMessage', function (req) {
     functions.consoleLogger('CLIENT_MESSAGE event received');
     var r_username;
     r_username = req.session.username;
-    var r_question;
-    r_question = req.data;
+    var theQuestion;
+    theQuestion = req.data;
 
-    event_handlers.clientMessage(app, req, r_username, r_question);
+    event_handlers.clientMessage(app, req, r_username, theQuestion);
 });
 
 app.io.route('upvote', function (req) {
