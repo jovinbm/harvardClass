@@ -16,7 +16,8 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 
 //defining database
 var mongoose = require('mongoose');
-var dbURL = 'mongodb://localhost:27017';
+var dbURL = 'mongodb://localhost:27017'; //*******your database URL goes here
+
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
 var db = mongoose.connection;
