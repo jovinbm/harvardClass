@@ -2,7 +2,6 @@
  * Created by jovinbm on 12/27/14.
  */
 var mongoose = require('mongoose');
-//initiate the schema prototype
 var Schema = mongoose.Schema;
 
 var questionSchema = new Schema({

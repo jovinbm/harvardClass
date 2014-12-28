@@ -1,12 +1,13 @@
+/**
+ * Created by jovinbm on 12/27/14.
+ */
 $(document).ready(function () {
+    var socket = io.connect(window.location.hostname);
+    socket.emit('readyToChat');
 
-    var r_username;
-    var varUsername;
-    var atrributeId;
-    var whichUpvote;
-
+    //******define global variables************
+    var myGlobalUsername;
     var usersOnline = [];
-    var index = 0;
 
     function searchArray(name, theArray) {
         for (var j = 0; j < theArray.length; j++) {
@@ -17,132 +18,111 @@ $(document).ready(function () {
         return true;
     }
 
-
-    function addMessage(message) {
-        console.log("addMessage called");
-        console.log("got message: " + message);
-
-        attributeId2 = "a" + index + "a";
-
-        var nextq = "<tr><td width = '103.156px'><button class='btn btn-info btn-xs' type='button'>" + varUsername + "</button></td><td id='a" + index + "'>" + message + "</td><td width='12px'><button id='" + attributeId2 + "' class='btn btn-info btn-xs buttonglyph' type='button'><span class='glyphicon glyphicon-arrow-up'></span></button></td></tr>";
-
-        attributeId2 = "#a" + index + "a";
-
-        $("#thomas").prepend(nextq);
-
-        attributeId = "#a" + index;
-
-        console.log(attributeId);
-        console.log(attributeId2);
-        $(attributeId2).bind("click", function () {
-            $(this).removeClass("btn-info");
-            $(this).addClass("btn-warning");
+    //globally bind the upvote event hanlder for the pulled questions
+    $("table.question_feed").delegate("button", "click", function () {
+        console.log("TRIGGERED DELEGATE FEED!");
+        console.log(this);
+        var upvoteId = "." + $(this).attr('class').split(' ')[0];
+        $(upvoteId).each(function () {
             $(this).attr("disabled", "disabled");
-            console.log("upvote clicked");
-            whichUpvote = "#" + $(this).attr("id");
-            console.log(whichUpvote);
-
-            socket.emit("upvote", whichUpvote);
-            console.log("sent upvote to server");
+            $(this).removeClass("btn-info").addClass("btn-warning");
         });
 
-        index++;
-    }
+        //send upvote event with the question index to server
+        socket.emit('upvote', upvoteId.substring(1, 3));
+    });
 
-    function addOnline(username) {
-        console.log("addOnline called");
-        if (searchArray(username, usersOnline)) {
-            var newUser = "<p><span class='glyphicon glyphicon-user online'></span>" + username + "</p>";
-            $("#onlineUsers").prepend(newUser);
-
-            usersOnline.push(username);
-
-            console.log("addOnline finished");
-        }
-    }
-
-    function removeOnline(username) {
-        console.log("removeOnline called");
-        $(".glyphicon-user").each(function () {
-            if ($(this).parent().text() == username) {
-                $(this).parent().remove();
-                console.log("removeOnline success");
-            }
-
-        });
-        var index = usersOnline.indexOf(username);
-        usersOnline.splice(index, 1);
-    }
-
-    function arrangeQuestions(obj) {
-        console.log("arrangeQuestions called on " + JSON.stringify(obj));
-        $("#topQuestions").empty();
-
-        obj.reverse();
-
-        obj.forEach(function (entry) {
-            if (entry) {
-                var cloneId = entry[0].substring(0, 3);
-                console.log(cloneId);
-                var cloneUpVotes = entry[1];
-                console.log(cloneUpVotes);
-
-                var votes = cloneUpVotes;
-
-                var nextp = "<p>" + $(cloneId).text() + "<span class='input-group-btn'><button class='btn btn-info btn-xs' type='button'><span class='glyphicon glyphicon-arrow-up'></span>Number of Votes<span class='input-group-btn'><button class='btn btn-info btn-warning btn-xs' type='button'>" + votes + "</button></span></button></span></p>";
-
-
-                $("#topQuestions").prepend(nextp);
-
-            }
+    $("table.topQuestions").delegate("button", "click", function () {
+        console.log("TRIGGERED DELEGATE TOP");
+        console.log(this);
+        var upvoteId = "." + $(this).attr('class').split(' ')[0];
+        $(upvoteId).each(function () {
+            $(this).attr("disabled", "disabled");
+            $(this).removeClass("btn-info").addClass("btn-warning");
         });
 
-    }
+        //send upvote event with the question index to server
+        socket.emit('upvote', upvoteId.substring(1, 3));
+    });
 
 
-    function loggedIn(content) {
+    function loggedIn(name) {
         console.log("loggedIn called");
-        var name = content;
-        content = "<a href='#'>" + content + "</a>";
-        $('#signInName').html(content);
+        var myName = "<a href='#'>" + name + "</a>";
+        $('#signInName').html(myName);
         $('#logout').html("<a href='#'>Logout</a>");
     }
 
-    var socket = io.connect(window.location.hostname);
+    //adds a new user to the onlinne list
+    function addOnline(name) {
+        console.log("addOnline called");
+
+        //server sends all online users each time. searchArray makes sure           //that only
+        //new users are appended
+        if (searchArray(name, usersOnline)) {
+            var newUser = "<tr><td><i class='fa fa-user'></i></td><td class='onlineUser'>" + name + "</td></tr>";
+            $(".onlineUsers").prepend(newUser);
+            usersOnline.push(name);
+        }
+    }
+
+    function removeOnline(name) {
+        console.log("removeOnline called with name " + name);
+        $(".onlineUser").each(function () {
+            if ($(this).text() == name) {
+                $(this).closest("tr").remove();
+            }
+        });
+        var index = usersOnline.indexOf(name);
+        usersOnline.splice(index, 1);
+    }
+
+    //prepends a new message to the question feed
+    function addMessage(messageObject) {
+        var nextQuestion = "<tr class=" + messageObject.messageClass + "><td class='senderName'>" + messageObject.senderName + "</td><td>" + messageObject.message + "</td><td class='questionTime'>" + messageObject.time + "</p></td><td align='center'><button type='button' class='" + messageObject.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+
+        $(".question_feed").prepend(nextQuestion);
+    }
 
 
-    socket.emit('readyToChat');
+    function arrangeQuestions(object) {
+        $(".topQuestions").empty();
+        object.forEach(function (key) {
+            var nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
+            $(".topQuestions").append(nextTop);
+        })
+    }
 
+    //deal with events
 
-    socket.on('arrangement', function (content) {
+    //receives arrangement event
+    socket.on('arrangement', function (object) {
         console.log("'arrangement' event received");
-        arrangeQuestions(content);
+        arrangeQuestions(object);
     });
 
-    socket.on('serverMessage', function (content) {
-        console.log("'serverMessage' event received");
-        addMessage(content);
-    });
-
-    socket.on('online', function (content) {
+    //receives online event
+    socket.on('online', function (name) {
         console.log("'online' event received");
-        addOnline(content);
-        varUsername = content;
+        addOnline(name);
+        varUsername = name;
     });
 
-    socket.on('sender', function(content){
-        console.log("'sender' event received");
-        varUsername = content;
+    socket.on('serverMessage', function (messageObject) {
+        console.log("'serverMessage' event received");
+        addMessage(messageObject);
     });
 
-    socket.on('loggedin', function (content) {
-        console.log("'loggedin' event received");
-        loggedIn(content);
-    });
-
-    socket.on('logoutUser', function (content) {
+    //receives logoutUser event from server
+    socket.on('logoutUser', function (name) {
         console.log("'logout' event received");
-        removeOnline(content);
+        removeOnline(name);
+    });
+
+    socket.on('loggedin', function (name) {
+        myGlobalUsername = name;
+        console.log("'loggedin' event received");
+        loggedIn(name);
     });
 
     socket.on('goToLogin', function (content) {
@@ -150,22 +130,41 @@ $(document).ready(function () {
         window.location.href = content;
     });
 
-
+    //emit events on interactions
     $('#ask').click(function () {
         console.log("Clicked");
+        var message = $("#qfield").val();
+        var shortMessage = "";
+        //trim 130 characters to be used for top voted
+        if (message.length > 130) {
+            for (var i = 0; i < 130; i++) {
+                shortMessage = shortMessage + message[i];
+            }
+            shortMessage = shortMessage + "...";
+        }
+        else {
+            for (var i = 0; i < message.length; i++) {
+                shortMessage = shortMessage + message[i];
+            }
+        }
+        var questionToDatabase = {
+            'senderName': myGlobalUsername,
+            'message': message,
+            'shortMessage': shortMessage,
+            'messageClass': '',
+            'buttonClass': '',
+            'votes': 0
+        };
 
-        var toServer = $("#qfield").val();
-
-        socket.emit('clientMessage', toServer);
-        console.log("sent " + toServer + " to server");
+        socket.emit('clientMessage', questionToDatabase);
         $("#qfield").val("");
         return false;
     });
 
     $('#logout').click(function () {
-        console.log("logout clicked");
-        socket.emit('logout', varUsername);
-        console.log("sent 'logout' emit to server");
+        socket.emit('logout', myGlobalUsername);
     });
 
 });
+
+

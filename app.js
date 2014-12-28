@@ -9,12 +9,10 @@ var routes = require('./routes/index');
 
 var app = express().http().io();
 
-// load the functions
+// load the functions and event_handlers
 var functions = require('./functions/functions.js');
 var sessions = require('./functions/sessions.js');
-//load the event Handlers
 var event_handlers = require('./event_handlers/event_handlers.js');
-
 
 //defining database
 var mongoose = require('mongoose');
@@ -26,7 +24,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
     console.log("Succesfully connected to server");
 });
-//initiate the schema prototype
 var Question = require("./database/questions/question_model.js");
 
 
@@ -102,7 +99,6 @@ app.io.route('readyInput', function (req) {
     req.session.save();
     var r_username;
     r_username = req.session.username;
-
     event_handlers.readyInput(req, app, r_username);
 });
 
@@ -110,7 +106,6 @@ app.io.route('readyToChat', function (req) {
     functions.consoleLogger('READY_TO_CHAT event received');
     var r_username;
     r_username = req.session.username;
-
     event_handlers.readyToChat(req, app, r_username);
 });
 
@@ -120,7 +115,6 @@ app.io.route('clientMessage', function (req) {
     r_username = req.session.username;
     var theQuestion;
     theQuestion = req.data;
-
     event_handlers.clientMessage(app, req, r_username, theQuestion);
 });
 
@@ -130,7 +124,6 @@ app.io.route('upvote', function (req) {
     r_username = req.session.username;
     var r_id;
     r_id = req.data;
-
     event_handlers.upvote(req, app, r_username, r_id);
 });
 
@@ -140,14 +133,12 @@ app.io.route('logout', function (req) {
     req.session.save();
     var r_username;
     r_username = req.data;
-
     event_handlers.logout(req, app, r_username);
 });
 
 
 //start the server
 var port = process.env.PORT || 3000;
-
 //setup server to listen at port
 app.listen(port, function () {
     console.log("Server listening on port : " + port);
