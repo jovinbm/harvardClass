@@ -4,7 +4,7 @@ var sessions = require('../functions/sessions.js');
 //handling login.html and chat.html requests
 exports.loginHtml = function (req, res) {
     if(sessions.checkIfLoggedIn(req)){
-        res.redirect("chat2.html");
+        res.redirect("chat.html");
     }else {
         res.sendfile("views/login.html");
     }

@@ -1,11 +1,12 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-
+//import modules
 var mongoose = require('mongoose');
-//initiate the schema prototype
 var Schema = mongoose.Schema;
-var models = require("../database/questions/question_model.js");
+var Question = require("../database/questions/question_model.js");
+
+//logger function
 var consoleLogger = function (data) {
     console.log(data);
 };
@@ -15,12 +16,6 @@ var consoleLogger = function (data) {
 module.exports = {
     consoleLogger: function (data) {
         console.log(data);
-    },
-
-    redirectUser: function () {
-    },
-
-    handleError: function () {
     },
 
     eventEmit: function (req, serverEvent, content) {
