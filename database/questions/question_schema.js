@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 
 var questionSchema = new Schema({
     questionIndex: {type: Number, default:0, required:true, unique: true},
-    senderName: {type: String, default: "Anonymous", required: true, unique: false},
+    senderName: {type: String, default: "Anonymous", required: true},
     message: {type: String, default: "Nothing to show", required: true},
     shortMessage: {type: String, default: "Nothing to show", required: true},
     messageClass: {type: String, default: "abc", required: true, unique:true},
