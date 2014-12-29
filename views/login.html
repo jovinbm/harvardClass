@@ -14,7 +14,8 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- loads stylesheet for form bootstrap validator plugin -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
 
     <!-- loads custom css file -->
     <link rel="stylesheet" href="login.css" rel="stylesheet">
@@ -84,27 +85,64 @@
 <!--end of login with Harvard ID-->
 
 
-
 <!--start of custom student login form-->
 <div class="container">
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form action="/studentLogin" method="post" id="studentLoginForm">
+    <form action="/studentLogin"
+          method="post"
+          id="studentLoginForm"
+          data-bv-message="This value is not valid"
+          data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+          data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+          data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+
+        <!--Username field-->
         <div class="form-group">
             <label for="customUsername">Username</label>
-            <input type="text" class="form-control" id="customUsername" placeholder="Enter your custom Username" name="customUsername">
+            <input type="text"
+                   class="form-control"
+                   id="customUsername"
+                   placeholder="Enter your custom Username"
+                   name="customUsername"
+                   data-bv-message="The username is not valid"
+                   data-bv-notempty="true"
+                   data-bv-notempty-message="The username is required and cannot be empty"
+                   data-bv-regexp="true"
+                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
+                   data-bv-regexp-message="The username can only consist of alphabetical, number, dot and underscore"
+                   data-bv-stringlength="true"
+                   data-bv-stringlength-min="5"
+                   data-bv-stringlength-max="10"
+                   data-bv-stringlength-message="The custom username must be at least 5 and at most 10 characters long"/>
         </div>
 
+        <!--class code field-->
         <div class="form-group">
-            <label for="customCode">Code</label>
-            <input type="password" class="form-control" id="customCode" placeholder="Password" name="classCode">
+            <label for="classCode">Code</label>
+            <input type="password"
+                   class="form-control"
+                   id="classCode"
+                   placeholder="Password"
+                   name="classCode"
+                   data-bv-message="The class code is not valid"
+                   data-bv-notempty="true"
+                   data-bv-notempty-message="The class code is required and cannot be empty"
+                   data-bv-regexp="true"
+                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
+                   data-bv-regexp-message="The class code can only consist of alphabetical, number, dot and underscore"
+                   data-bv-stringlength="true"
+                   data-bv-stringlength-min="5"
+                   data-bv-stringlength-max="10"
+                   data-bv-stringlength-message="The class code must be at least 5 and at most 10 characters long"/>
         </div>
 
         <!--<button type="submit" class="btn btn-default btn-block">Get in Class</button>-->
-        <input type="submit" class="btn btn-default btn-block" value="Get in Class">
+        <div class="form-group">
+            <button type="submit" class="btn btn-default btn-block">Get in Class</button>
+        </div>
     </form>
 </div>
 <!--end of custom student login form-->
-
 
 
 <!--start of instructor login form-->
@@ -120,7 +158,9 @@
             <input type="password" class="form-control" id="password" placeholder="Password">
         </div>
 
-        <button type="submit" class="btn btn-default btn-block toClass">Sign In</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default btn-block">Sign In</button>
+        </div>
     </form>
 </div>
 <!--end of instructor login form-->
@@ -145,8 +185,6 @@
 <!--end of footer-->
 
 
-
-
 <!-- JAVASCRIPT -->
 
 <!-- socket.io javascript -->
@@ -162,7 +200,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 
 <!-- loads jquery for bootstrapvalidator plugin -->
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 
 <!-- customlogin javascript file: should be loaded after jquery-->
 <script type="text/javascript" src="login.js"></script>
