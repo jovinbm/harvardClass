@@ -56,30 +56,33 @@ module.exports = {
     clientMessage: function (req, app, r_username, theQuestion) {
         functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
         var question;
+        functions.consoleLogger('theQuestion.message = ' + theQuestion.message);
 
-        //query to get new index
-        Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
-            var thisQuestionIndex;
-            if (err || theObject == null || theObject == undefined) {
-                functions.consoleLogger("ERROR: getNewQuestion: " + err);
-                thisQuestionIndex = 0;
-            } else {
-                thisQuestionIndex = theObject.questionIndex + 1;
-            }
-
-            //save the question
-            question = makeNewQuestion(theQuestion, thisQuestionIndex);
-            question.save(function (err, UpdatedQuestion) {
-                if (err) {
-                    console.log("ERROR: clientMessage: question.save: " + err);
+        //only save if the question is not empty or is not a space
+        if (theQuestion.message != "" || theQuestion.message != " ") {
+            //query to get new index
+            Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
+                var thisQuestionIndex;
+                if (err || theObject == null || theObject == undefined) {
+                    functions.consoleLogger("ERROR: getNewQuestion: " + err);
+                    thisQuestionIndex = 0;
                 } else {
-                    functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
-                    functions.consoleLogger('clientMessage: Success');
+                    thisQuestionIndex = theObject.questionIndex + 1;
                 }
+
+                //save the question
+                question = makeNewQuestion(theQuestion, thisQuestionIndex);
+                question.save(function (err, UpdatedQuestion) {
+                    if (err) {
+                        console.log("ERROR: clientMessage: question.save: " + err);
+                    } else {
+                        functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
+                        functions.consoleLogger('clientMessage: Success');
+                    }
+                });
+
             });
-
-        });
-
+        }
 
     },
 
