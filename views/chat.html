@@ -71,7 +71,7 @@
         <!--start of top voted questions-->
         <div class="col-lg-3 col-md-3 col-sm-5">
             <p>Top Voted Questions</p>
-            <table class="table table-striped topQuestions" >
+            <table class="table table-striped topQuestions">
 
             </table>
         </div>
@@ -96,20 +96,19 @@
 <!--end of mid container-->
 
 <!--start of question input field-->
-<div class="container navbar-fixed-bottom">
-    <div class="panel-footer" id="footerconst">
-        <p>Please Professor, can you
-            <span><button class="btn btn-align btn-warning btn-xs">clarify?</button></span>
-            <span><button class="btn btn-align btn-warning btn-xs">give an example?</button></span>
-        </p>
+<!--<div class="container navbar-fixed-bottom">-->
+<!--<div class="panel-footer" id="footerconst">-->
+<div class='navbar navbar-default navbar-fixed-bottom'>
+    <div class="container">
 
-        <div class="input-group input-group-sm">
-            <textarea class="form-control" id="qfield" placeholder="Type your question" rows="1"></textarea>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-info" type="button" id="ask">ASK</button>
-                                    </span>
+        <textarea class="form-control" id="qfield" placeholder="Type your question" rows="3"></textarea>
+
+        <div class="pull-right">
+            <button class="navbar-btn btn btn-align btn-info">clarify?</button>
+            <button class="navbar-btn btn btn-align btn-info">give an example?</button>
+            <button class="navbar-btn btn btn-warning" type="button" id="ask">ASK
+            </button>
         </div>
-
     </div>
 </div>
 <!--end of question input field-->
