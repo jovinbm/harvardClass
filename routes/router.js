@@ -12,6 +12,7 @@ exports.loginHtml = function (req, res) {
 };
 
 exports.studentLoginPost = function(req, res){
+    //perform server side login form validation
     req.session.username = req.body.customUsername;
     sessions.toggleLoggedInSession(req, 1);
     req.session.save();

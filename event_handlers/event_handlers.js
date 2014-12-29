@@ -59,7 +59,7 @@ module.exports = {
         functions.consoleLogger('theQuestion.message = ' + theQuestion.message);
 
         //only save if the question is not empty or is not a space
-        if (theQuestion.message != "" || theQuestion.message != " ") {
+        if (theQuestion.message != "" && theQuestion.message != " ") {
             //query to get new index
             Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
                 var thisQuestionIndex;
