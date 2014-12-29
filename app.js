@@ -16,9 +16,9 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 
 //defining database
 var mongoose = require('mongoose');
-//var dbURL = 'mongodb://localhost:27017';
+var dbURL = 'mongodb://localhost:27017';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
-var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
+//var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
@@ -43,7 +43,8 @@ app.set('view engine', 'jade');
 //handling login.html and chat.html requests
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
-app.post('/login', routes.loginPost);
+app.post('/studentLogin', routes.studentLoginPost);
+//app.post('/instructorLogin', routes.instructorLoginPost);
 app.get('/chat.html', routes.chatHtml);
 
 //handling css requests

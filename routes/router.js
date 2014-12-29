@@ -11,7 +11,7 @@ exports.loginHtml = function (req, res) {
     }
 };
 
-exports.loginPost = function(req, res){
+exports.studentLoginPost = function(req, res){
     req.session.username = req.body.customUsername;
     sessions.toggleLoggedInSession(req, 1);
     req.session.save();

@@ -88,7 +88,7 @@
 <!--start of custom student login form-->
 <div class="container">
     <!--data-dv attributes for bootstrap validator plugin-->
-    <form action="/login" method="post" id="studentLoginForm">
+    <form action="/studentLogin" method="post" id="studentLoginForm">
         <div class="form-group">
             <label for="customUsername">Username</label>
             <input type="text" class="form-control" id="customUsername" placeholder="Enter your custom Username" name="customUsername">
@@ -109,7 +109,7 @@
 
 <!--start of instructor login form-->
 <div class="container" style="display: none">
-    <form method="POST">
+    <form action="/instructorLogin" method="post" id="instructorLoginForm">
         <div class="form-group">
             <label for="email">Instructor's Email</label>
             <input type="email" class="form-control" id="email" placeholder="Please enter your Email Address">
