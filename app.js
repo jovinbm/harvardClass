@@ -16,7 +16,7 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 
 //defining database
 var mongoose = require('mongoose');
-var dbURL = 'mongodb://localhost:27017';//**********your database URL goes hear
+var dbURL = 'mongodb://localhost:27017'; //********your database URL goes into dbURL
 
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
@@ -27,40 +27,36 @@ db.once('open', function (callback) {
 });
 var Question = require("./database/questions/question_model.js");
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.session({secret: '1234567890QWERTY'}));
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
 //define all routing
 //handling login.html and chat.html requests
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
+app.post('/studentLogin', routes.studentLoginPost);
+//app.post('/instructorLogin', routes.instructorLoginPost);
 app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
-app.get('/custom.css', routes.customCss);
-app.get('/logincss.css', routes.loginCss);
+app.get('/login.css', routes.loginCss);
+app.get('/chat.css', routes.chatCss);
 
 //handling js requests
-app.get('/customlogin.js', routes.loginJs);
-app.get('/customchat.js', routes.chatJs);
+app.get('/login.js', routes.loginJs);
+app.get('/chat.js', routes.chatJs);
 
 //handling the socket.io request
 app.get('/socket.io/socket.io.js', routes.socketIo);
 
-//redirect everyother request to home
+//redirect every other request to home
 app.get('*', routes.loginHtml);
 
 
