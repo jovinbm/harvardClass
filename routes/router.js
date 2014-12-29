@@ -1,5 +1,6 @@
 var functions = require('../functions/functions.js');
 var sessions = require('../functions/sessions.js');
+var event_handlers = require('../event_handlers/event_handlers.js');
 
 //handling login.html and chat.html requests
 exports.loginHtml = function (req, res) {
@@ -8,6 +9,16 @@ exports.loginHtml = function (req, res) {
     }else {
         res.sendfile("views/login.html");
     }
+};
+
+exports.loginPost = function(req, res){
+    req.session.username = req.body.customUsername;
+    sessions.toggleLoggedInSession(req, 1);
+    req.session.save();
+    var r_username;
+    r_username = req.session.username;
+    functions.consoleLogger("req.session.username from POST = " +req.session.username)
+    res.redirect("login.html");
 };
 
 exports.chatHtml = function (req, res) {

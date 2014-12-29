@@ -13,6 +13,9 @@
     <!--loads font awesome-->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <!-- loads stylesheet for form bootstrap validator plugin -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+
     <!-- loads custom css file -->
     <link rel="stylesheet" href="login.css" rel="stylesheet">
 
@@ -84,18 +87,20 @@
 
 <!--start of custom student login form-->
 <div class="container">
-    <form>
+    <!--data-dv attributes for bootstrap validator plugin-->
+    <form action="/login" method="post" id="studentLoginForm">
         <div class="form-group">
             <label for="customUsername">Username</label>
-            <input type="text" class="form-control" id="customUsername" placeholder="Enter your custom Username">
+            <input type="text" class="form-control" id="customUsername" placeholder="Enter your custom Username" name="customUsername">
         </div>
 
         <div class="form-group">
             <label for="customCode">Code</label>
-            <input type="password" class="form-control" id="customCode" placeholder="Password">
+            <input type="password" class="form-control" id="customCode" placeholder="Password" name="classCode">
         </div>
 
-        <button type="submit" class="btn btn-default btn-block" id="toClass">Get in Class</button>
+        <!--<button type="submit" class="btn btn-default btn-block">Get in Class</button>-->
+        <input type="submit" class="btn btn-default btn-block" value="Get in Class">
     </form>
 </div>
 <!--end of custom student login form-->
@@ -104,10 +109,10 @@
 
 <!--start of instructor login form-->
 <div class="container" style="display: none">
-    <form>
+    <form method="POST">
         <div class="form-group">
             <label for="email">Instructor's Email</label>
-            <input type="text" class="form-control" id="email" placeholder="Please enter your Email Address">
+            <input type="email" class="form-control" id="email" placeholder="Please enter your Email Address">
         </div>
 
         <div class="form-group">
@@ -115,7 +120,7 @@
             <input type="password" class="form-control" id="password" placeholder="Password">
         </div>
 
-        <button type="submit" class="btn btn-default btn-block" id="toClass">Sign In</button>
+        <button type="submit" class="btn btn-default btn-block toClass">Sign In</button>
     </form>
 </div>
 <!--end of instructor login form-->
@@ -155,6 +160,9 @@
 
 <!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
+<!-- loads jquery for bootstrapvalidator plugin -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 
 <!-- customlogin javascript file: should be loaded after jquery-->
 <script type="text/javascript" src="login.js"></script>

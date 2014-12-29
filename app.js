@@ -29,26 +29,21 @@ db.once('open', function (callback) {
 });
 var Question = require("./database/questions/question_model.js");
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.session({secret: '1234567890QWERTY'}));
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
 //define all routing
 //handling login.html and chat.html requests
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
+app.post('/login', routes.loginPost);
 app.get('/chat.html', routes.chatHtml);
 
 //handling css requests
