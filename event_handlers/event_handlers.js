@@ -5,6 +5,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Question = require("../database/questions/question_model.js");
+var User = require("../database/users/user_model.js");
 var functions = require('../functions/functions.js');
 
 //function to make new question
@@ -74,7 +75,7 @@ module.exports = {
                 question = makeNewQuestion(theQuestion, thisQuestionIndex);
                 question.save(function (err, UpdatedQuestion) {
                     if (err) {
-                        console.log("ERROR: clientMessage: question.save: " + err);
+                        functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
                     } else {
                         functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
                         functions.consoleLogger('clientMessage: Success');
@@ -86,29 +87,41 @@ module.exports = {
 
     },
 
-    upvote: function (req, app, r_username, r_id) {
-        functions.consoleLogger('upvote: UPVOTE event handler called with r_id = ' + r_id);
-        var incrementVotes = function (r_id) {
-            Question.update({"messageClass": r_id}, {"$inc": {"votes": 1}},
-                function (err, qObject) {
-                    if (err) {
-                        console.log("ERROR: upvote: Question.update: " + err);
-                    } else {
-                        Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+    //this function adds the voted question button class to the respective voter and then increments the total number of votes on the 
+    //respective question, thereafter broadcasting the updated arrangement to all connected clients
+    upvote: function(req, app, customUsername, userId, r_id, buttonClass){
+        functions.consoleLogger("upvote: upvote event handler called");
+        User.update({customUsername: customUsername, userId: userId},{
+            $push: {votedButtonClasses: buttonClass}
+        }, function(err, question){
+            if(err){
+                functions.consoleLogger("ERRO: upvote: event_handlers " + err);
+            }else{
+                functions.consoleLogger(JSON.stringify(question));
+
+                //then upvote the specific question and broadcast the new top 5
+                functions.consoleLogger('upvote: UPVOTE event handler called with r_id = ' + r_id);
+                var incrementVotes = function (r_id) {
+                    Question.update({"messageClass": r_id}, {"$inc": {"votes": 1}},
+                        function (err, qObject) {
                             if (err) {
-                                functions.consoleLogger("ERROR: upvote: Question.find: " + err)
+                                console.log("ERROR: upvote: Question.update: " + err);
                             } else {
-                                app.io.broadcast('arrangement', topFiveObject);
-                                functions.consoleLogger('upvote: Success');
+                                Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+                                    if (err) {
+                                        functions.consoleLogger("ERROR: upvote: Question.find: " + err)
+                                    } else {
+                                        app.io.broadcast('arrangement', topFiveObject);
+                                        functions.consoleLogger('upvote: Success');
+                                    }
+                                });
+
                             }
                         });
-
-                    }
-                });
-        };
-        incrementVotes(r_id);
-
-
+                };
+                incrementVotes(r_id);
+            }
+        });
     },
 
     logout: function (req, app, r_username) {

@@ -16,6 +16,7 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 
 //defining database
 var mongoose = require('mongoose');
+
 // *****your database URL goes hear
 var dbURL = 'mongodb://localhost:27017'; 
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
@@ -133,9 +134,17 @@ app.io.route('upvote', function (req) {
     functions.consoleLogger('UPVOTE event received');
     var r_username;
     r_username = req.session.username;
+    var r_userId = req.session.userId;
+
+    //r_id passed from client is the questionClass
     var r_id;
     r_id = req.data;
-    event_handlers.upvote(req, app, r_username, r_id);
+
+    //make a buttonClass from r_id to be tracked per user
+    var buttonClass = r_id + "b";
+
+    //add the button Id to the user who upvoted the question
+    event_handlers.upvote(req, app, r_username, r_userId, r_id, buttonClass);
 });
 
 app.io.route('logout', function (req) {

@@ -36,6 +36,8 @@ $(document).ready(function () {
         //send upvote event with the question index(representing the question class to server
         // first check if upvoteId has 4 chars(for classes like .a4b)
         //5 chars(for classes like .a40b etc
+
+        //stringLimit = questionClass;
         var stringLimit = upvoteId.length - 1;
         console.log(upvoteId.substring(1, stringLimit));
         socket.emit('upvote', upvoteId.substring(1, stringLimit));
@@ -66,7 +68,7 @@ $(document).ready(function () {
     function addOnline(name) {
         console.log("addOnline called");
 
-        //server sends all online users each time. searchArray makes sure           //that only
+        //server sends all online users each time. searchArray makes sure that only
         //new users are appended
         if (searchArray(name, usersOnline)) {
             var newUser = "<tr><td><i class='fa fa-user'></i></td><td class='onlineUser'>" + name + "</td></tr>";
@@ -166,6 +168,7 @@ $(document).ready(function () {
         console.log("'goToLogin' event received");
         window.location.href = content;
     });
+
 
     //emit events on interactions
     $('#ask').click(function () {
