@@ -13,8 +13,9 @@ $(document).ready(function () {
     //on every start and when the arrangeQuestion function is called
     var myUpvotedQuestions = [];
     var usersOnline = [];
-    //stores the current question index
-    var currentQuestionIndex = 0;
+    //stores the current question index. The initial value is -1 because the server queries results greater than -1
+    //i.e. $gt -1 means from 0 onwards
+    var currentQuestionIndex = -1;
 
     var socket = io.connect(window.location.hostname);
     socket.emit('readyToChat');
