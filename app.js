@@ -55,8 +55,11 @@ app.use(passport.session());
 passport.use(new OpenIDStrategy({
         returnURL: 'https://harvardclass.herokuapp.com/harvardId',
         realm: 'https://harvardclass.herokuapp.com'
+
+        //returnURL: 'http://localhost:3000/harvardId',
+        //realm: 'http://localhost:3000'
     },
-    function (identifier,profile, done) {
+    function (identifier, profile, done) {
         console.log("*********IDENTIFIER = " + identifier);
         console.log("*********PROFILE = " + JSON.stringify(profile));
         done(null, {id: identifier});
