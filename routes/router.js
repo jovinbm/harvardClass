@@ -59,7 +59,6 @@ exports.studentLoginPost = function(req, res){
             if(err){
                 functions.consoleLogger("ERROR: event_handlers: studentLoginPost: " + err)
             }else{
-                functions.consoleLogger("************* savedUser = " + savedUser);
                 res.redirect("login.html");
             }
         });

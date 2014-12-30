@@ -111,7 +111,21 @@ module.exports = {
                                     if (err) {
                                         functions.consoleLogger("ERROR: upvote: Question.find: " + err)
                                     } else {
-                                        app.io.broadcast('arrangement', topFiveObject);
+                                        req.io.broadcast('arrangement', topFiveObject);
+
+                                        //find the respective user who upvoted the question
+                                        User.findOne({customUsername: customUsername, userId: userId}).exec(function(err, theUser){
+                                            if(err){
+                                                functions.consoleLogger("ERROR: upvote: - in retrieving user who updated")
+                                            }else{
+                                                var usersUpvotes = theUser.votedButtonClasses;
+                                                topFiveObject.forEach(function(question){
+                                                    question.votedButtonClasses = usersUpvotes;
+                                                });
+                                                req.io.emit('arrangement', topFiveObject);
+                                            }
+                                        });
+
                                         functions.consoleLogger('upvote: Success');
                                     }
                                 });

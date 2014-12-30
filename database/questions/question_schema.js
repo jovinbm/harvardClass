@@ -13,6 +13,7 @@ var questionSchema = new Schema({
     messageClass: {type: String, default: "abc", required: true, unique:true},
     buttonClass: {type: String, default: "abc", required: true, unique: true},
     votes: {type: Number, default: 0},
+    votedButtonClasses: { type : Array , "default" : [] },
     time: {type: Date, default: Date.now}
 });
 

@@ -48,7 +48,6 @@ module.exports = {
     broadcastOnlineUsers: function (app, userOnlineObject, r_username) {
         consoleLogger("f.broadcastOnlineUsers: Function 'broadcastOnlineUsers' called");
         userOnlineObject.forEach(function (name) {
-            consoleLogger(name);
             app.io.broadcast('online', name);
         });
     }
