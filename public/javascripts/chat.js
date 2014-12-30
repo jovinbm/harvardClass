@@ -110,15 +110,33 @@ $(document).ready(function () {
     }
 
     //prepends a new message to the question feed
-    function addMessage(messageObject) {
+    function addMessage(key) {
 
         //change timestring from mongodb to actual time
-        var mongoDate = new Date(messageObject.time);
+        var mongoDate = new Date(key.time);
         var questionTime = mongoDate.getHours() + ":" + mongoDate.getMinutes();
 
-        var nextQuestion = "<tr class=" + messageObject.messageClass + "><td class='senderName'>" + messageObject.senderName + "</td><td>" + messageObject.message + "</td><td class='questionTime'>" + questionTime + "</p></td><td align='center'><button type='button' class='" + messageObject.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+        //deal with the issue that a user might have upvoted a certain question already
+        //intelligently extracting button class by adding 'b' to question class instead of the buttonClass key
+        //here the button class used for check purposes is named r_buttonClass
+        //and the array that has the users upvoted button classes is named r_buttonClassArray
+        var r_buttonClass = key.messageClass + "b";
+        //check that the votedButtonClass array has something
+        if (key.votedButtonClasses.length != 0) {
+            myUpvotedQuestions = key.votedButtonClasses;
+        }
 
-        $(".question_feed").prepend(nextQuestion);
+        var nextQuestion;
+        //if already updated, insert a new button class with a btn-warning class, and a disabled attribute
+        if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
+            r_buttonClass = r_buttonClass + " btn btn-warning upvote";
+
+            nextQuestion = "<tr class=" + key.messageClass + "><td class='senderName'>" + key.senderName + "</td><td>" + key.message + "</td><td class='questionTime'>" + questionTime + "</p></td><td align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+            $(".question_feed").prepend(nextQuestion);
+        } else {
+            nextQuestion = "<tr class=" + key.messageClass + "><td class='senderName'>" + key.senderName + "</td><td>" + key.message + "</td><td class='questionTime'>" + questionTime + "</p></td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+            $(".question_feed").prepend(nextQuestion);
+        }
     }
 
     //deals with adding history
@@ -127,8 +145,8 @@ $(document).ready(function () {
 
         //reverse array to correct prepending of the function addMessage
         historyArray.reverse();
-        historyArray.forEach(function (messageObject) {
-            addMessage(messageObject);
+        historyArray.forEach(function (key) {
+            addMessage(key);
         });
     }
 
@@ -142,17 +160,17 @@ $(document).ready(function () {
             //and the array that has the users upvoted button classes is named r_buttonClassArray
             var r_buttonClass = key.messageClass + "b";
             //check that the votedButtonClass array has something
-            if(key.votedButtonClasses.length != 0) {
+            if (key.votedButtonClasses.length != 0) {
                 myUpvotedQuestions = key.votedButtonClasses;
             }
             var nextTop;
 
-            //if already updated, isert a new button class with a btn-warning class, and a disabled attribute
-            if(searchArrayIfExists(r_buttonClass, myUpvotedQuestions)){
-                r_buttonClass = r_buttonClass + " btn btn-warning upvote"
-               nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
+            //if already updated, insert a new button class with a btn-warning class, and a disabled attribute
+            if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
+                r_buttonClass = r_buttonClass + " btn btn-warning upvote";
+                nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
                 $(".topQuestions").append(nextTop);
-            }else{
+            } else {
                 nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
                 $(".topQuestions").append(nextTop);
             }
@@ -162,6 +180,16 @@ $(document).ready(function () {
     //deal with events
 
     //receives arrangement event
+
+    socket.on('myUpvotedQuestions', function(myUpvoted){
+        console.log("********************************myUpvotedQuestions event received");
+        console.log("********************************myUpvotedQuestions = " + myUpvoted);
+        if(myUpvoted.length != 0) {
+            myUpvotedQuestions = myUpvoted;
+            console.log("********************************myUpvotedQuestions = " + myUpvotedQuestions);
+        }
+    });
+
     socket.on('arrangement', function (theArray) {
         console.log("'arrangement' event received");
         arrangeQuestions(theArray);

@@ -18,9 +18,9 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 var mongoose = require('mongoose');
 
 // *****your database URL goes hear
-//var dbURL = 'mongodb://localhost:27017';
+var dbURL = 'mongodb://localhost:27017';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
-var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
+//var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 
 mongoose.connect(dbURL);
 var mongoose = require('mongoose');
@@ -110,15 +110,18 @@ app.io.route('readyToChat', function (req) {
     functions.consoleLogger('READY_TO_CHAT event received');
     var r_username;
     r_username = req.session.username;
-    event_handlers.readyToChat(req, app, r_username);
+    var r_userId = req.session.userId;
+    functions.consoleLogger("r_userId = " + req.session.userId);
+    event_handlers.readyToChat(req, app, r_username, r_userId);
 });
 
 app.io.route('getHistory', function (req) {
     functions.consoleLogger('READY_TO_CHAT event received');
     var r_username;
     r_username = req.session.username;
+    var r_userId = req.session.userId;
     var currentQuestionIndex = req.data;
-    event_handlers.getHistory(req, app, r_username, currentQuestionIndex);
+    event_handlers.getHistory(req, app, r_username, r_userId, currentQuestionIndex);
 });
 
 app.io.route('clientMessage', function (req) {

@@ -34,24 +34,35 @@ module.exports = {
         functions.consoleLogger('readyInput: Success');
     },
 
-    readyToChat: function (req, app, r_username) {
+    readyToChat: function (req, app, r_username, r_userId) {
         functions.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
         functions.eventEmit(req, 'loggedin', r_username);
-        functions.addOnline(usersOnline, r_username);
 
-        //broadcasts to all, client needs to check if user is not yet displayed
-        functions.broadcastOnlineUsers(app, usersOnline, r_username);
-
-        //broadcasts the currently top questions
-        Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+        User.findOne({userId: r_userId}).exec(function (err, theUser) {
             if (err) {
-                functions.consoleLogger("ERROR: upvote: Question.find: " + err)
+                functions.consoleLogger("ERROR: readyToChat: - in retrieving user who updated")
             } else {
-                functions.eventEmit(req, 'arrangement', topFiveObject);
-                functions.consoleLogger('upvote: Success');
+                //send the user his upvoted questiond and the recent top voted questions
+                var myUpvotedQuestions = theUser.votedButtonClasses;
+                functions.eventEmit(req, 'myUpvotedQuestions', myUpvotedQuestions);
+
+                functions.addOnline(usersOnline, r_username);
+
+                //broadcasts to all, client needs to check if user is not yet displayed
+                functions.broadcastOnlineUsers(app, usersOnline, r_username);
+
+                //broadcasts the currently top questions
+                Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+                    if (err) {
+                        functions.consoleLogger("ERROR: upvote: Question.find: " + err)
+                    } else {
+                        functions.eventEmit(req, 'arrangement', topFiveObject);
+                        functions.consoleLogger('upvote: Success');
+                    }
+                });
+                functions.consoleLogger('readyToChat: Success');
             }
         });
-        functions.consoleLogger('readyToChat: Success');
     },
 
     clientMessage: function (req, app, r_username, theQuestion) {
@@ -89,14 +100,14 @@ module.exports = {
 
     //this function adds the voted question button class to the respective voter and then increments the total number of votes on the 
     //respective question, thereafter broadcasting the updated arrangement to all connected clients
-    upvote: function(req, app, customUsername, userId, r_id, buttonClass){
+    upvote: function (req, app, customUsername, userId, r_id, buttonClass) {
         functions.consoleLogger("upvote: upvote event handler called");
-        User.update({customUsername: customUsername, userId: userId},{
+        User.update({customUsername: customUsername, userId: userId}, {
             $push: {votedButtonClasses: buttonClass}
-        }, function(err, question){
-            if(err){
+        }, function (err, question) {
+            if (err) {
                 functions.consoleLogger("ERRO: upvote: event_handlers " + err);
-            }else{
+            } else {
                 functions.consoleLogger(JSON.stringify(question));
 
                 //then upvote the specific question and broadcast the new top 5
@@ -114,12 +125,12 @@ module.exports = {
                                         req.io.broadcast('arrangement', topFiveObject);
 
                                         //find the respective user who upvoted the question
-                                        User.findOne({customUsername: customUsername, userId: userId}).exec(function(err, theUser){
-                                            if(err){
+                                        User.findOne({userId: userId}).exec(function (err, theUser) {
+                                            if (err) {
                                                 functions.consoleLogger("ERROR: upvote: - in retrieving user who updated")
-                                            }else{
+                                            } else {
                                                 var usersUpvotes = theUser.votedButtonClasses;
-                                                topFiveObject.forEach(function(question){
+                                                topFiveObject.forEach(function (question) {
                                                     question.votedButtonClasses = usersUpvotes;
                                                 });
                                                 req.io.emit('arrangement', topFiveObject);
@@ -153,17 +164,28 @@ module.exports = {
         functions.consoleLogger('close: Success');
     },
 
-    getHistory: function (req, app, r_username, currentQuestionIndex) {
+    getHistory: function (req, app, r_username, r_userId, currentQuestionIndex) {
         //define limit: How many do you want?
-        var historyLimit = 10;
+        var historyLimit = 20;
 
         functions.consoleLogger("getHistory: getHistory called");
         Question.find({questionIndex: {$gt: currentQuestionIndex}}).sort({questionIndex: -1}).limit(historyLimit).exec(function (err, historyArray) {
             if (err) {
                 console.log("ERROR: getHistory: Question.find: " + err);
             } else {
-                functions.eventEmit(req, "serverHistory", historyArray);
-                functions.eventEmit(req, "incrementCurrentIndex", currentQuestionIndex + historyLimit);
+                //find this users respective upvoted questions
+                User.findOne({userId: r_userId}).exec(function (err, theUser) {
+                    if (err) {
+                        functions.consoleLogger("ERROR: getHistory: - in retrieving user who updated")
+                    } else {
+                        var usersUpvotes = theUser.votedButtonClasses;
+                        historyArray.forEach(function (question) {
+                            question.votedButtonClasses = usersUpvotes;
+                        });
+                        req.io.emit("serverHistory", historyArray);
+                        req.io.emit("incrementCurrentIndex", currentQuestionIndex + historyLimit);
+                    }
+                });
             }
             functions.consoleLogger('getHistory: Success');
         });

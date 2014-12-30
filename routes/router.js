@@ -46,7 +46,11 @@ exports.studentLoginPost = function(req, res){
             thisUserIndex = theUser.userId + 1;
         }
 
-        req.session.userId = thisUserIndex;
+        //check if the user exists on server from his device
+        //this check uses the never expiring req.session.userId
+        if(!req.session.userId && req.session.userId != 0) {
+            req.session.userId = thisUserIndex;
+        }
         sessions.toggleLoggedInSession(req, 1);
         req.session.save();
         var r_username;
