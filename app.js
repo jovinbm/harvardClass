@@ -1,12 +1,17 @@
+/**
+ * Created by jovinbm on 12/25/14.
+ */
+//import modules
 var express = require('express.io');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var session = require('express-session');
+var passport = require('passport');
+var OpenIDStrategy = require('passport-openid').Strategy;
 var routes = require('./routes/router.js');
-
 var app = express().http().io();
 
 // load the functions and event_handlers
@@ -16,20 +21,20 @@ var event_handlers = require('./event_handlers/event_handlers.js');
 
 //defining database
 var mongoose = require('mongoose');
-
-// *****your database URL goes hear
+//*YOUR DATABASE URL GOES HERE*
 //var dbURL = 'mongodb://localhost:27017';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
 var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
-
 mongoose.connect(dbURL);
-var mongoose = require('mongoose');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
     console.log("Succesfully connected to server");
 });
+//define models
 var Question = require("./database/questions/question_model.js");
+var User = require("./database/users/user_model.js");
+var HarvardUser = require("./database/harvardUsers/harvard_user_model.js");
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -37,11 +42,57 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.session({secret: '1234567890QWERTY'}));
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+//app.use(express.session({secret: '1234567890QWERTY'}));
+app.use(session({
+    secret: 'no peeking',
+    resave: false,
+    saveUninitialized: true
+}));
+
+//require and configure passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new OpenIDStrategy({
+        returnURL: 'https://harvardclass.herokuapp.com/harvardId',
+        realm: 'https://harvardclass.herokuapp.com'
+    },
+    function (identifier,profile, done) {
+        console.log("*********IDENTIFIER = " + identifier);
+        console.log("*********PROFILE = " + JSON.stringify(profile));
+        done(null, {id: identifier});
+    }
+));
+
+passport.serializeUser(function(user, done){
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done){
+    done(null, {id: id});
+});
+
 
 //define all routing
+//HANDLING PASSPORT REQUESTS
+app.post('/harvardId/login', passport.authenticate('openid'));
+app.get('/harvardId',
+    passport.authenticate('openid', {
+        successRedirect: '/success',
+        failureRedirect: '/failure'
+    }));
+app.get('/success', function(req, res, next) {
+    res.send('Successfully logged in.');
+});
+app.get('/failure', function(req, res, next) {
+    res.send("Error logging in.");
+});
+
+
+
+
+
+
+
 //handling login.html and chat.html requests
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
@@ -61,39 +112,7 @@ app.get('/chat.js', routes.chatJs);
 app.get('/socket.io/socket.io.js', routes.socketIo);
 
 //redirect every other request to home
-app.get('*', routes.loginHtml);
-
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+//app.get('*', routes.loginHtml);
 
 //handling events
 app.io.route('readyInput', function (req) {

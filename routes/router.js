@@ -2,7 +2,6 @@
  * Created by jovinbm on 12/25/14.
  */
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 var functions = require('../functions/functions.js');
 var sessions = require('../functions/sessions.js');
 var event_handlers = require('../event_handlers/event_handlers.js');

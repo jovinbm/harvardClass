@@ -3,7 +3,6 @@
  */
 //import modules
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 var Question = require("../database/questions/question_model.js");
 var User = require("../database/users/user_model.js");
 var functions = require('../functions/functions.js');

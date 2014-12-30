@@ -80,7 +80,14 @@
 
 <!--to hide use:  style="display: none"-->
 <div class="container text-center">
-    <button type="submit" class="btn btn-default btn-danger btn-lg" id="harvardID">Log in with Harvard ID</button>
+    <form action="/harvardId/login"
+          method="post"
+          id="harvardIdLoginForm">
+
+        <input type="text" name="https://id.cs50.net/" value="https://id.cs50.net/"/>
+
+        <button type="submit" class="btn btn-default btn-danger btn-lg" id="harvardID">Log in with Harvard ID</button>
+    </form>
 </div>
 <!--end of login with Harvard ID-->
 
