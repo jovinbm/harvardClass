@@ -24,7 +24,7 @@ var mongoose = require('mongoose');
 //*YOUR DATABASE URL GOES HERE*
 //var dbURL = 'mongodb://localhost:27017';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
-var dbURL =  'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
+var dbURL = 'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 mongoose.connect(dbURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -53,20 +53,21 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new OpenIDStrategy({
-        returnURL: 'https://harvardclass.herokuapp.com/harvardId',
-        realm: 'https://harvardclass.herokuapp.com'
+        //returnURL: 'https://harvardclass.herokuapp.com/harvardId',
+        //realm: 'https://harvardclass.herokuapp.com'
 
-        //returnURL: 'http://localhost:3000/harvardId',
-        //realm: 'http://localhost:3000'
+        returnURL: 'http://localhost:3000/harvardId',
+        realm: 'http://localhost:3000',
+        profile: true
     },
     function (identifier, profile, done) {
         console.log("*********IDENTIFIER = " + identifier);
         console.log("*********PROFILE = " + JSON.stringify(profile));
-        done(null, {id: identifier});
+        done(null, {id: identifier, emails: profile.email, name: profile.name });
     }
 ));
 
-passport.serializeUser(function(user, done){
+passport.serializeUser(function (user, done) {
     done(null, user.id);
 });
 
@@ -83,17 +84,12 @@ app.get('/harvardId',
         successRedirect: '/success',
         failureRedirect: '/failure'
     }));
-app.get('/success', function(req, res, next) {
+app.get('/success', function (req, res, next) {
     res.send('Successfully logged in.');
 });
-app.get('/failure', function(req, res, next) {
+app.get('/failure', function (req, res, next) {
     res.send("Error logging in.");
 });
-
-
-
-
-
 
 
 //handling login.html and chat.html requests
@@ -183,7 +179,7 @@ app.io.route('logout', function (req) {
 
 //handle disconnections
 //closed unexpectedly
-app.io.route('close', function(req) {
+app.io.route('close', function (req) {
     functions.consoleLogger('CLOSE event received');
     var r_username;
     r_username = req.session.username;
@@ -191,7 +187,7 @@ app.io.route('close', function(req) {
 });
 
 //request ended normally
-app.io.route('end', function(req){
+app.io.route('end', function (req) {
     functions.consoleLogger('END event received');
     var r_username;
     r_username = req.session.username;
