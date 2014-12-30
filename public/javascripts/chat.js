@@ -147,8 +147,10 @@ $(document).ready(function () {
             }
             var nextTop;
 
+            //if already updated, isert a new button class with a btn-warning class, and a disabled attribute
             if(searchArrayIfExists(r_buttonClass, myUpvotedQuestions)){
-               nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%' disabled><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
+                r_buttonClass = r_buttonClass + " btn btn-warning upvote"
+               nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
                 $(".topQuestions").append(nextTop);
             }else{
                 nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
