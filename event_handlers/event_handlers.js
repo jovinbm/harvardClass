@@ -2,23 +2,22 @@
  * Created by jovinbm on 12/25/14.
  */
 //import modules
-var mongoose = require('mongoose');
 var Question = require("../database/questions/question_model.js");
-var User = require("../database/users/user_model.js");
 var functions = require('../functions/functions.js');
+var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
 //function to make new question
-var makeNewQuestion = function (questionObject, thisQuestionIndex) {
+var makeNewQuestion = function (questionObject, thisQuestionIndex, openId) {
     question = new Question({
         questionIndex: thisQuestionIndex,
         senderName: questionObject.senderName,
+        senderOpenId: openId,
         message: questionObject.message,
         shortMessage: questionObject.shortMessage,
         messageClass: "a" + thisQuestionIndex,
         buttonClass: "a" + thisQuestionIndex + "b btn btn-info upvote",
         votes: 0
     });
-    functions.consoleLogger("makeNewQuestion: question = " + JSON.stringify(question));
     return question;
 };
 
@@ -27,21 +26,15 @@ var usersOnline = [];
 
 //define and export all the event handlers
 module.exports = {
-    readyInput: function (req, app, r_username) {
-        functions.consoleLogger('readyInput: READY_INPUT event handler called');
-        functions.eventEmit(req, "goToChat", "/chat.html");
-        functions.consoleLogger('readyInput: Success');
-    },
-
-    readyToChat: function (req, app, r_username, r_userId) {
+    readyToChat: function (req, app, r_username, openId) {
         functions.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
         functions.eventEmit(req, 'loggedin', r_username);
 
-        User.findOne({userId: r_userId}).exec(function (err, theUser) {
+        HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
             if (err) {
-                functions.consoleLogger("ERROR: readyToChat: - in retrieving user who updated")
+                functions.consoleLogger("ERROR: readyToChat: - in retrieving user")
             } else {
-                //send the user his upvoted questiond and the recent top voted questions
+                //send the user his upvoted questions and THE RECENT TOP VOTED questions
                 var myUpvotedQuestions = theUser.votedButtonClasses;
                 functions.eventEmit(req, 'myUpvotedQuestions', myUpvotedQuestions);
 
@@ -50,7 +43,7 @@ module.exports = {
                 //broadcasts to all, client needs to check if user is not yet displayed
                 functions.broadcastOnlineUsers(app, usersOnline, r_username);
 
-                //broadcasts the currently top questions
+                //BROADCASTS CURRENTLY TOP VOTED
                 Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
                     if (err) {
                         functions.consoleLogger("ERROR: upvote: Question.find: " + err)
@@ -64,51 +57,57 @@ module.exports = {
         });
     },
 
-    clientMessage: function (req, app, r_username, theQuestion) {
+    clientMessage: function (req, app, r_username, theQuestion, openId) {
         functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
-        var question;
-        functions.consoleLogger('theQuestion.message = ' + theQuestion.message);
-
         //only save if the question is not empty or is not a space
         if (theQuestion.message != "" && theQuestion.message != " ") {
-            //query to get new index
-            Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
-                var thisQuestionIndex;
-                if (err || theObject == null || theObject == undefined) {
-                    functions.consoleLogger("ERROR: getNewQuestion: " + err);
-                    thisQuestionIndex = 0;
+            //insert the question class to the respective harvard user for tracking
+            HarvardUser.update({openId: openId}, {
+                $push: {askedQuestionsClasses: theQuestion.messageClass}
+            }, function (err, theUser) {
+                if (err) {
+                    functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
                 } else {
-                    thisQuestionIndex = theObject.questionIndex + 1;
-                }
+                    var question;
+                    //query to get new index
+                    Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
+                        var thisQuestionIndex;
+                        if (err || theObject == null || theObject == undefined) {
+                            functions.consoleLogger("ERROR: getNewQuestion: " + err);
+                            thisQuestionIndex = 0;
+                        } else {
+                            thisQuestionIndex = theObject.questionIndex + 1;
+                        }
 
-                //save the question
-                question = makeNewQuestion(theQuestion, thisQuestionIndex);
-                question.save(function (err, UpdatedQuestion) {
-                    if (err) {
-                        functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
-                    } else {
-                        functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
-                        functions.consoleLogger('clientMessage: Success');
-                    }
-                });
+                        //save the question using the new unique index and the senders openId(for tracking who
+                        //asked which question
+                        question = makeNewQuestion(theQuestion, thisQuestionIndex, openId);
+                        question.save(function (err, UpdatedQuestion) {
+                            if (err) {
+                                functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
+                            } else {
+                                functions.eventBroadcaster(app, 'serverMessage', UpdatedQuestion);
+                                functions.consoleLogger('clientMessage: Success');
+                            }
+                        });
+
+                    });
+                }
 
             });
         }
-
     },
 
     //this function adds the voted question button class to the respective voter and then increments the total number of votes on the 
     //respective question, thereafter broadcasting the updated arrangement to all connected clients
-    upvote: function (req, app, customUsername, userId, r_id, buttonClass) {
+    upvote: function (req, app, customUsername, openId, r_id, buttonClass) {
         functions.consoleLogger("upvote: upvote event handler called");
-        User.update({customUsername: customUsername, userId: userId}, {
+        HarvardUser.update({id: openId}, {
             $push: {votedButtonClasses: buttonClass}
         }, function (err, question) {
             if (err) {
                 functions.consoleLogger("ERRO: upvote: event_handlers " + err);
             } else {
-                functions.consoleLogger(JSON.stringify(question));
-
                 //then upvote the specific question and broadcast the new top 5
                 functions.consoleLogger('upvote: UPVOTE event handler called with r_id = ' + r_id);
                 var incrementVotes = function (r_id) {
@@ -121,10 +120,12 @@ module.exports = {
                                     if (err) {
                                         functions.consoleLogger("ERROR: upvote: Question.find: " + err)
                                     } else {
+                                        //broadcast to all but the user who upvoted the question
                                         req.io.broadcast('arrangement', topFiveObject);
 
-                                        //find the respective user who upvoted the question
-                                        User.findOne({userId: userId}).exec(function (err, theUser) {
+                                        //find the respective user who upvoted the question so that you can send them
+                                        //a personalized arrangement with an update of what he upvoted
+                                        HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
                                             if (err) {
                                                 functions.consoleLogger("ERROR: upvote: - in retrieving user who updated")
                                             } else {
@@ -163,7 +164,7 @@ module.exports = {
         functions.consoleLogger('close: Success');
     },
 
-    getHistory: function (req, app, r_username, r_userId, currentQuestionIndex) {
+    getHistory: function (req, app, r_username, openId, currentQuestionIndex) {
         //define limit: How many do you want?
         var historyLimit = 20;
 
@@ -173,10 +174,11 @@ module.exports = {
                 console.log("ERROR: getHistory: Question.find: " + err);
             } else {
                 //find this users respective upvoted questions
-                User.findOne({userId: r_userId}).exec(function (err, theUser) {
+                HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
                     if (err) {
                         functions.consoleLogger("ERROR: getHistory: - in retrieving user who updated")
                     } else {
+                        //insert the users upvotes into the ultimate object
                         var usersUpvotes = theUser.votedButtonClasses;
                         historyArray.forEach(function (question) {
                             question.votedButtonClasses = usersUpvotes;

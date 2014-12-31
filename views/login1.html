@@ -76,20 +76,65 @@
 </div>
 <!--end of jumbotron-->
 
-<!--start of login with Harvard ID-->
-
-<!--to hide use:  style="display: none"-->
-<div class="container text-center">
-    <form action="/harvardId/login"
+<!--start of custom student login form-->
+<div class="container">
+    <!--data-dv attributes for bootstrap validator plugin-->
+    <form action="/studentLogin"
           method="post"
-          id="harvardIdLoginForm">
+          id="studentLoginForm"
+          data-bv-message="This value is not valid"
+          data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+          data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+          data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
 
-        <input type="hidden" name="openid_identifier" value="https://id.cs50.net/"/>
+        <!--Username field-->
+        <div class="form-group">
+            <label for="customUsername">Username</label>
+            <input type="text"
+                   class="form-control"
+                   id="customUsername"
+                   placeholder="Enter your custom Username"
+                   name="customUsername"
+                   data-bv-message="The username is not valid"
+                   data-bv-notempty="true"
+                   data-bv-notempty-message="The username is required and cannot be empty"
+                   data-bv-regexp="true"
+                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
+                   data-bv-regexp-message="The username can only consist of alphabetical, number, dot and underscore"
+                   data-bv-stringlength="true"
+                   data-bv-stringlength-min="5"
+                   data-bv-stringlength-max="10"
+                   data-bv-stringlength-message="The custom username must be at least 5 and at most 10 characters long"/>
+        </div>
 
-        <button type="submit" class="btn btn-default btn-danger btn-lg" id="harvardID">Log in with Harvard ID</button>
+        <!--class code field-->
+        <div class="form-group">
+            <label for="classCode">Code</label>
+            <input type="password"
+                   class="form-control"
+                   id="classCode"
+                   placeholder="Password"
+                   name="classCode"
+                   data-bv-message="The class code is not valid"
+                   data-bv-notempty="true"
+                   data-bv-notempty-message="The class code is required and cannot be empty"
+                   data-bv-regexp="true"
+                   data-bv-regexp-regexp="^[a-zA-Z0-9_\.]+$"
+                   data-bv-regexp-message="The class code can only consist of alphabetical, number, dot and underscore"
+                   data-bv-stringlength="true"
+                   data-bv-stringlength-min="5"
+                   data-bv-stringlength-max="10"
+                   data-bv-stringlength-message="The class code must be at least 5 and at most 10 characters long"/>
+        </div>
+
+        <!--<button type="submit" class="btn btn-default btn-block">Get in Class</button>-->
+        <div class="form-group">
+            <button type="submit" class="btn btn-default btn-block">Get in Class</button>
+        </div>
     </form>
 </div>
-<!--end of login with Harvard ID-->
+<!--end of custom student login form-->
+
 
 <!--start of instructor login form-->
 <div class="container" style="display: none">
