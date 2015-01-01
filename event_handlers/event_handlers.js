@@ -173,7 +173,7 @@ module.exports = {
 
                             });
                         }
-                    }
+                    });
 
                 } else {
                     thisQuestionIndex = theObject.questionIndex + 1;
