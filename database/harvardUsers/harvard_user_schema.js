@@ -18,3 +18,5 @@ var harvardUsersSchema = new Schema({
 });
 
 module.exports = harvardUsersSchema;
+
+//TODO -- what unique thing to use to identify users uniquely --cs50 id

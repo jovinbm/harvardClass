@@ -2,8 +2,6 @@
  * Created by jovinbm on 12/27/14.
  */
 $(document).ready(function () {
-    //******define global variables************
-
     //IMPORTANT
     //examples: questionClasses have the format a7, the corresponding buttonClass = a7b
 
@@ -12,18 +10,108 @@ $(document).ready(function () {
     //myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
     //on every start and when the arrangeQuestion function is called
     var myUpvotedQuestions = [];
+
     var usersOnline = [];
-    //stores the current question index. The initial value is -1 because the server queries results greater than -1
-    //i.e. $gt -1 means from 0 onwards
+
+    // currentQuestionIndexstores the current question index. The initial value is -1
+    // because the server queries results greater than -1 i.e. $gt -1 means from 0 onwards
     var currentQuestionIndex = -1;
 
-    var your_sid_cookie =  $.cookie('your.sid-key');
-    //var socket = io.connect('//' + window.location.hostname, {query: 'session_id=' + your_sid_cookie});
-    var socket = io.connect('http://127.0.0.1:3000', {query: 'session_id=' + your_sid_cookie});
-    socket.emit('readyToChat', your_sid_cookie);
-    socket.emit('getHistory', currentQuestionIndex);
+    var socket = io.connect('//' + window.location.hostname);
 
-    //defining functions
+    //send a readyToChat event which on succes will request the recent
+    //question history
+    sendReadyToChat();
+
+
+    //INTERACTIONS
+    $('#ask').click(function () {
+        console.log("Clicked");
+        var message = $("#qfield").val();
+        var shortMessage = "";
+
+        //trim 130 characters to be used for top voted
+        if (message.length > 130) {
+            for (var i = 0; i < 130; i++) {
+                shortMessage = shortMessage + message[i];
+            }
+            shortMessage = shortMessage + "...";
+        }
+        else {
+            for (var i = 0; i < message.length; i++) {
+                shortMessage = shortMessage + message[i];
+            }
+        }
+        var questionToDatabase = {
+            "senderName": myGlobalUsername,
+            "message": message,
+            "shortMessage": shortMessage,
+            "messageClass": "",
+            "buttonClass": "",
+            "votes": 0
+        };
+
+        sendQuestion(questionToDatabase);
+        $("#qfield").val("");
+        return false;
+    });
+
+    $('#logout').click(function () {
+        sendLogout();
+    });
+
+
+    //DEFINING FUNCTIONS
+
+    function sendReadyToChat() {
+        $.ajax({
+            url: "/readyToChat",
+            type: 'POST',
+            dataType: "json",
+            data: {"name": "jovin"},
+            complete: function sendGetHistory() {
+                $.ajax({
+                    url: "/getHistory",
+                    type: 'POST',
+                    dataType: "json",
+                    data: {"currentQuestionIndex": currentQuestionIndex}
+                });
+            }
+        })
+    }
+
+
+    function sendQuestion(askedQuestion) {
+        $.ajax({
+            url: "/clientMessage",
+            type: "POST",
+            dataType: "json",
+            data: askedQuestion
+        });
+    }
+
+
+    function sendUpvote(questionClass) {
+        $.ajax({
+            url: "/upvote",
+            type: "POST",
+            dataType: "json",
+            data: questionClass
+        });
+    }
+
+
+    function sendLogout() {
+        $.ajax({
+            url: "/logout",
+            type: "POST",
+            success: function () {
+                //window.location = '//' + window.location.hostname;
+                window.location = '//' + window.location.hostname + ':3000';
+            }
+        });
+    }
+
 
     //returns true only if 'name' DOESN'T exist in 'theArray
     function searchArray(name, theArray) {
@@ -34,6 +122,7 @@ $(document).ready(function () {
         }
         return true;
     }
+
 
     //returns true only if 'name' EXISTS in 'theArray
     function searchArrayIfExists(name, theArray) {
@@ -63,8 +152,10 @@ $(document).ready(function () {
         //stringLimit = questionClass;
         var stringLimit = upvoteId.length - 1;
         console.log(upvoteId.substring(1, stringLimit));
-        socket.emit('upvote', upvoteId.substring(1, stringLimit));
+        var questionClass = {"questionClass": upvoteId.substring(1, stringLimit)};
+        sendUpvote(questionClass);
     });
+
 
     $("table.topQuestions").delegate("button", "click", function () {
         console.log("TRIGGERED DELEGATE TOP");
@@ -87,6 +178,7 @@ $(document).ready(function () {
         $('#logout').html("<a href='#'>Logout</a>");
     }
 
+
     //adds a new user to the onlinne list
     function addOnline(name) {
         console.log("addOnline called");
@@ -100,6 +192,7 @@ $(document).ready(function () {
         }
     }
 
+
     function removeOnline(name) {
         console.log("removeOnline called with name " + name);
         $(".onlineUser").each(function () {
@@ -110,6 +203,7 @@ $(document).ready(function () {
         var index = usersOnline.indexOf(name);
         usersOnline.splice(index, 1);
     }
+
 
     //prepends a new message to the question feed
     function addMessage(key) {
@@ -140,6 +234,7 @@ $(document).ready(function () {
             $(".question_feed").prepend(nextQuestion);
         }
     }
+
 
     //deals with adding history
     function addHistory(historyArray) {
@@ -179,35 +274,34 @@ $(document).ready(function () {
         })
     }
 
-    //deal with events
 
-    //receives arrangement event
+    //EVENTS
 
-    socket.on('myUpvotedQuestions', function(myUpvoted){
-        console.log("********************************myUpvotedQuestions event received");
-        console.log("********************************myUpvotedQuestions = " + myUpvoted);
-        if(myUpvoted.length != 0) {
+    socket.on('myUpvotedQuestions', function (myUpvoted) {
+        if (myUpvoted.length != 0) {
             myUpvotedQuestions = myUpvoted;
-            console.log("********************************myUpvotedQuestions = " + myUpvotedQuestions);
         }
     });
+
 
     socket.on('arrangement', function (theArray) {
         console.log("'arrangement' event received");
         arrangeQuestions(theArray);
     });
 
+
     //receives online event
     socket.on('online', function (name) {
         console.log("'online' event received");
         addOnline(name);
-        varUsername = name;
     });
+
 
     socket.on('serverMessage', function (messageObject) {
         console.log("'serverMessage' event received");
         addMessage(messageObject);
     });
+
 
     //receive recent history
     socket.on('serverHistory', function (historyArray) {
@@ -215,11 +309,13 @@ $(document).ready(function () {
         addHistory(historyArray);
     });
 
+
     //increments currentQuestionIndex
     socket.on('incrementCurrentIndex', function (num) {
         console.log("'incrementCurrentIndex' event received");
         currentQuestionIndex = currentQuestionIndex + num;
     });
+
 
     //receives logoutUser event from server
     socket.on('logoutUser', function (name) {
@@ -227,53 +323,18 @@ $(document).ready(function () {
         removeOnline(name);
     });
 
+
     socket.on('loggedin', function (name) {
         myGlobalUsername = name;
         console.log("'loggedin' event received");
         loggedIn(name);
     });
 
+
     socket.on('goToLogin', function (content) {
         console.log("'goToLogin' event received");
         window.location.href = content;
     });
-
-
-    //emit events on interactions
-    $('#ask').click(function () {
-        console.log("Clicked");
-        var message = $("#qfield").val();
-        var shortMessage = "";
-        //trim 130 characters to be used for top voted
-        if (message.length > 130) {
-            for (var i = 0; i < 130; i++) {
-                shortMessage = shortMessage + message[i];
-            }
-            shortMessage = shortMessage + "...";
-        }
-        else {
-            for (var i = 0; i < message.length; i++) {
-                shortMessage = shortMessage + message[i];
-            }
-        }
-        var questionToDatabase = {
-            'senderName': myGlobalUsername,
-            'message': message,
-            'shortMessage': shortMessage,
-            'messageClass': '',
-            'buttonClass': '',
-            'votes': 0
-        };
-
-        socket.emit('clientMessage', questionToDatabase);
-        $("#qfield").val("");
-        return false;
-    });
-
-    $('#logout').click(function () {
-        socket.emit('logout', myGlobalUsername);
-    });
-
 });
 
 

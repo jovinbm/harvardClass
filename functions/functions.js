@@ -18,15 +18,16 @@ module.exports = {
     },
 
     //this funtion emits an event to the respective users
-    eventEmit: function (req, serverEvent, content) {
+    eventEmit: function (socket, io, serverEvent, content) {
         consoleLogger("f.eventEmit: Function 'eventEmit' called");
-        req.io.emit(serverEvent, content);
+        io.emit(serverEvent, content);
     },
 
     //this function emits an event to all connected users
-    eventBroadcaster: function (app, serverEvent, content) {
+    eventBroadcaster: function (socket, io, serverEvent, content) {
         consoleLogger("f.eventBroadcaster: Function 'eventBroadcaster' called");
-        app.io.broadcast(serverEvent, content);
+        //broadcast to all sockets
+        io.sockets.emit(serverEvent, content);
     },
 
     //this function keeps track of an array that contains names of all online users
@@ -43,10 +44,11 @@ module.exports = {
     },
 
     //this function broadcasts all online users
-    broadcastOnlineUsers: function (app, userOnlineObject, r_username) {
+    broadcastOnlineUsers: function (socket, io, userOnlineObject, r_username) {
         consoleLogger("f.broadcastOnlineUsers: Function 'broadcastOnlineUsers' called");
         userOnlineObject.forEach(function (name) {
-            app.io.broadcast('online', name);
+            //broadcast to all
+            io.sockets.emit('online', name);
         });
     }
 
