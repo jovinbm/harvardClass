@@ -113,7 +113,7 @@ module.exports = {
         if (index != -1) {
             usersOnline[index].time = microSeconds;
             functions.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
-        }else{
+        } else {
             //add the user back to the online object
             functions.addOnline(usersOnline, r_username);
         }
@@ -152,31 +152,30 @@ module.exports = {
                     thisQuestionIndex = 0;
                 } else {
                     thisQuestionIndex = theObject.questionIndex + 1;
+
+                    //save the question using the new unique index and the senders openId(for tracking who
+                    //asked which question
+                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId);
+                    question.save(function (err, UpdatedQuestion) {
+                        if (err) {
+                            functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
+                        } else {
+
+                            //insert the question class to the respective harvard user for tracking
+                            HarvardUser.update({id: openId}, {
+                                $push: {askedQuestionsClasses: UpdatedQuestion.messageClass}
+                            }, function (err, theUser) {
+                                if (err || theUser == null || theUser == undefined) {
+                                    functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
+                                } else {
+                                    functions.eventBroadcaster(socket, io, 'serverMessage', UpdatedQuestion);
+                                    functions.consoleLogger('clientMessage: Success');
+                                }
+
+                            });
+                        }
+                    });
                 }
-
-                //save the question using the new unique index and the senders openId(for tracking who
-                //asked which question
-                question = makeNewQuestion(theQuestion, thisQuestionIndex, openId);
-                question.save(function (err, UpdatedQuestion) {
-                    if (err) {
-                        functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
-                    } else {
-
-                        //insert the question class to the respective harvard user for tracking
-                        HarvardUser.update({id: openId}, {
-                            $push: {askedQuestionsClasses: UpdatedQuestion.messageClass}
-                        }, function (err, theUser) {
-                            if (err || theUser == null || theUser == undefined) {
-                                functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
-                            } else {
-                                functions.eventBroadcaster(socket, io, 'serverMessage', UpdatedQuestion);
-                                functions.consoleLogger('clientMessage: Success');
-                            }
-
-                        });
-                    }
-                });
-
             });
         }
     },
