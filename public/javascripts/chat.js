@@ -6,6 +6,7 @@ $(document).ready(function () {
     //examples: questionClasses have the format a7, the corresponding buttonClass = a7b
 
     var myGlobalUsername;
+    var onlinePollTime = 120000;
 
     //myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
     //on every start and when the arrangeQuestion function is called
@@ -22,6 +23,8 @@ $(document).ready(function () {
     //send a readyToChat event which on succes will request the recent
     //question history
     sendReadyToChat();
+
+    setInterval(iAmOnline, onlinePollTime);
 
 
     //INTERACTIONS
@@ -56,8 +59,12 @@ $(document).ready(function () {
         return false;
     });
 
-    $('#logout').click(function () {
-        sendLogout();
+    $('.logoutHarvardChat').click(function () {
+        sendLogoutHarvardChat();
+    });
+
+    $('.logoutCustomChat').click(function () {
+        sendLogoutCustomChat();
     });
 
 
@@ -101,13 +108,27 @@ $(document).ready(function () {
     }
 
 
-    function sendLogout() {
+    //clears both custom and harvard session
+    function sendLogoutHarvardChat() {
         $.ajax({
-            url: "/logout",
+            url: "/logoutHarvardChat",
             type: "POST",
             success: function () {
                 window.location = '//' + window.location.hostname;
                 //window.location = '//' + window.location.hostname + ':3000';
+            }
+        });
+    }
+
+
+    //clears only custom session
+    function sendLogoutCustomChat() {
+        $.ajax({
+            url: "/logoutCustomChat",
+            type: "POST",
+            success: function () {
+                //window.location = '//' + window.location.hostname;
+                window.location = '//' + window.location.hostname + ':3000';
             }
         });
     }
@@ -132,6 +153,13 @@ $(document).ready(function () {
             }
         }
         return false;
+    }
+
+    function iAmOnline(){
+        $.ajax({
+            url: "/iAmOnline",
+            type: "POST"
+        });
     }
 
 
@@ -180,16 +208,15 @@ $(document).ready(function () {
 
 
     //adds a new user to the onlinne list
-    function addOnline(name) {
+    function addOnline(onlineUsers) {
         console.log("addOnline called");
-
-        //server sends all online users each time. searchArray makes sure that only
+        $(".onlineUsers").empty();
+        //server sends all onlineUsers Array at regular intervals
         //new users are appended
-        if (searchArray(name, usersOnline)) {
-            var newUser = "<tr><td><i class='fa fa-user'></i></td><td class='onlineUser'>" + name + "</td></tr>";
+        onlineUsers.forEach(function(user){
+            var newUser = "<tr><td><i class='fa fa-user'></i></td><td class='onlineUser'>" + user.customUsername + "</td></tr>";
             $(".onlineUsers").prepend(newUser);
-            usersOnline.push(name);
-        }
+        });
     }
 
 
@@ -200,8 +227,6 @@ $(document).ready(function () {
                 $(this).closest("tr").remove();
             }
         });
-        var index = usersOnline.indexOf(name);
-        usersOnline.splice(index, 1);
     }
 
 
@@ -291,9 +316,10 @@ $(document).ready(function () {
 
 
     //receives online event
-    socket.on('online', function (name) {
-        console.log("'online' event received");
-        addOnline(name);
+    socket.on('usersOnline', function (onlineUsers) {
+        console.log("'usersOnline' event received");
+        usersOnline = onlineUsers;
+        addOnline(onlineUsers);
     });
 
 

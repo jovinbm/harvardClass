@@ -50,7 +50,16 @@
                 <li><a href="https://canvas.harvard.edu/" target="_blank">Canvas</a></li>
                 <li><a href="https://my.harvard.edu" target="_blank">my.harvard.edu</a></li>
                 <li id='signInName'><a href="#">About</a></li>
-                <li id="logout"><a href="#">Beta!</a></li>
+
+                <!--the user profile dropdown-->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <%= displayName %> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="logoutHarvardLogin">Logout from Harvard</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -191,7 +200,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 
 <!-- loads jquery cookie plugin -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 
 <!-- loads jquery for bootstrapvalidator plugin -->
 <script type="text/javascript"

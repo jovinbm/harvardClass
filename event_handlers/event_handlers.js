@@ -6,6 +6,8 @@ var Question = require("../database/questions/question_model.js");
 var functions = require('../functions/functions.js');
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
+var onlineMinutesLimit = 5;
+
 //function to make new question
 var makeNewQuestion = function (questionObject, thisQuestionIndex, openId) {
     question = new Question({
@@ -23,6 +25,14 @@ var makeNewQuestion = function (questionObject, thisQuestionIndex, openId) {
 
 //variable to hold online users
 var usersOnline = [];
+
+//function to return index of userObject in an array
+function indexArrayObject(myArray, property, value) {
+    for (var i = 0, len = myArray.length; i < len; i++) {
+        if (myArray[i][property] === value) return i;
+    }
+    return -1;
+}
 
 //define and export all the event handlers
 module.exports = {
@@ -63,6 +73,7 @@ module.exports = {
         });
     },
 
+
     getHistory: function (req, res, r_username, openId, currentQuestionIndex, socket, io) {
         //define limit: How many do you want?
         var historyLimit = 20;
@@ -90,6 +101,43 @@ module.exports = {
             }
         });
     },
+
+
+    iAmOnline: function (req, res, r_username, socket, io) {
+        var date = new Date();
+        var microSeconds = date.getTime();
+
+        //find the user in the userOnline object
+        var index = indexArrayObject(usersOnline, "customUsername", r_username);
+
+        if (index != -1) {
+            usersOnline[index].time = microSeconds;
+            functions.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
+        }else{
+            //add the user back to the online object
+            functions.addOnline(usersOnline, r_username);
+        }
+    },
+
+    checkOnlineUsers: function (io) {
+
+        var date = new Date();
+        var microSeconds = date.getTime();
+        var tempUsersOnline = [];
+
+        for (var i = 0, len = usersOnline.length; i < len; i++) {
+            //get minutes difference since when users last checked in
+            var minutes = Math.floor(((microSeconds - usersOnline[i].time) / 1000) / 60);
+            functions.consoleLogger("******minutes = " + minutes);
+            if (minutes < onlineMinutesLimit) {
+                tempUsersOnline.push(usersOnline[i]);
+            }
+        }
+        usersOnline = tempUsersOnline;
+        functions.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
+        io.sockets.emit('usersOnline', usersOnline);
+    },
+
 
     clientMessage: function (req, res, r_username, theQuestion, openId, socket, io) {
         functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
@@ -132,6 +180,7 @@ module.exports = {
             });
         }
     },
+
 
     //this function adds the voted question button class to the respective voter and then increments the total number of votes on the 
     //respective question, thereafter broadcasting the updated arrangement to all connected clients
@@ -182,15 +231,39 @@ module.exports = {
         });
     },
 
-    logout: function (req, res, r_username, socket, io) {
-        functions.consoleLogger('LOGOUT event handler called');
-        functions.eventBroadcaster(socket, io,  'logoutUser', r_username);
+
+    logoutHarvardLogin: function (req, res, socket, io) {
+        functions.consoleLogger('LOGOUT HARVARD LOGIN event handler called');
+        //delete the harvard cs50 ID session
+        req.logout();
+        //send a success so that the user will be logged out and redirected
+        res.contentType('json');
+        res.send({status: JSON.stringify({response: 'success'})});
+        functions.consoleLogger('logoutHarvard: Success');
+    },
+
+
+    logoutCustomChat: function (req, res, r_username, socket, io) {
+        functions.consoleLogger('LOGOUT CUSTOM CHAT event handler called');
+        functions.eventBroadcaster(socket, io, 'logoutUser', r_username);
+        functions.removeOnline(usersOnline, r_username);
+        //delete the harvard cs50 ID session
+        //send a success so that the user will be logged out and redirected
+        res.contentType('json');
+        res.send({status: JSON.stringify({response: 'success'})});
+        functions.consoleLogger('logout: Success');
+    },
+
+
+    logoutHarvardChat: function (req, res, r_username, socket, io) {
+        functions.consoleLogger('LOGOUT HARVARD CHAT event handler called');
+        functions.eventBroadcaster(socket, io, 'logoutUser', r_username);
         functions.removeOnline(usersOnline, r_username);
         //delete the harvard cs50 ID session
         req.logout();
-        //send a success so that the user will be logged out
+        //send a success so that the user will be logged out and redirected
         res.contentType('json');
-        res.send({ status: JSON.stringify({response:'success'}) });
+        res.send({status: JSON.stringify({response: 'success'})});
         functions.consoleLogger('logout: Success');
     }
 };

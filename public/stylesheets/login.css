@@ -4,3 +4,7 @@
 body {
     padding-bottom: 140px;
 }
+
+.displayName {
+    color: cyan;
+}

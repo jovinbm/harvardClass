@@ -44,8 +44,17 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
 
             <ul class="nav navbar-nav navbar-right">
-                <li id='signInName'><a href="#">About</a></li>
-                <li id="logout"><a href="#">Beta!</a></li>
+                <!--the user profile dropdown-->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        ID: <%= customUsername %> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="logoutCustomChat">Logout from Session</a></li>
+                        <li><a href="#" class="logoutHarvardChat">Logout from Harvard</a></li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </div>
