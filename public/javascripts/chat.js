@@ -106,8 +106,8 @@ $(document).ready(function () {
             url: "/logout",
             type: "POST",
             success: function () {
-                //window.location = '//' + window.location.hostname;
-                window.location = '//' + window.location.hostname + ':3000';
+                window.location = '//' + window.location.hostname;
+                //window.location = '//' + window.location.hostname + ':3000';
             }
         });
     }
