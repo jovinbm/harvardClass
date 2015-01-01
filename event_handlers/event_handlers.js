@@ -150,6 +150,31 @@ module.exports = {
                 if (err || theObject == null || theObject == undefined) {
                     functions.consoleLogger("*(new)ERROR: getNewQuestion: " + err);
                     thisQuestionIndex = 0;
+
+                    //still save the new question
+                    //save the question using the new unique index and the senders openId(for tracking who
+                    //asked which question
+                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId);
+                    question.save(function (err, UpdatedQuestion) {
+                        if (err) {
+                            functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
+                        } else {
+
+                            //insert the question class to the respective harvard user for tracking
+                            HarvardUser.update({id: openId}, {
+                                $push: {askedQuestionsClasses: UpdatedQuestion.messageClass}
+                            }, function (err, theUser) {
+                                if (err || theUser == null || theUser == undefined) {
+                                    functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
+                                } else {
+                                    functions.eventBroadcaster(socket, io, 'serverMessage', UpdatedQuestion);
+                                    functions.consoleLogger('clientMessage: Success');
+                                }
+
+                            });
+                        }
+                    }
+
                 } else {
                     thisQuestionIndex = theObject.questionIndex + 1;
 
