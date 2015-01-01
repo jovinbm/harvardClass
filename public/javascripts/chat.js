@@ -6,7 +6,7 @@ $(document).ready(function () {
     //examples: questionClasses have the format a7, the corresponding buttonClass = a7b
 
     var myGlobalUsername;
-    var onlinePollTime = 120000;
+    var onlinePollTime = 30000;
 
     //myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
     //on every start and when the arrangeQuestion function is called
