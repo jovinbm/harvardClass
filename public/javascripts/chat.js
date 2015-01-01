@@ -17,9 +17,10 @@ $(document).ready(function () {
     //i.e. $gt -1 means from 0 onwards
     var currentQuestionIndex = -1;
 
-    var socket = io.connect(window.location.hostname);
-    socket.emit('readyToChat');
-
+    var your_sid_cookie =  $.cookie('your.sid-key');
+    //var socket = io.connect('//' + window.location.hostname, {query: 'session_id=' + your_sid_cookie});
+    var socket = io.connect('http://127.0.0.1:3000', {query: 'session_id=' + your_sid_cookie});
+    socket.emit('readyToChat', your_sid_cookie);
     socket.emit('getHistory', currentQuestionIndex);
 
     //defining functions
