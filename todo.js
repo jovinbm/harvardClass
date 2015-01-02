@@ -15,3 +15,5 @@
 //TODO -- socket.on disconnect?
 
 //todo -- custom code?
+
+//todo -- filter to remove whitespace from users input, because when it is formatted, it brings overlapping problems
