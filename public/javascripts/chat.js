@@ -252,10 +252,10 @@ $(document).ready(function () {
         if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
             r_buttonClass = r_buttonClass + " btn btn-warning upvote";
 
-            nextQuestion = "<tr class=" + key.messageClass + "><td class='senderName'>" + key.senderName + "</td><td>" + key.message + "</td><td class='questionTime'>" + questionTime + "</p></td><td align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+            nextQuestion = "<tr class=" + key.messageClass + "><td class='col-md-2 senderName'>" + key.senderName + "</td><td class='col-md-8'>" + key.message + "</td><td class='col-md-1 questionTime'>" + questionTime + "</p></td><td class='col-md-1' align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
             $(".question_feed").prepend(nextQuestion);
         } else {
-            nextQuestion = "<tr class=" + key.messageClass + "><td class='senderName'>" + key.senderName + "</td><td>" + key.message + "</td><td class='questionTime'>" + questionTime + "</p></td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
+            nextQuestion = "<tr class=" + key.messageClass + "><td class='col-md-2 senderName'>" + key.senderName + "</td><td class='col-md-8'>" + key.message + "</td><td class='col-md-1 questionTime'>" + questionTime + "</p></td><td class='col-md-1' align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
             $(".question_feed").prepend(nextQuestion);
         }
     }

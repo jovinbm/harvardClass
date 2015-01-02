@@ -18,6 +18,12 @@ body {
     z-index: 4;
 }
 
+/*wrapping text to one line*/
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
 /******************* end of questions field *******************/
 
 /***************** top voted column *************************/
