@@ -240,7 +240,7 @@ module.exports = {
                                                 topFiveObject.forEach(function (question) {
                                                     question.votedButtonClasses = usersUpvotes;
                                                 });
-                                                io.emit('arrangement', topFiveObject);
+                                                socket.emit('arrangement', topFiveObject);
                                                 functions.consoleLogger('upvote: Success');
                                             }
                                         });
