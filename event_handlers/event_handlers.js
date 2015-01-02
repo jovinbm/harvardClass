@@ -103,7 +103,7 @@ module.exports = {
     },
 
 
-    iAmOnline: function (req, res, r_username, socket, io) {
+    iAmOnline: function (req, res, r_username) {
         var date = new Date();
         var microSeconds = date.getTime();
 
