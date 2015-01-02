@@ -9,10 +9,10 @@ var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 var onlineMinutesLimit = 2;
 
 //function to make new question
-var makeNewQuestion = function (questionObject, thisQuestionIndex, openId) {
-    question = new Question({
+var makeNewQuestion = function (questionObject, thisQuestionIndex, openId, r_username) {
+    var question = new Question({
         questionIndex: thisQuestionIndex,
-        senderName: questionObject.senderName,
+        senderName: r_username,
         senderOpenId: openId,
         message: questionObject.message,
         shortMessage: questionObject.shortMessage,
@@ -154,7 +154,7 @@ module.exports = {
                     //still save the new question
                     //save the question using the new unique index and the senders openId(for tracking who
                     //asked which question
-                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId);
+                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId, r_username);
                     question.save(function (err, UpdatedQuestion) {
                         if (err) {
                             functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
@@ -180,7 +180,7 @@ module.exports = {
 
                     //save the question using the new unique index and the senders openId(for tracking who
                     //asked which question
-                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId);
+                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId, r_username);
                     question.save(function (err, UpdatedQuestion) {
                         if (err) {
                             functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
