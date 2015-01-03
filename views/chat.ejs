@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <meta name="description" content="Harvard Website to ask questions in class"/>
@@ -15,7 +16,7 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- loads custom css file -->
-    <link rel="stylesheet" href="chat.css" rel="stylesheet">
+    <link rel="stylesheet" href="chat.css">
 
 </head>
 <body>
@@ -61,38 +62,52 @@
 </div>
 <!--end of nav-->
 
-<!--middle container for newsfeed, top voted questions and online users-->
+<!--middle container for news-feed, top voted questions and online users-->
 <div class="container">
 
     <div class="row">
 
         <!--column for newsfeed-->
-        <div class="col-lg-7 col-md-6 col-sm-6">
+        <div class="col-lg-7 col-md-8 col-sm-8 col-xs-12">
 
-            <p><span>Question Feed: </span><span>Date</span></p>
-            <table class="table table-striped question_feed">
+            <p>
+                <span>
+                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                    Question Feed:
+                </span>
+                <span class="questionFeedDate">Date</span></p>
+            <table class="table table-condensed table-striped question_feed">
 
             </table>
 
         </div>
         <!--end of newsfeed-->
 
-        <!--start of top voted questions-->
-        <div class="col-lg-3 col-md-3 col-sm-5">
-            <p>Top Voted Questions</p>
-            <table class="table table-striped topQuestions">
 
-            </table>
-        </div>
-        <!--end of top voted questions-->
+        <!--start of top voted questions and online column-->
+        <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12">
 
-        <!--start of online users column-->
-        <div class="col-lg-2 col-md-2 col-sm-1 col-xs-2">
+            <div class="row">
 
-            <p>Online</p>
-            <table class="table table-striped onlineUsers">
+                <!--start of top voted questions-->
+                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-9">
+                    <p>Top Voted Questions</p>
+                    <table class="table table-condensed table-striped topQuestions">
 
-            </table>
+                    </table>
+                </div>
+                <!--end of top voted questions-->
+
+                <!--start of online users-->
+                <div class="col-lg-3 col-md-5 col-sm-5 col-xs-3" style="text-align: center">
+
+                    <p>Online</p>
+                    <table class="table table-condensed table-striped onlineUsers">
+
+                    </table>
+                </div>
+
+            </div>
 
         </div>
         <!--end of online users column-->

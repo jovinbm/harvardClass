@@ -36,10 +36,10 @@ function indexArrayObject(myArray, property, value) {
 
 //define and export all the event handlers
 module.exports = {
-    readyToChat: function (req, res, r_username, openId, socket, io) {
+    readyToChat: function (req, res, r_username, openId, socketRoom, io) {
         functions.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
 
-        functions.eventEmit(socket, io, 'loggedin', r_username);
+        functions.eventEmit(socketRoom, io, 'loggedin', r_username);
 
         HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
             if (err) {
@@ -47,26 +47,26 @@ module.exports = {
             } else {
                 //send the user his upvoted questions and THE RECENT TOP VOTED questions
                 var myUpvotedQuestions = theUser.votedButtonClasses;
-                functions.eventEmit(socket, io, 'myUpvotedQuestions', myUpvotedQuestions);
+                functions.eventEmit(socketRoom, io, 'myUpvotedQuestions', myUpvotedQuestions);
 
                 functions.addOnline(usersOnline, r_username);
 
                 //broadcasts to all, client needs to check if user is not yet displayed
-                functions.broadcastOnlineUsers(socket, io, usersOnline, r_username);
+                functions.broadcastOnlineUsers(io, usersOnline, r_username);
 
                 //BROADCASTS CURRENTLY TOP VOTED
-                Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
+                Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(10).exec(function (err, topFiveObject) {
                     if (err) {
-                        functions.consoleLogger("ERROR: upvote: Question.find: " + err)
+                        functions.consoleLogger("ERROR: upvote: Question.find: " + err);
                         functions.consoleLogger('readyToChat: Success');
                     } else {
-                        functions.eventEmit(socket, io, 'arrangement', topFiveObject);
+                        functions.eventEmit(socketRoom, io, 'arrangement', topFiveObject);
                         functions.consoleLogger('readyTochat: query votes: Success');
                         functions.consoleLogger('readyToChat: Success');
 
-                        //complete the ajax request here so that the next 'getHistory' can wait
+                        /*complete the ajax request by sending the client their socket.io room*/
                         res.contentType('json');
-                        res.send({status: JSON.stringify({response: 'success'})});
+                        res.send(JSON.stringify({"status": "success"}));
                     }
                 });
             }
@@ -74,7 +74,7 @@ module.exports = {
     },
 
 
-    getHistory: function (req, res, r_username, openId, currentQuestionIndex, socket, io) {
+    getHistory: function (req, res, r_username, openId, currentQuestionIndex, socketRoom, io) {
         //define limit: How many do you want?
         var historyLimit = 20;
 
@@ -93,8 +93,8 @@ module.exports = {
                         historyArray.forEach(function (question) {
                             question.votedButtonClasses = usersUpvotes;
                         });
-                        io.emit("serverHistory", historyArray);
-                        io.emit("incrementCurrentIndex", currentQuestionIndex + historyLimit);
+                        functions.eventEmit(socketRoom, io, "serverHistory", historyArray);
+                        functions.eventEmit(socketRoom, io, "incrementCurrentIndex", currentQuestionIndex + historyLimit);
                         functions.consoleLogger('getHistory: Success');
                     }
                 });
@@ -103,7 +103,7 @@ module.exports = {
     },
 
 
-    iAmOnline: function (req, res, r_username) {
+    iAmOnline: function (req, res, r_username, socketRoom) {
         var date = new Date();
         var microSeconds = date.getTime();
 
@@ -117,6 +117,12 @@ module.exports = {
             //add the user back to the online object
             functions.addOnline(usersOnline, r_username);
         }
+
+        //update the socketRoom
+        /*complete the ajax request by sending the client their socket.io room
+         the socketRoom is encrypted*/
+        res.contentType('json');
+        res.send(JSON.stringify({"socketRoom": socketRoom}));
     },
 
     checkOnlineUsers: function (io) {
@@ -135,11 +141,11 @@ module.exports = {
         }
         usersOnline = tempUsersOnline;
         functions.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
-        io.sockets.emit('usersOnline', usersOnline);
+        functions.eventBroadcaster(io, 'usersOnline', usersOnline);
     },
 
 
-    clientMessage: function (req, res, r_username, theQuestion, openId, socket, io) {
+    clientMessage: function (req, res, r_username, theQuestion, openId, socketRoom, io) {
         functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
         //only save if the question is not empty or is not a space
         if (theQuestion.message != "" && theQuestion.message != " ") {
@@ -167,7 +173,7 @@ module.exports = {
                                 if (err || theUser == null || theUser == undefined) {
                                     functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
                                 } else {
-                                    functions.eventBroadcaster(socket, io, 'serverMessage', UpdatedQuestion);
+                                    functions.eventBroadcaster(io, 'serverMessage', UpdatedQuestion);
                                     functions.consoleLogger('clientMessage: Success');
                                 }
 
@@ -193,7 +199,7 @@ module.exports = {
                                 if (err || theUser == null || theUser == undefined) {
                                     functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
                                 } else {
-                                    functions.eventBroadcaster(socket, io, 'serverMessage', UpdatedQuestion);
+                                    functions.eventBroadcaster(io, 'serverMessage', UpdatedQuestion);
                                     functions.consoleLogger('clientMessage: Success');
                                 }
 
@@ -208,7 +214,7 @@ module.exports = {
 
     //this function adds the voted question button class to the respective voter and then increments the total number of votes on the 
     //respective question, thereafter broadcasting the updated arrangement to all connected clients
-    upvote: function (req, res, customUsername, openId, r_id, buttonClass, socket, io) {
+    upvote: function (req, res, customUsername, openId, r_id, buttonClass, socketRoom, io) {
         functions.consoleLogger("upvote: upvote event handler called");
         HarvardUser.update({id: openId}, {
             $push: {votedButtonClasses: buttonClass}
@@ -228,7 +234,7 @@ module.exports = {
                                         functions.consoleLogger("ERROR: upvote: Question.find: " + err)
                                     } else {
                                         //broadcast to all but the user who upvoted the question
-                                        socket.broadcast.emit('arrangement', topFiveObject);
+                                        functions.eventBroadcaster(io, 'arrangement', topFiveObject);
 
                                         //find the respective user who upvoted the question so that you can send them
                                         //a personalized arrangement with an update of what he upvoted
@@ -237,10 +243,11 @@ module.exports = {
                                                 functions.consoleLogger("ERROR: upvote: - in retrieving user who updated")
                                             } else {
                                                 var usersUpvotes = theUser.votedButtonClasses;
+                                                var temp = [];
                                                 topFiveObject.forEach(function (question) {
                                                     question.votedButtonClasses = usersUpvotes;
                                                 });
-                                                socket.emit('arrangement', topFiveObject);
+                                                functions.eventEmit(socketRoom, io, 'arrangement', topFiveObject);
                                                 functions.consoleLogger('upvote: Success');
                                             }
                                         });
@@ -256,7 +263,7 @@ module.exports = {
     },
 
 
-    logoutHarvardLogin: function (req, res, socket, io) {
+    logoutHarvardLogin: function (req, res, socketRoom, io) {
         functions.consoleLogger('LOGOUT HARVARD LOGIN event handler called');
         //delete the harvard cs50 ID session
         req.logout();
@@ -267,9 +274,9 @@ module.exports = {
     },
 
 
-    logoutCustomChat: function (req, res, r_username, socket, io) {
+    logoutCustomChat: function (req, res, r_username, socketRoom, io) {
         functions.consoleLogger('LOGOUT CUSTOM CHAT event handler called');
-        functions.eventBroadcaster(socket, io, 'logoutUser', r_username);
+        functions.eventBroadcaster(io, 'logoutUser', r_username);
         functions.removeOnline(usersOnline, r_username);
         //delete the harvard cs50 ID session
         //send a success so that the user will be logged out and redirected
@@ -279,9 +286,9 @@ module.exports = {
     },
 
 
-    logoutHarvardChat: function (req, res, r_username, socket, io) {
+    logoutHarvardChat: function (req, res, r_username, socketRoom, io) {
         functions.consoleLogger('LOGOUT HARVARD CHAT event handler called');
-        functions.eventBroadcaster(socket, io, 'logoutUser', r_username);
+        functions.eventBroadcaster(io, 'logoutUser', r_username);
         functions.removeOnline(usersOnline, r_username);
         //delete the harvard cs50 ID session
         req.logout();

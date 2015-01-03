@@ -2,32 +2,66 @@
  * Created by jovinbm on 12/27/14.
  */
 $(document).ready(function () {
-    //IMPORTANT
-    //examples: questionClasses have the format a7, the corresponding buttonClass = a7b
+    /*IMPORTANT
+     examples: questionClasses have the format a7, the corresponding buttonClass = a7b*/
+
+    //extend the date prototype to give the name of day
+    (function () {
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        Date.prototype.getMonthName = function () {
+            return months[this.getMonth()];
+        };
+        Date.prototype.getDayName = function () {
+            return days[this.getDay()];
+        };
+
+        Date.prototype.getTodayHumanReadable = function () {
+            return days[this.getDay()] + " " + months[this.getMonth()] + " " + this.getDay() + ", " + this.getFullYear();
+        }
+    })();
+
 
     var myGlobalUsername;
+    var socketRoom;
     var onlinePollTime = 30000;
+    var questionFeedDate;
 
-    //myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
-    //on every start and when the arrangeQuestion function is called
+    /*the redirect url for logout
+    the logout URL for temp production and development purposes(uncomment one)*/
+    var logoutURL = "//window.location = '//' + window.location.hostname";
+    //var logoutURL = "window.location = '//' + window.location.hostname + ':3000'";
+
+    /*myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
+     on every start and when the arrangeQuestion function is called*/
     var myUpvotedQuestions = [];
 
     var usersOnline = [];
 
-    // currentQuestionIndexstores the current question index. The initial value is -1
-    // because the server queries results greater than -1 i.e. $gt -1 means from 0 onwards
+    /*currentQuestionIndex stores the current question index. The initial value is -1
+     because the server queries results greater than -1 i.e. $gt -1 means from 0 onwards*/
     var currentQuestionIndex = -1;
 
     var socket = io.connect('//' + window.location.hostname);
 
-    //send a readyToChat event which on succes will request the recent
-    //question history
-    sendReadyToChat();
+    //MAJOR EVENTS FIRED AFTER DOCUMENT IS READY
 
-    setInterval(iAmOnline, onlinePollTime);
+    //send a function to get socket's room
+    getMyRoom();
+
+    socket.on('joined', function(){
+        //send a readyToChat event which on success will request the recent question history
+        sendReadyToChat();
+
+        //function to notify server that I am online
+        setInterval(iAmOnline, onlinePollTime);
+    });
 
 
     //INTERACTIONS
+
     $('#ask').click(function () {
         console.log("Clicked");
         var message = $("#qfield").val();
@@ -41,7 +75,7 @@ $(document).ready(function () {
             shortMessage = shortMessage + "...";
         }
         else {
-            for (var i = 0; i < message.length; i++) {
+            for (var i = 0, len = message.length; i < len; i++) {
                 shortMessage = shortMessage + message[i];
             }
         }
@@ -59,6 +93,7 @@ $(document).ready(function () {
         return false;
     });
 
+    //send events on logout
     $('.logoutHarvardChat').click(function () {
         sendLogoutHarvardChat();
     });
@@ -70,12 +105,35 @@ $(document).ready(function () {
 
     //DEFINING FUNCTIONS
 
+    //function to set questionFeedDate
+    function setFeedDate(theVar, new_value) {
+        theVar = new_value;
+        $(".questionFeedDate").text(theVar);
+    }
+
+
+    //function gets clients socket.io room and saves it on a cookie
+    function getMyRoom() {
+        $.ajax({
+            url: "/getMyRoom",
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $.cookie('socketRoom', data.socketRoom, {expires: 7, path: '/'});
+                socket.emit('joinRoom', data.socketRoom);
+            }
+        });
+    }
+
+
+    //notifies the server of the initial landing on chat page
     function sendReadyToChat() {
         $.ajax({
             url: "/readyToChat",
             type: 'POST',
             dataType: "json",
-            data: {"name": "jovin"},
+            //get the history when the readyToChat event completes
+
             complete: function sendGetHistory() {
                 $.ajax({
                     url: "/getHistory",
@@ -88,6 +146,7 @@ $(document).ready(function () {
     }
 
 
+    //sends a clientMessage event to the server containing the new question
     function sendQuestion(askedQuestion) {
         $.ajax({
             url: "/clientMessage",
@@ -98,6 +157,7 @@ $(document).ready(function () {
     }
 
 
+    //sends upvote event to server
     function sendUpvote(questionClass) {
         $.ajax({
             url: "/upvote",
@@ -114,8 +174,7 @@ $(document).ready(function () {
             url: "/logoutHarvardChat",
             type: "POST",
             success: function () {
-                window.location = '//' + window.location.hostname;
-                //window.location = '//' + window.location.hostname + ':3000';
+                window.location = logoutURL;
             }
         });
     }
@@ -127,21 +186,9 @@ $(document).ready(function () {
             url: "/logoutCustomChat",
             type: "POST",
             success: function () {
-                window.location = '//' + window.location.hostname;
-                //window.location = '//' + window.location.hostname + ':3000';
+                window.location = logoutURL;
             }
         });
-    }
-
-
-    //returns true only if 'name' DOESN'T exist in 'theArray
-    function searchArray(name, theArray) {
-        for (var j = 0; j < theArray.length; j++) {
-            if (theArray[j].match(name)) {
-                return false;
-            }
-        }
-        return true;
     }
 
 
@@ -155,29 +202,32 @@ $(document).ready(function () {
         return false;
     }
 
-    function iAmOnline(){
+    //sends an event to server to notify it of the clients online activity
+    function iAmOnline() {
         $.ajax({
             url: "/iAmOnline",
-            type: "POST"
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                $.cookie('socketRoom', data.socketRoom, {expires: 7, path: '/'});
+            }
         });
     }
 
 
-    //globally bind the upvote event hanlder for the pulled questions
+    //globally bind the upvote event handler for the pulled questions
     $("table.question_feed").delegate("button", "click", function () {
-        console.log("TRIGGERED DELEGATE FEED!");
-        console.log(this);
         var upvoteId = "." + $(this).attr('class').split(' ')[0];
         $(upvoteId).each(function () {
             $(this).attr("disabled", "disabled");
             $(this).removeClass("btn-info").addClass("btn-warning");
         });
 
-        //send upvote event with the question index(representing the question class to server
-        // first check if upvoteId has 4 chars(for classes like .a4b)
-        //5 chars(for classes like .a40b etc
+        /*send upvote event with the question index(representing the question class to server;
+         first check if upvoteId has 4 chars(for classes like .a4b)
+         5 chars(for classes like .a40b etc*/
 
-        //stringLimit = questionClass;
+        //here, stringLimit = questionClass;
         var stringLimit = upvoteId.length - 1;
         console.log(upvoteId.substring(1, stringLimit));
         var questionClass = {"questionClass": upvoteId.substring(1, stringLimit)};
@@ -185,9 +235,8 @@ $(document).ready(function () {
     });
 
 
+    //globally bind the upvote event handler for the pulled questions
     $("table.topQuestions").delegate("button", "click", function () {
-        console.log("TRIGGERED DELEGATE TOP");
-        console.log(this);
         var upvoteId = "." + $(this).attr('class').split(' ')[0];
         $(upvoteId).each(function () {
             $(this).attr("disabled", "disabled");
@@ -199,65 +248,35 @@ $(document).ready(function () {
     });
 
 
-    function loggedIn(name) {
-        console.log("loggedIn called");
-        var myName = "<a href='#'>" + name + "</a>";
-        $('#signInName').html(myName);
-        $('#logout').html("<a href='#'>Logout</a>");
-    }
-
-
-    //adds a new user to the onlinne list
+    /*adds a new user to the online list;
+     onlineUsers is an array of all users that are currently online*/
     function addOnline(onlineUsers) {
         console.log("addOnline called");
         $(".onlineUsers").empty();
-        //server sends all onlineUsers Array at regular intervals
-        //new users are appended
-        onlineUsers.forEach(function(user){
-            var newUser = "<tr><td><i class='fa fa-user'></i></td><td class='onlineUser'>" + user.customUsername + "</td></tr>";
+
+        /*server sends all onlineUsers Array at regular intervals;
+         new users are appended*/
+
+        onlineUsers.forEach(function (user) {
+            //the online list template
+            var newUser = "<tr><td class='onlineUser'><i class='fa fa-user'></i>  " + user.customUsername + "</td></tr>";
             $(".onlineUsers").prepend(newUser);
         });
     }
 
 
+    /*removes users from the online list -- when a user logs out;
+     note: the server sends an online event with a complete array of all currently online users
+     this is only called when another client disconnects or logs out somewhere*/
     function removeOnline(name) {
         console.log("removeOnline called with name " + name);
+        //cycle through all online users
         $(".onlineUser").each(function () {
             if ($(this).text() == name) {
+                //remove the closest tr which carries that user
                 $(this).closest("tr").remove();
             }
         });
-    }
-
-
-    //prepends a new message to the question feed
-    function addMessage(key) {
-
-        //change timestring from mongodb to actual time
-        var mongoDate = new Date(key.time);
-        var questionTime = mongoDate.getHours() + ":" + mongoDate.getMinutes();
-
-        //deal with the issue that a user might have upvoted a certain question already
-        //intelligently extracting button class by adding 'b' to question class instead of the buttonClass key
-        //here the button class used for check purposes is named r_buttonClass
-        //and the array that has the users upvoted button classes is named r_buttonClassArray
-        var r_buttonClass = key.messageClass + "b";
-        //check that the votedButtonClass array has something
-        if (key.votedButtonClasses.length != 0) {
-            myUpvotedQuestions = key.votedButtonClasses;
-        }
-
-        var nextQuestion;
-        //if already updated, insert a new button class with a btn-warning class, and a disabled attribute
-        if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
-            r_buttonClass = r_buttonClass + " btn btn-warning upvote";
-
-            nextQuestion = "<tr class=" + key.messageClass + "><td class='col-md-2 senderName'>" + key.senderName + "</td><td class='col-md-8'>" + key.message + "</td><td class='col-md-1 questionTime'>" + questionTime + "</p></td><td class='col-md-1' align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
-            $(".question_feed").prepend(nextQuestion);
-        } else {
-            nextQuestion = "<tr class=" + key.messageClass + "><td class='col-md-2 senderName'>" + key.senderName + "</td><td class='col-md-8'>" + key.message + "</td><td class='col-md-1 questionTime'>" + questionTime + "</p></td><td class='col-md-1' align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span></button></td></tr>";
-            $(".question_feed").prepend(nextQuestion);
-        }
     }
 
 
@@ -265,7 +284,7 @@ $(document).ready(function () {
     function addHistory(historyArray) {
         console.log("addHistory called");
 
-        //reverse array to correct prepending of the function addMessage
+        //reverse array to correct prepend-ing of the function addMessage
         historyArray.reverse();
         historyArray.forEach(function (key) {
             addMessage(key);
@@ -273,35 +292,111 @@ $(document).ready(function () {
     }
 
 
+    //prepends a new message to the question feed
+    function addMessage(key) {
+
+        //change time-string from mongodb to actual time
+        var mongoDate = new Date(key.time);
+        var questionTime = mongoDate.getHours() + ":" + mongoDate.getMinutes();
+
+        //change the global date variable and change feed date
+        setFeedDate(questionFeedDate, mongoDate.getTodayHumanReadable());
+
+
+        /*deal with the issue that a user might have upvoted a certain question already;
+         intelligently extracting button class by adding 'b' to question class instead of the buttonClass key;
+         here, r_buttonClass = button class used for check purposes is named;
+         r_buttonClassArray = array that has the users upvoted button classes is named*/
+
+        var r_buttonClass = key.messageClass + "b";
+        //check that the votedButtonClass array has something
+        if (key.votedButtonClasses.length != 0) {
+            myUpvotedQuestions = key.votedButtonClasses;
+        }
+
+        var nextQuestion;
+        //variable to take care of the disabled attribute of the button
+        var ifDisabled;
+        /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
+        if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
+            r_buttonClass = r_buttonClass + " btn btn-warning upvote";
+            ifDisabled = "disabled"
+        } else {
+            r_buttonClass = key.buttonClass;
+            ifDisabled = "";
+        }
+
+        nextQuestion = "<tr class=" + key.messageClass + ">" +
+        "<td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs senderName'>" + key.senderName + "</td>" +
+        "<td class='col-lg-9 col-md-9 col-sm-8 col-xs-11'>" + key.message + "</td>" +
+        "<td class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hidden-xs questionTime'>" + questionTime + "</p></td>" +
+        "<td class='col-lg-1 col-md-1 col-sm-1 col-xs-1' align='center'>" +
+        "<button type='button btn-xs' class='" + r_buttonClass + "' " + ifDisabled + " >" +
+        "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>" +
+        "</button>" +
+        "</td>" +
+        "</tr>";
+
+        $(".question_feed").prepend(nextQuestion);
+    }
+
+
     function arrangeQuestions(theArray) {
         $(".topQuestions").empty();
         theArray.forEach(function (key) {
-            //deal with the issue that a user might have upvoted a certain question already
-            //intelligently extracting button class by adding 'b' to question class instead of the buttonClass key
-            //here the button class used for check purposes is named r_buttonClass
-            //and the array that has the users upvoted button classes is named r_buttonClassArray
+            /*deal with the issue that a user might have upvoted a certain question already;
+             intelligently extracting button class by adding 'b' to question class instead of the buttonClass key;
+             here, r_buttonClass = button class used for check purposes is named;
+             r_buttonClassArray = array that has the users upvoted button classes is named*/
+
             var r_buttonClass = key.messageClass + "b";
             //check that the votedButtonClass array has something
             if (key.votedButtonClasses.length != 0) {
                 myUpvotedQuestions = key.votedButtonClasses;
             }
             var nextTop;
-
-            //if already updated, insert a new button class with a btn-warning class, and a disabled attribute
+            //variable to take care of the disabled attribute of the button
+            var ifDisabled;
+            /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
             if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
                 r_buttonClass = r_buttonClass + " btn btn-warning upvote";
-                nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + r_buttonClass + "' style='width:100%' disabled><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
-                $(".topQuestions").append(nextTop);
+                ifDisabled = "disabled"
             } else {
-                nextTop = "<tr class='a1'><td>" + key.shortMessage + "</td><td align='center'><button type='button' class='" + key.buttonClass + "' style='width:100%'><span class='voteNumber'>" + key.votes + "</span></button></td></tr>";
-                $(".topQuestions").append(nextTop);
+                r_buttonClass = key.buttonClass;
+                ifDisabled = "";
             }
-        })
+
+            nextTop = "<tr class='a1'>" +
+            "<td class='col-lg-10 col-md-10 col-sm-10 col-xs-11'>" + key.shortMessage + "</td>" +
+            "<td class='col-lg-2 col-md-2 col-sm-2 col-xs-1' align='center'>" +
+            "<button type='button btn-xs' class='" + r_buttonClass + "' " + ifDisabled + ">" +
+            "<span class='voteNumber'>" + key.votes + "</span>" +
+            "</button>" +
+            "</td>" +
+            "</tr>";
+
+            $(".topQuestions").append(nextTop);
+        });
     }
 
 
     //EVENTS
 
+    //receives a the clients customUsername and sets it as the myGlobalUsername
+    socket.on('loggedin', function (name) {
+        console.log("'loggedin' event received");
+        myGlobalUsername = name;
+    });
+
+
+    /*receive an array containing the recent history(this array has objects with individual questions) and calls 'addHistory'*/
+    socket.on('serverHistory', function (historyArray) {
+        console.log("'serverHistory' event received");
+        addHistory(historyArray);
+    });
+
+
+    //receives an array containing this client's upvoted questions
     socket.on('myUpvotedQuestions', function (myUpvoted) {
         if (myUpvoted.length != 0) {
             myUpvotedQuestions = myUpvoted;
@@ -309,13 +404,8 @@ $(document).ready(function () {
     });
 
 
-    socket.on('arrangement', function (theArray) {
-        console.log("'arrangement' event received");
-        arrangeQuestions(theArray);
-    });
-
-
-    //receives online event
+    /*receives an array (at regular intervals) containing the currently online users
+     then calls 'addOnline' with the array*/
     socket.on('usersOnline', function (onlineUsers) {
         console.log("'usersOnline' event received");
         usersOnline = onlineUsers;
@@ -323,43 +413,32 @@ $(document).ready(function () {
     });
 
 
+    //receives an array containing the top voted questions, and calls 'arrangeQuestions'
+    socket.on('arrangement', function (theArray) {
+        console.log("'arrangement' event received");
+        arrangeQuestions(theArray);
+    });
+
+
+    //receives an object containing a question to be added to the feed. Calls 'addMessage'
     socket.on('serverMessage', function (messageObject) {
         console.log("'serverMessage' event received");
         addMessage(messageObject);
     });
 
 
-    //receive recent history
-    socket.on('serverHistory', function (historyArray) {
-        console.log("'serverHistory' event received");
-        addHistory(historyArray);
-    });
-
-
-    //increments currentQuestionIndex
+    /*increments currentQuestionIndex which is used to keep track of the current index the user is at*/
     socket.on('incrementCurrentIndex', function (num) {
         console.log("'incrementCurrentIndex' event received");
         currentQuestionIndex = currentQuestionIndex + num;
     });
 
 
-    //receives logoutUser event from server
+    /*receives logoutUser event from server with the name of the client who logged out;
+     then it calls 'removeOnline' to remove the name from the online list;*/
     socket.on('logoutUser', function (name) {
         console.log("'logout' event received");
         removeOnline(name);
-    });
-
-
-    socket.on('loggedin', function (name) {
-        myGlobalUsername = name;
-        console.log("'loggedin' event received");
-        loggedIn(name);
-    });
-
-
-    socket.on('goToLogin', function (content) {
-        console.log("'goToLogin' event received");
-        window.location.href = content;
     });
 });
 

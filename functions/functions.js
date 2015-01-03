@@ -2,6 +2,7 @@
  * Created by jovinbm on 12/25/14.
  */
 //import modules
+//encryption variables
 var Question = require("../database/questions/question_model.js");
 
 
@@ -28,14 +29,15 @@ module.exports = {
         console.log(data);
     },
 
-    //this funtion emits an event to the respective users
-    eventEmit: function (socket, io, serverEvent, content) {
+
+    //this funtion emits an event to the respective user
+    eventEmit: function (socketRoom, io, serverEvent, content) {
         consoleLogger("f.eventEmit: Function 'eventEmit' called");
-        io.emit(serverEvent, content);
+        io.sockets.in(socketRoom).emit(serverEvent, content);
     },
 
     //this function emits an event to all connected users
-    eventBroadcaster: function (socket, io, serverEvent, content) {
+    eventBroadcaster: function (io, serverEvent, content) {
         consoleLogger("f.eventBroadcaster: Function 'eventBroadcaster' called");
         //broadcast to all sockets
         io.sockets.emit(serverEvent, content);
@@ -71,7 +73,7 @@ module.exports = {
     },
 
     //this function broadcasts all online users
-    broadcastOnlineUsers: function (socket, io, userOnlineObject, r_username) {
+    broadcastOnlineUsers: function (io, userOnlineObject, r_username) {
         consoleLogger("f.broadcastOnlineUsers: Function 'broadcastOnlineUsers' called");
         //broadcast to all
         io.sockets.emit('usersOnline', userOnlineObject);
