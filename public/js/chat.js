@@ -11,15 +11,8 @@ $(document).ready(function () {
 
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        Date.prototype.getMonthName = function () {
-            return months[this.getMonth()];
-        };
-        Date.prototype.getDayName = function () {
-            return days[this.getDay()];
-        };
-
         Date.prototype.getTodayHumanReadable = function () {
-            return days[this.getDay()] + " " + months[this.getMonth()] + " " + this.getDay() + ", " + this.getFullYear();
+            return days[this.getDay()] + " " + months[this.getMonth()] + " " + this.getDate() + ", " + this.getFullYear();
         }
     })();
 
