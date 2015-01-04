@@ -12,6 +12,7 @@
     "cuid": "^1.2.4",
     "debug": "~2.0.0",
     "ejs": "^1.0.0",
+    "emailjs": "^0.3.12",
     "express": "~4.9.0",
     "express-session": "^1.9.3",
     "jade": "~1.6.0",
