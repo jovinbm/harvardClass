@@ -124,11 +124,59 @@
 
         <!--the class navbar-btn styles the buttons for the nav-->
         <!--the class pull-right floats the buttons to the right-->
-        <a class="navbar-btn btn btn-info btn-xs pull-right">Status: Development</a>
+        <div class="pull-right">
+            <a class="navbar-btn btn btn-warning btn-xs">Status: Development</a>
+            <a href="#myModal" role="button" class="btn btn-info btn-xs" data-toggle="modal">Shoot Me an Email</a>
+        </div>
 
     </div>
 </div>
 <!--end of footer-->
+
+
+<!--email modal-->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">I'd Love to Hear From You</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal col-sm-12 emailForm" method="post" action="/sendEmail">
+                    <div class="form-group"><label>Name</label><input class="form-control required"
+                                                                      placeholder="Your name" data-placement="top"
+                                                                      data-trigger="manual"
+                                                                      data-content="Must be at least 3 characters long, and must only contain letters."
+                                                                      type="text" name="name"></div>
+                    <div class="form-group"><label>Message</label><textarea class="form-control"
+                                                                            placeholder="Your message here.."
+                                                                            data-placement="top"
+                                                                            data-trigger="manual"
+                                                                            name="message"></textarea></div>
+                    <div class="form-group"><label>E-Mail</label><input class="form-control email"
+                                                                        placeholder="email@you.com (so that we can contact you)"
+                                                                        data-placement="top" data-trigger="manual"
+                                                                        data-content="Must be a valid e-mail address (user@gmail.com)"
+                                                                        type="text" name="email"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success pull-right">Send It!</button>
+                        <p class="help-block pull-left text-danger hide" id="form-error">&nbsp; The form is not
+                            valid. </p></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end of email modal-->
+
+
+
+
+
 
 
 <!-- JAVASCRIPT -->
@@ -154,5 +202,8 @@
 
 <!-- customlogin javascript file: should be loaded after jquery-->
 <script type="text/javascript" src="js/login.js"></script>
+
+<!--my custom javascript file with pluging-->
+<script type="text/javascript" src="js/custom_plugin"></script>
 </body>
 </html>
