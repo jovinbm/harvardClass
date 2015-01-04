@@ -43,6 +43,7 @@ exports.login_1_Html = function (req, res) {
 
 };
 
+
 exports.studentLoginPost = function (req, res) {
     //if user got here without doing a harvard login, redirect them back to harvard login
     if (!req.user) {
@@ -82,6 +83,7 @@ exports.studentLoginPost = function (req, res) {
     );
 };
 
+
 exports.chatHtml = function (req, res) {
     var openId = req.user.id;
     //perform checks to make sure the user is logged in
@@ -101,24 +103,6 @@ exports.chatHtml = function (req, res) {
     });
 };
 
-//handling css requests
-exports.chatCss = function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/stylesheets', 'chat.css'));
-};
-
-exports.loginCss = function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/stylesheets', 'login.css'));
-};
-
-
-//handling js requests
-exports.loginJs = function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/javascripts', 'login.js'));
-};
-
-exports.chatJs = function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/javascripts', 'chat.js'));
-};
 
 //handling the socket.io request
 exports.socketIo = function (req, res) {

@@ -31,8 +31,8 @@ $(document).ready(function () {
 
     /*the redirect url for logout
     the logout URL for temp production and development purposes(uncomment one)*/
-    var logoutURL = "//window.location = '//' + window.location.hostname";
-    //var logoutURL = "window.location = '//' + window.location.hostname + ':3000'";
+    //var logoutURL = "//window.location = '//' + window.location.hostname";
+    var logoutURL = "window.location = '//' + window.location.hostname + ':3000'";
 
     /*myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
      on every start and when the arrangeQuestion function is called*/
