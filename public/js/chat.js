@@ -239,8 +239,8 @@ $(document).ready(function () {
         });
 
         //send upvote event with the question index to server
-        //var questionClass = {"questionClass": upvoteId.substring(1, stringLimit)};
-        socket.emit('upvote', upvoteId.substring(1, 3));
+        var questionClass = {"questionClass": upvoteId.substring(1, 3)};
+        sendUpvote(questionClass);
     });
 
 
