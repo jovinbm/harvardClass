@@ -10,8 +10,6 @@
 
 //TODO -- find and findOne -- try to optimize
 
-//TODO -- indexing?
-
 //TODO -- socket.on disconnect?
 
 //todo -- custom code?

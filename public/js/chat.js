@@ -23,7 +23,7 @@ $(document).ready(function () {
     var questionFeedDate;
 
     /*the redirect url for logout
-    the logout URL for temp production and development purposes(uncomment one)*/
+     the logout URL for temp production and development purposes(uncomment one)*/
     var logoutURL = "//window.location = '//' + window.location.hostname";
     //var logoutURL = "window.location = '//' + window.location.hostname +gi ':3000'";
 
@@ -43,7 +43,7 @@ $(document).ready(function () {
     //send a function to get socket's room
     getMyRoom();
 
-    socket.on('joined', function(){
+    socket.on('joined', function () {
         //send a readyToChat event which on success will request the recent question history
         sendReadyToChat();
 
@@ -80,7 +80,10 @@ $(document).ready(function () {
             "votes": 0
         };
 
-        sendQuestion(questionToDatabase);
+        //make sure there input is not all whitespace
+        if (!(/^\s+$/.test(message))) {
+            sendQuestion(questionToDatabase);
+        }
         $("#qfield").val("");
         return false;
     });

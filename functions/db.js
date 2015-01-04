@@ -111,7 +111,6 @@ module.exports = {
             } else if (history == null || history == undefined || history.length == 0) {
                 error_0(0);
             } else {
-                basic.consoleLogger("************HISTORY = " + history);
                 success(history);
             }
         });

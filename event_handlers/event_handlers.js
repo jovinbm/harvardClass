@@ -118,39 +118,41 @@ module.exports = {
         basic.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
         var thisQuestionIndex;
         //query the recent question
-        function save(index) {
-            function made(question) {
-                function saved(savedQuestion) {
-                    function done(questionObject) {
-                        ioJs.emitToAll(io, 'serverMessage', questionObject);
-                        basic.consoleLogger('clientMessage: Success');
+        if (!(/^\s+$/.test(theQuestion.message))) {
+            function save(index) {
+                function made(question) {
+                    function saved(savedQuestion) {
+                        function done(questionObject) {
+                            ioJs.emitToAll(io, 'serverMessage', questionObject);
+                            basic.consoleLogger('clientMessage: Success');
+                        }
+
+                        dbJs.pushQuestionToAsker(req.user.id, savedQuestion, error, error, done);
                     }
 
-                    dbJs.pushQuestionToAsker(req.user.id, savedQuestion, error, error, done);
+                    dbJs.saveNewQuestion(question, error, error, saved);
                 }
 
-                dbJs.saveNewQuestion(question, error, error, saved);
+                dbJs.makeNewQuestion(theQuestion, index, theHarvardUser, made);
             }
 
-            dbJs.makeNewQuestion(theQuestion, index, theHarvardUser, made);
-        }
+            function error(status, err) {
+                if (status == -1) {
+                    basic.consoleLogger("ERROR: clientMessage event_Handler: " + err);
+                } else if (status == 0) {
+                    //means this is the first question. Save it
+                    thisQuestionIndex = 0;
+                    save(thisQuestionIndex);
+                }
+            }
 
-        function error(status, err) {
-            if (status == -1) {
-                basic.consoleLogger("ERROR: clientMessage event_Handler: " + err);
-            } else if (status == 0) {
-                //means this is the first question. Save it
-                thisQuestionIndex = 0;
+            function success(history) {
+                thisQuestionIndex = history[0].questionIndex + 1;
                 save(thisQuestionIndex);
             }
-        }
 
-        function success(history) {
-            thisQuestionIndex = history[0].questionIndex + 1;
-            save(thisQuestionIndex);
+            dbJs.getRecentQuestions(-1, -1, 1, error, error, success);
         }
-
-        dbJs.getRecentQuestions(-1, -1, 1, error, error, success);
     },
 
 
