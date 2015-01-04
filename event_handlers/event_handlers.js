@@ -3,119 +3,90 @@
  */
 //import modules
 var Question = require("../database/questions/question_model.js");
-var functions = require('../functions/functions.js');
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
+var basic = require('../functions/basic.js');
+var ioJs = require('../functions/io.js');
+var dbJs = require('../functions/db.js');
+var online = require('../functions/online.js');
 
 var onlineMinutesLimit = 2;
-
-//function to make new question
-var makeNewQuestion = function (questionObject, thisQuestionIndex, openId, r_username) {
-    var question = new Question({
-        questionIndex: thisQuestionIndex,
-        senderName: r_username,
-        senderOpenId: openId,
-        message: questionObject.message,
-        shortMessage: questionObject.shortMessage,
-        messageClass: "a" + thisQuestionIndex,
-        buttonClass: "a" + thisQuestionIndex + "b btn btn-info upvote",
-        votes: 0
-    });
-    return question;
-};
 
 //variable to hold online users
 var usersOnline = [];
 
-//function to return index of userObject in an array
-function indexArrayObject(myArray, property, value) {
-    for (var i = 0, len = myArray.length; i < len; i++) {
-        if (myArray[i][property] === value) return i;
-    }
-    return -1;
-}
-
 //define and export all the event handlers
 module.exports = {
-    readyToChat: function (req, res, r_username, openId, socketRoom, io) {
-        functions.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
+    readyToChat: function (req, res, theHarvardUser, io) {
+        basic.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
+        var customUsername = theHarvardUser.customUsername;
+        var socketRoom = theHarvardUser.socketRoom;
+        ioJs.emitToOne(socketRoom, io, 'loggedin', customUsername);
+        online.addToUsersOnline(usersOnline, customUsername);
+        ioJs.emitToAll(io, "usersOnline", usersOnline);
 
-        functions.eventEmit(socketRoom, io, 'loggedin', r_username);
+        //send the user his upvoted questions and THE RECENT TOP VOTED questions
+        ioJs.emitToOne(socketRoom, io, 'myUpvotedButtonClasses', theHarvardUser.votedButtonClasses);
 
-        HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
-            if (err) {
-                functions.consoleLogger("ERROR: readyToChat: - in retrieving user")
-            } else {
-                //send the user his upvoted questions and THE RECENT TOP VOTED questions
-                var myUpvotedQuestions = theUser.votedButtonClasses;
-                functions.eventEmit(socketRoom, io, 'myUpvotedQuestions', myUpvotedQuestions);
-
-                functions.addOnline(usersOnline, r_username);
-
-                //broadcasts to all, client needs to check if user is not yet displayed
-                functions.broadcastOnlineUsers(io, usersOnline, r_username);
-
-                //BROADCASTS CURRENTLY TOP VOTED
-                Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(10).exec(function (err, topFiveObject) {
-                    if (err) {
-                        functions.consoleLogger("ERROR: upvote: Question.find: " + err);
-                        functions.consoleLogger('readyToChat: Success');
-                    } else {
-                        functions.eventEmit(socketRoom, io, 'arrangement', topFiveObject);
-                        functions.consoleLogger('readyTochat: query votes: Success');
-                        functions.consoleLogger('readyToChat: Success');
-
-                        /*complete the ajax request by sending the client their socket.io room*/
-                        res.contentType('json');
-                        res.send(JSON.stringify({"status": "success"}));
-                    }
-                });
+        //find and broadcast the currently top voted
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                basic.consoleLogger("*: ReadyToChat: failed to find top voted: " + err);
+                /*complete the ajax request by sending the client their socket.io room*/
+                res.contentType('json');
+                res.send(JSON.stringify({"status": "success"}));
+                basic.consoleLogger('readyToChat: Success');
             }
-        });
+        }
+
+        function success(topVotedObject) {
+            ioJs.emitToOne(socketRoom, io, 'arrangement', topVotedObject);
+            /*complete the ajax request by sending the client their socket.io room*/
+            res.contentType('json');
+            res.send(JSON.stringify({"status": "success"}));
+            basic.consoleLogger('readyToChat: Success');
+        }
+
+        dbJs.findTopVotedQuestions(-1, 7, error, error, success);
     },
 
 
-    getHistory: function (req, res, r_username, openId, currentQuestionIndex, socketRoom, io) {
+    getHistory: function (req, res, theHarvardUser, io, currentQuestionIndex) {
+        basic.consoleLogger("getHistory: getHistory called");
+        var socketRoom = theHarvardUser.socketRoom;
         //define limit: How many do you want?
         var historyLimit = 20;
-
-        functions.consoleLogger("getHistory: getHistory called");
-        Question.find({questionIndex: {$gt: currentQuestionIndex}}).sort({questionIndex: -1}).limit(historyLimit).exec(function (err, historyArray) {
-            if (err) {
-                console.log("ERROR: getHistory: Question.find: " + err);
-            } else {
-                //find this users respective upvoted questions
-                HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
-                    if (err) {
-                        functions.consoleLogger("ERROR: getHistory: - in retrieving user who updated")
-                    } else {
-                        //insert the users upvotes into the ultimate object
-                        var usersUpvotes = theUser.votedButtonClasses;
-                        historyArray.forEach(function (question) {
-                            question.votedButtonClasses = usersUpvotes;
-                        });
-                        functions.eventEmit(socketRoom, io, "serverHistory", historyArray);
-                        functions.eventEmit(socketRoom, io, "incrementCurrentIndex", currentQuestionIndex + historyLimit);
-                        functions.consoleLogger('getHistory: Success');
-                    }
-                });
+        //retrieve the history
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                basic.consoleLogger("ERROR: getHistory: Question.find: " + err);
             }
-        });
+        }
+
+        function success(historyArray) {
+            //get this user their respective upvotes first
+            function success() {
+                ioJs.emitToOne(socketRoom, io, "serverHistory", historyArray);
+                ioJs.emitToOne(socketRoom, io, "incrementCurrentIndex", currentQuestionIndex + historyLimit);
+                basic.consoleLogger('getHistory: Success');
+            }
+
+            ioJs.emitToOne(socketRoom, io, "myUpvotedButtonClasses", theHarvardUser.votedButtonClasses, success);
+        }
+
+        dbJs.getRecentQuestions(-1, currentQuestionIndex, 20, error, error, success)
     },
 
 
     iAmOnline: function (req, res, r_username, socketRoom) {
         var date = new Date();
         var microSeconds = date.getTime();
-
         //find the user in the userOnline object
-        var index = indexArrayObject(usersOnline, "customUsername", r_username);
-
+        var index = basic.indexArrayObject(usersOnline, "customUsername", r_username);
         if (index != -1) {
             usersOnline[index].time = microSeconds;
-            functions.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
+            basic.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
         } else {
-            //add the user back to the online object
-            functions.addOnline(usersOnline, r_username);
+            online.addToUsersOnline(usersOnline, r_username);
         }
 
         //update the socketRoom
@@ -126,7 +97,6 @@ module.exports = {
     },
 
     checkOnlineUsers: function (io) {
-
         var date = new Date();
         var microSeconds = date.getTime();
         var tempUsersOnline = [];
@@ -134,167 +104,129 @@ module.exports = {
         for (var i = 0, len = usersOnline.length; i < len; i++) {
             //get minutes difference since when users last checked in
             var minutes = Math.floor(((microSeconds - usersOnline[i].time) / 1000) / 60);
-            functions.consoleLogger("******minutes = " + minutes);
             if (minutes < onlineMinutesLimit) {
                 tempUsersOnline.push(usersOnline[i]);
             }
         }
         usersOnline = tempUsersOnline;
-        functions.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
-        functions.eventBroadcaster(io, 'usersOnline', usersOnline);
+        basic.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
+        ioJs.emitToAll(io, 'usersOnline', usersOnline);
     },
 
 
-    clientMessage: function (req, res, r_username, theQuestion, openId, socketRoom, io) {
-        functions.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
-        //only save if the question is not empty or is not a space
-        if (theQuestion.message != "" && theQuestion.message != " ") {
-            var question;
-            //query to get new index by adding one to the previous question's index
-            Question.findOne().sort({questionIndex: -1}).exec(function (err, theObject) {
-                var thisQuestionIndex;
-                if (err || theObject == null || theObject == undefined) {
-                    functions.consoleLogger("*(new)ERROR: getNewQuestion: " + err);
-                    thisQuestionIndex = 0;
+    clientMessage: function (req, res, theHarvardUser, io, theQuestion) {
+        basic.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
+        var thisQuestionIndex;
+        //query the recent question
+        function save(index) {
+            function made(question) {
+                function saved(savedQuestion) {
+                    function done(questionObject) {
+                        ioJs.emitToAll(io, 'serverMessage', questionObject);
+                        basic.consoleLogger('clientMessage: Success');
+                    }
 
-                    //still save the new question
-                    //save the question using the new unique index and the senders openId(for tracking who
-                    //asked which question
-                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId, r_username);
-                    question.save(function (err, UpdatedQuestion) {
-                        if (err) {
-                            functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
-                        } else {
-
-                            //insert the question class to the respective harvard user for tracking
-                            HarvardUser.update({id: openId}, {
-                                $push: {askedQuestionsClasses: UpdatedQuestion.messageClass}
-                            }, function (err, theUser) {
-                                if (err || theUser == null || theUser == undefined) {
-                                    functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
-                                } else {
-                                    functions.eventBroadcaster(io, 'serverMessage', UpdatedQuestion);
-                                    functions.consoleLogger('clientMessage: Success');
-                                }
-
-                            });
-                        }
-                    });
-
-                } else {
-                    thisQuestionIndex = theObject.questionIndex + 1;
-
-                    //save the question using the new unique index and the senders openId(for tracking who
-                    //asked which question
-                    question = makeNewQuestion(theQuestion, thisQuestionIndex, openId, r_username);
-                    question.save(function (err, UpdatedQuestion) {
-                        if (err) {
-                            functions.consoleLogger("ERROR: clientMessage: question.save: " + err);
-                        } else {
-
-                            //insert the question class to the respective harvard user for tracking
-                            HarvardUser.update({id: openId}, {
-                                $push: {askedQuestionsClasses: UpdatedQuestion.messageClass}
-                            }, function (err, theUser) {
-                                if (err || theUser == null || theUser == undefined) {
-                                    functions.consoleLogger("ERROR: clientMessage: HarvardUser.findone: " + err);
-                                } else {
-                                    functions.eventBroadcaster(io, 'serverMessage', UpdatedQuestion);
-                                    functions.consoleLogger('clientMessage: Success');
-                                }
-
-                            });
-                        }
-                    });
+                    dbJs.pushQuestionToAsker(req.user.id, savedQuestion, error, error, done);
                 }
-            });
-        }
-    },
 
-
-    //this function adds the voted question button class to the respective voter and then increments the total number of votes on the 
-    //respective question, thereafter broadcasting the updated arrangement to all connected clients
-    upvote: function (req, res, customUsername, openId, r_id, buttonClass, socketRoom, io) {
-        functions.consoleLogger("upvote: upvote event handler called");
-        HarvardUser.update({id: openId}, {
-            $push: {votedButtonClasses: buttonClass}
-        }, function (err, question) {
-            if (err) {
-                functions.consoleLogger("ERROR: upvote: event_handlers " + err);
-            } else {
-                //then upvote the specific question and broadcast the new top 5
-                var incrementVotes = function (r_id) {
-                    Question.update({"messageClass": r_id}, {"$inc": {"votes": 1}},
-                        function (err, qObject) {
-                            if (err) {
-                                console.log("ERROR: upvote: Question.update: " + err);
-                            } else {
-                                Question.find({votes: {$gt: 0}}).sort({votes: -1}).limit(5).exec(function (err, topFiveObject) {
-                                    if (err) {
-                                        functions.consoleLogger("ERROR: upvote: Question.find: " + err)
-                                    } else {
-                                        //broadcast to all but the user who upvoted the question
-                                        functions.eventBroadcaster(io, 'arrangement', topFiveObject);
-
-                                        //find the respective user who upvoted the question so that you can send them
-                                        //a personalized arrangement with an update of what he upvoted
-                                        HarvardUser.findOne({id: openId}).exec(function (err, theUser) {
-                                            if (err) {
-                                                functions.consoleLogger("ERROR: upvote: - in retrieving user who updated")
-                                            } else {
-                                                var usersUpvotes = theUser.votedButtonClasses;
-                                                var temp = [];
-                                                topFiveObject.forEach(function (question) {
-                                                    question.votedButtonClasses = usersUpvotes;
-                                                });
-                                                functions.eventEmit(socketRoom, io, 'arrangement', topFiveObject);
-                                                functions.consoleLogger('upvote: Success');
-                                            }
-                                        });
-                                    }
-                                });
-
-                            }
-                        });
-                };
-                incrementVotes(r_id);
+                dbJs.saveNewQuestion(question, error, error, saved);
             }
-        });
+
+            dbJs.makeNewQuestion(theQuestion, index, theHarvardUser, made);
+        }
+
+        function error(status, err) {
+            if (status == -1) {
+                basic.consoleLogger("ERROR: clientMessage event_Handler: " + err);
+            } else if (status == 0) {
+                //means this is the first question. Save it
+                thisQuestionIndex = 0;
+                save(thisQuestionIndex);
+            }
+        }
+
+        function success(history) {
+            thisQuestionIndex = history[0].questionIndex + 1;
+            save(thisQuestionIndex);
+        }
+
+        dbJs.getRecentQuestions(-1, -1, 1, error, error, success);
     },
 
 
-    logoutHarvardLogin: function (req, res, socketRoom, io) {
-        functions.consoleLogger('LOGOUT HARVARD LOGIN event handler called');
+    upvote: function (req, res, theHarvardUser, io, questionClass, buttonClass) {
+        basic.consoleLogger("upvote: upvote event handler called");
+        //push the new upvote's button class to the respective upvoter
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                basic.consoleLogger("ERROR: upvote: event_handlers " + err);
+            }
+        }
+
+        function success() {
+            function broadcastTop() {
+                function broadcaster(topVotedObject) {
+
+                    function pushed() {
+                        function personalizedDone() {
+                            ioJs.emitToAll(io, 'arrangement', topVotedObject);
+                            basic.consoleLogger('upvote: Success');
+                        }
+
+                        //send the upvoter their current upvoted questions
+                        ioJs.emitToOne(theHarvardUser.socketRoom, io, "myUpvotedButtonClasses", theHarvardUser.votedButtonClasses, personalizedDone);
+                    }
+
+                    //update theHarvardUser(to avoid retrieving) by pushing the new buttonClass
+                    function pushButtonClass(pushed) {
+                        theHarvardUser.votedButtonClasses.push(buttonClass);
+                        pushed()
+                    }
+
+                    pushButtonClass(pushed)
+                }
+
+                dbJs.findTopVotedQuestions(-1, 7, error, error, broadcaster);
+            }
+
+            dbJs.incrementQuestionVotes(questionClass, error, error, broadcastTop);
+        }
+
+        dbJs.pushUpvoteToUpvoter(req.user.id, buttonClass, error, error, success);
+    },
+
+
+    logoutHarvardLogin: function (req, res) {
+        basic.consoleLogger('LOGOUT HARVARD LOGIN event handler called');
         //delete the harvard cs50 ID session
         req.logout();
         //send a success so that the user will be logged out and redirected
         res.contentType('json');
         res.send({status: JSON.stringify({response: 'success'})});
-        functions.consoleLogger('logoutHarvard: Success');
+        basic.consoleLogger('logoutHarvard: Success');
     },
 
 
-    logoutCustomChat: function (req, res, r_username, socketRoom, io) {
-        functions.consoleLogger('LOGOUT CUSTOM CHAT event handler called');
-        functions.eventBroadcaster(io, 'logoutUser', r_username);
-        functions.removeOnline(usersOnline, r_username);
-        //delete the harvard cs50 ID session
+    logoutCustomChat: function (req, res, theHarvardUser, io) {
+        basic.consoleLogger('LOGOUT CUSTOM CHAT event handler called');
+        ioJs.emitToAll(io, 'logoutUser', theHarvardUser.customUsername);
+        online.removeFromUsersOnline(usersOnline, theHarvardUser.customUsername);
         //send a success so that the user will be logged out and redirected
         res.contentType('json');
         res.send({status: JSON.stringify({response: 'success'})});
-        functions.consoleLogger('logout: Success');
+        basic.consoleLogger('logout: Success');
     },
 
 
-    logoutHarvardChat: function (req, res, r_username, socketRoom, io) {
-        functions.consoleLogger('LOGOUT HARVARD CHAT event handler called');
-        functions.eventBroadcaster(io, 'logoutUser', r_username);
-        functions.removeOnline(usersOnline, r_username);
+    logoutHarvardChat: function (req, res, theHarvardUser, io) {
+        basic.consoleLogger('LOGOUT HARVARD CHAT event handler called');
+        ioJs.emitToAll(io, 'logoutUser', theHarvardUser.customUsername);
+        online.removeFromUsersOnline(usersOnline, theHarvardUser.customUsername);
         //delete the harvard cs50 ID session
         req.logout();
         //send a success so that the user will be logged out and redirected
         res.contentType('json');
         res.send({status: JSON.stringify({response: 'success'})});
-        functions.consoleLogger('logout: Success');
+        basic.consoleLogger('logout: Success');
     }
 };

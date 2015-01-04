@@ -31,12 +31,11 @@ $(document).ready(function () {
 
     /*the redirect url for logout
     the logout URL for temp production and development purposes(uncomment one)*/
-    //var logoutURL = "//window.location = '//' + window.location.hostname";
-    var logoutURL = "window.location = '//' + window.location.hostname + ':3000'";
+    var logoutURL = "//window.location = '//' + window.location.hostname";
+    //var logoutURL = "window.location = '//' + window.location.hostname +gi ':3000'";
 
-    /*myUpvotedQuestions is an array storing all my currently upvoted questions. It should be updated
-     on every start and when the arrangeQuestion function is called*/
-    var myUpvotedQuestions = [];
+    /*myUpvotedButtonClasses is an array storing button classes corresponding to all the questions this client has upvoted. It should be updated on every start and when the arrangeQuestion function is called*/
+    var myUpvotedButtonClasses = [];
 
     var usersOnline = [];
 
@@ -244,6 +243,7 @@ $(document).ready(function () {
         });
 
         //send upvote event with the question index to server
+        //var questionClass = {"questionClass": upvoteId.substring(1, stringLimit)};
         socket.emit('upvote', upvoteId.substring(1, 3));
     });
 
@@ -286,17 +286,17 @@ $(document).ready(function () {
 
         //reverse array to correct prepend-ing of the function addMessage
         historyArray.reverse();
-        historyArray.forEach(function (key) {
-            addMessage(key);
+        historyArray.forEach(function (question) {
+            addMessage(question);
         });
     }
 
 
     //prepends a new message to the question feed
-    function addMessage(key) {
+    function addMessage(question) {
 
         //change time-string from mongodb to actual time
-        var mongoDate = new Date(key.time);
+        var mongoDate = new Date(question.time);
         var questionTime = mongoDate.getHours() + ":" + mongoDate.getMinutes();
 
         //change the global date variable and change feed date
@@ -308,27 +308,23 @@ $(document).ready(function () {
          here, r_buttonClass = button class used for check purposes is named;
          r_buttonClassArray = array that has the users upvoted button classes is named*/
 
-        var r_buttonClass = key.messageClass + "b";
-        //check that the votedButtonClass array has something
-        if (key.votedButtonClasses.length != 0) {
-            myUpvotedQuestions = key.votedButtonClasses;
-        }
+        var r_buttonClass = question.messageClass + "b";
 
         var nextQuestion;
         //variable to take care of the disabled attribute of the button
         var ifDisabled;
         /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
-        if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
+        if (searchArrayIfExists(r_buttonClass, myUpvotedButtonClasses)) {
             r_buttonClass = r_buttonClass + " btn btn-warning upvote";
             ifDisabled = "disabled"
         } else {
-            r_buttonClass = key.buttonClass;
+            r_buttonClass = question.buttonClass;
             ifDisabled = "";
         }
 
-        nextQuestion = "<tr class=" + key.messageClass + ">" +
-        "<td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs senderName'>" + key.senderName + "</td>" +
-        "<td class='col-lg-9 col-md-9 col-sm-8 col-xs-11'>" + key.message + "</td>" +
+        nextQuestion = "<tr class=" + question.messageClass + ">" +
+        "<td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs senderName'>" + question.senderName + "</td>" +
+        "<td class='col-lg-9 col-md-9 col-sm-8 col-xs-11'>" + question.message + "</td>" +
         "<td class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hidden-xs questionTime'>" + questionTime + "</p></td>" +
         "<td class='col-lg-1 col-md-1 col-sm-1 col-xs-1' align='center'>" +
         "<button type='button btn-xs' class='" + r_buttonClass + "' " + ifDisabled + " >" +
@@ -343,34 +339,30 @@ $(document).ready(function () {
 
     function arrangeQuestions(theArray) {
         $(".topQuestions").empty();
-        theArray.forEach(function (key) {
+        theArray.forEach(function (question) {
             /*deal with the issue that a user might have upvoted a certain question already;
              intelligently extracting button class by adding 'b' to question class instead of the buttonClass key;
              here, r_buttonClass = button class used for check purposes is named;
              r_buttonClassArray = array that has the users upvoted button classes is named*/
 
-            var r_buttonClass = key.messageClass + "b";
-            //check that the votedButtonClass array has something
-            if (key.votedButtonClasses.length != 0) {
-                myUpvotedQuestions = key.votedButtonClasses;
-            }
+            var r_buttonClass = question.messageClass + "b";
             var nextTop;
             //variable to take care of the disabled attribute of the button
             var ifDisabled;
             /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
-            if (searchArrayIfExists(r_buttonClass, myUpvotedQuestions)) {
+            if (searchArrayIfExists(r_buttonClass, myUpvotedButtonClasses)) {
                 r_buttonClass = r_buttonClass + " btn btn-warning upvote";
                 ifDisabled = "disabled"
             } else {
-                r_buttonClass = key.buttonClass;
+                r_buttonClass = question.buttonClass;
                 ifDisabled = "";
             }
 
             nextTop = "<tr class='a1'>" +
-            "<td class='col-lg-10 col-md-10 col-sm-10 col-xs-11'>" + key.shortMessage + "</td>" +
+            "<td class='col-lg-10 col-md-10 col-sm-10 col-xs-11'>" + question.shortMessage + "</td>" +
             "<td class='col-lg-2 col-md-2 col-sm-2 col-xs-1' align='center'>" +
             "<button type='button btn-xs' class='" + r_buttonClass + "' " + ifDisabled + ">" +
-            "<span class='voteNumber'>" + key.votes + "</span>" +
+            "<span class='voteNumber'>" + question.votes + "</span>" +
             "</button>" +
             "</td>" +
             "</tr>";
@@ -397,9 +389,9 @@ $(document).ready(function () {
 
 
     //receives an array containing this client's upvoted questions
-    socket.on('myUpvotedQuestions', function (myUpvoted) {
-        if (myUpvoted.length != 0) {
-            myUpvotedQuestions = myUpvoted;
+    socket.on('myUpvotedButtonClasses', function (buttonClassesArray) {
+        if (buttonClassesArray.length != 0) {
+            myUpvotedButtonClasses = buttonClassesArray;
         }
     });
 
