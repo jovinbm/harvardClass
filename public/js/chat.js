@@ -24,8 +24,8 @@ $(document).ready(function () {
 
     /*the redirect url for logout
      the logout URL for temp production and development purposes(uncomment one)*/
-    //var logoutURL = "//" + window.location.hostname;
-    var logoutURL = "//" + window.location.hostname + ":3000";
+    var logoutURL = "//" + window.location.hostname;
+    //var logoutURL = "//" + window.location.hostname + ":3000";
 
     /*myUpvotedButtonClasses is an array storing button classes corresponding to all the questions this client has upvoted. It should be updated on every start and when the arrangeQuestion function is called*/
     var myUpvotedButtonClasses = [];
