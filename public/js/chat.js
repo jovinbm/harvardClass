@@ -45,6 +45,7 @@ $(document).ready(function () {
 
     socket.on('joined', function () {
         //send a readyToChat event which on success will request the recent question history
+        $(".question_feed").empty();
         sendReadyToChat();
 
         //function to notify server that I am online
