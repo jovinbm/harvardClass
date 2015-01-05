@@ -51,7 +51,7 @@ exports.studentLoginPost = function (req, res) {
     function success(theHarvardUser){
         //if logged in in both harvard and custom login take them to chat directly
         if (req.user && theHarvardUser.customLoggedInStatus == 1) {
-            req.redirect('chat.html');
+            res.redirect('chat.html');
         }
         function successUpdate (){
             res.redirect("chat.html");
