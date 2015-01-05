@@ -244,7 +244,7 @@ $(document).ready(function () {
 
         onlineUsers.forEach(function (user) {
             //the online list template
-            var newUser = "<tr><td><i class='fa fa-user'></i><span class='onlineUser'>  " + user.customUsername + "</span></td></tr>";
+            var newUser = "<tr><td class='onlineUser'><i class='fa fa-user'></i>  " + user.customUsername + "</td></tr>";
             $(".onlineUsers").prepend(newUser);
         });
     }
