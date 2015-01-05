@@ -45,7 +45,6 @@ $(document).ready(function () {
 
     socket.on('joined', function () {
         //send a readyToChat event which on success will request the recent question history
-        $(".question_feed").empty();
         sendReadyToChat();
 
         //function to notify server that I am online
@@ -358,6 +357,7 @@ $(document).ready(function () {
     /*receive an array containing the recent history(this array has objects with individual questions) and calls 'addHistory'*/
     socket.on('serverHistory', function (historyArray) {
         console.log("'serverHistory' event received");
+        $(".question_feed").empty();
         //reverse array to correct prepend-ing of the function addMessage
         historyArray.reverse();
         historyArray.forEach(function (questionObject) {
