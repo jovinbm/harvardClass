@@ -24,8 +24,8 @@ $(document).ready(function () {
 
     /*the redirect url for logout
      the logout URL for temp production and development purposes(uncomment one)*/
-    //var logoutURL = "//" + window.location.hostname;
-    var logoutURL = "//" + window.location.hostname + ":3000";
+    var logoutURL = "//" + window.location.hostname;
+    //var logoutURL = "//" + window.location.hostname + ":3000";
 
     /*myUpvotedButtonClasses is an array storing button classes corresponding to all the questions this client has upvoted. It should be updated on every start and when the arrangeQuestion function is called*/
     var myUpvotedButtonClasses = [];
@@ -321,9 +321,9 @@ $(document).ready(function () {
 
         nextQuestion = "<tr class=" + question.messageClass + ">" +
         "<td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs senderName'>" + question.senderName + "</td>" +
-        "<td class='col-lg-9 col-md-9 col-sm-8 col-xs-11'>" + question.message + "</td>" +
-        "<td class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hidden-xs questionTime'>" + questionTime + "</p></td>" +
-        "<td class='col-lg-1 col-md-1 col-sm-1 col-xs-1' align='center'>" +
+        "<td class='col-lg-9 col-md-9 col-sm-8 col-xs-10'>" + question.message + "</td>" +
+        "<td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs hidden-sm questionTime'>" + questionTime + "</p></td>" +
+        "<td class='col-lg-1 col-md-1 col-sm-2 col-xs-2' align='center'>" +
         "<button type='button btn-xs' class='" + r_buttonClass + "' " + ifDisabled + " >" +
         "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>" +
         "</button>" +
@@ -356,8 +356,8 @@ $(document).ready(function () {
             }
 
             nextTop = "<tr class='a1'>" +
-            "<td class='col-lg-10 col-md-10 col-sm-10 col-xs-11'>" + question.shortMessage + "</td>" +
-            "<td class='col-lg-2 col-md-2 col-sm-2 col-xs-1' align='center'>" +
+            "<td class='col-lg-10 col-md-10 col-sm-9 col-xs-9'>" + question.shortMessage + "</td>" +
+            "<td class='col-lg-2 col-md-2 col-sm-3 col-xs-2' align='center'>" +
             "<button type='button btn-xs' class='" + r_buttonClass + "' " + ifDisabled + ">" +
             "<span class='voteNumber'>" + question.votes + "</span>" +
             "</button>" +
