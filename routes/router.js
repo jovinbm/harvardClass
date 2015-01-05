@@ -16,12 +16,13 @@ exports.loginHtml = function (req, res) {
 };
 
 exports.login_1_Html = function (req, res) {
-    function error(status, err){
-        if(status == -1 || status == 0){
+    function error(status, err) {
+        if (status == -1 || status == 0) {
             basic.consoleLogger("ERROR: exports.loog_1_Html: getting customLoggedInStatus: " + err);
         }
     }
-    function success(theHarvardUser){
+
+    function success(theHarvardUser) {
         //if logged in in both harvard and custom login take them to chat directly
         if (req.user && theHarvardUser.customLoggedInStatus == 1) {
             res.redirect('chat.html');
@@ -32,6 +33,7 @@ exports.login_1_Html = function (req, res) {
             res.redirect("login.html");
         }
     }
+
     dbJs.findHarvardUser(req.user.id, error, error, success);
 };
 
@@ -43,21 +45,25 @@ exports.studentLoginPost = function (req, res) {
     }
 
     //get the customLoggedInStatus
-    function error (status, err){
-        if(status == -1 || status == 0){
+    function error(status, err) {
+        if (status == -1 || status == 0) {
             basic.consoleLogger("ERROR: exports.login_1_Html: " + err);
         }
     }
-    function success(theHarvardUser){
+
+    function success(theHarvardUser) {
+        function successUpdate() {
+            res.redirect("chat.html");
+        }
+
         //if logged in in both harvard and custom login take them to chat directly
         if (req.user && theHarvardUser.customLoggedInStatus == 1) {
             res.redirect('chat.html');
+        } else {
+            dbJs.updateCuCls(req.user.id, req.body.customUsername, 1, error, error, successUpdate)
         }
-        function successUpdate (){
-            res.redirect("chat.html");
-        }
-        dbJs.updateCuCls(req.user.id, req.body.customUsername, 1, error, error, successUpdate)
     }
+
     dbJs.findHarvardUser(req.user.id, error, error, success);
 
 };
@@ -65,13 +71,13 @@ exports.studentLoginPost = function (req, res) {
 
 exports.chatHtml = function (req, res) {
     //get the customUsername
-    function error(status, err){
-        if(status == -1 || status == 0){
+    function error(status, err) {
+        if (status == -1 || status == 0) {
             basic.consoleLogger("ERROR: exports.chatHtml: " + err);
         }
     }
 
-    function success(theHarvardUser){
+    function success(theHarvardUser) {
         if (req.user && theHarvardUser.customLoggedInStatus == 1) {
             res.render('chat', {customUsername: theHarvardUser.customUsername});
         } else if (req.user) {
@@ -80,5 +86,6 @@ exports.chatHtml = function (req, res) {
             res.redirect("login.html");
         }
     }
+
     dbJs.findHarvardUser(req.user.id, error, error, success);
 };
