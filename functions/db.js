@@ -68,11 +68,11 @@ module.exports = {
         var question = new Question({
             questionIndex: questionIndex,
             senderName: theHarvardUser.customUsername,
+            senderDisplayName: theHarvardUser.displayName,
+            senderEmail: theHarvardUser.email,
             senderOpenId: theHarvardUser.id,
-            message: questionObject.message,
-            shortMessage: questionObject.shortMessage,
-            messageClass: "a" + questionIndex,
-            buttonClass: "a" + questionIndex + "b btn btn-info upvote",
+            question: questionObject.question,
+            shortQuestion: questionObject.shortQuestion,
             votes: 0
         });
         success(question);
@@ -92,7 +92,7 @@ module.exports = {
 
     pushQuestionToAsker: function (openId, questionObject, error_neg_1, error_0, success) {
         HarvardUser.update({id: openId}, {
-            $push: {askedQuestionsClasses: questionObject.messageClass}
+            $push: {askedQuestionsIndexes: questionObject.questionIndex}
         }, function (err) {
             if (err) {
                 error_neg_1(-1, err);
@@ -117,18 +117,18 @@ module.exports = {
     },
 
     findTopVotedQuestions: function (sort, limit, error_neg_1, error_0, success) {
-        Question.find({votes: {$gt: 0}}).sort({votes: sort}).limit(limit).exec(function (err, topVotedObject) {
+        Question.find({votes: {$gt: 0}}).sort({votes: sort}).limit(limit).exec(function (err, topVotedArrayOfObjects) {
             if (err) {
                 error_neg_1(-1, err);
             } else {
-                success(topVotedObject);
+                success(topVotedArrayOfObjects);
             }
         });
     },
 
-    pushUpvoteToUpvoter: function (openId, buttonClass, error_neg_1, error_0, success) {
+    pushUpvoteToUpvoter: function (openId, upvotedIndex, error_neg_1, error_0, success) {
         HarvardUser.update({id: openId}, {
-                $push: {votedButtonClasses: buttonClass}
+                $push: {votedQuestionIndexes: upvotedIndex}
             }, function (err) {
                 if (err) {
                     error_neg_1(-1, err);
@@ -140,8 +140,8 @@ module.exports = {
     },
 
 
-    incrementQuestionVotes: function (questionClass, error_neg_1, error_0, success) {
-        Question.update({messageClass: questionClass}, {$inc: {votes: 1}}, function (err) {
+    incrementQuestionVotes: function (upvotedIndex, error_neg_1, error_0, success) {
+        Question.update({questionIndex: upvotedIndex}, {$inc: {votes: 1}}, function (err) {
             if (err) {
                 error_neg_1(-1, err);
             } else {

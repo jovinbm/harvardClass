@@ -16,16 +16,16 @@ var usersOnline = [];
 
 //define and export all the event handlers
 module.exports = {
-    readyToChat: function (req, res, theHarvardUser, io) {
+    readyToChat: function (req, res, io, theHarvardUser) {
         basic.consoleLogger('readyToChat: READY_TO_CHAT event handler called');
         var customUsername = theHarvardUser.customUsername;
         var socketRoom = theHarvardUser.socketRoom;
-        ioJs.emitToOne(socketRoom, io, 'loggedin', customUsername);
+        ioJs.emitToOne(socketRoom, io, 'logged-in', customUsername);
         online.addToUsersOnline(usersOnline, customUsername);
         ioJs.emitToAll(io, "usersOnline", usersOnline);
 
-        //send the user his upvoted questions and THE RECENT TOP VOTED questions
-        ioJs.emitToOne(socketRoom, io, 'myUpvotedButtonClasses', theHarvardUser.votedButtonClasses);
+        //send the user his upvoted questionIndexes and THE RECENT TOP VOTED questions
+        ioJs.emitToOne(socketRoom, io, 'myUpvotedIndexes', theHarvardUser.votedQuestionIndexes);
 
         //find and broadcast the currently top voted
         function error(status, err) {
@@ -38,8 +38,8 @@ module.exports = {
             }
         }
 
-        function success(topVotedObject) {
-            ioJs.emitToOne(socketRoom, io, 'arrangement', topVotedObject);
+        function success(topVotedArrayOfObjects) {
+            ioJs.emitToOne(socketRoom, io, 'topVoted', topVotedArrayOfObjects);
             /*complete the ajax request by sending the client their socket.io room*/
             res.contentType('json');
             res.send(JSON.stringify({"status": "success"}));
@@ -50,7 +50,7 @@ module.exports = {
     },
 
 
-    getHistory: function (req, res, theHarvardUser, io, currentQuestionIndex) {
+    getHistory: function (req, res, io, theHarvardUser, currentQuestionIndex) {
         basic.consoleLogger("getHistory: getHistory called");
         var socketRoom = theHarvardUser.socketRoom;
         //define limit: How many do you want?
@@ -70,26 +70,25 @@ module.exports = {
                 basic.consoleLogger('getHistory: Success');
             }
 
-            ioJs.emitToOne(socketRoom, io, "myUpvotedButtonClasses", theHarvardUser.votedButtonClasses, success);
+            ioJs.emitToOne(socketRoom, io, "myUpvotedIndexes", theHarvardUser.votedQuestionIndexes, success);
         }
 
         dbJs.getRecentQuestions(-1, currentQuestionIndex, 20, error, error, success)
     },
 
 
-    iAmOnline: function (req, res, r_username, socketRoom) {
+    iAmOnline: function (req, res, customUsername, socketRoom) {
         var date = new Date();
         var microSeconds = date.getTime();
         //find the user in the userOnline object
-        var index = basic.indexArrayObject(usersOnline, "customUsername", r_username);
+        var index = basic.indexArrayObject(usersOnline, "customUsername", customUsername);
         if (index != -1) {
             usersOnline[index].time = microSeconds;
             basic.consoleLogger("******usersOnline = " + JSON.stringify(usersOnline));
         } else {
-            online.addToUsersOnline(usersOnline, r_username);
+            online.addToUsersOnline(usersOnline, customUsername);
         }
 
-        //update the socketRoom
         /*complete the ajax request by sending the client their socket.io room
          the socketRoom is encrypted*/
         res.contentType('json');
@@ -114,17 +113,17 @@ module.exports = {
     },
 
 
-    clientMessage: function (req, res, theHarvardUser, io, theQuestion) {
-        basic.consoleLogger('clientMessage: CLIENT_MESSAGE event handler called');
+    clientQuestion: function (req, res, io, theHarvardUser, theQuestion) {
+        basic.consoleLogger('clientQuestion: CLIENT_QUESTION event handler called');
         var thisQuestionIndex;
-        //query the recent question
-        if (!(/^\s+$/.test(theQuestion.message))) {
+        //query the recent question's index
+        if (!(/^\s+$/.test(theQuestion.question))) {
             function save(index) {
                 function made(question) {
                     function saved(savedQuestion) {
                         function done(questionObject) {
-                            ioJs.emitToAll(io, 'serverMessage', questionObject);
-                            basic.consoleLogger('clientMessage: Success');
+                            ioJs.emitToAll(io, 'serverQuestion', questionObject);
+                            basic.consoleLogger('clientQuestion: Success');
                         }
 
                         dbJs.pushQuestionToAsker(req.user.id, savedQuestion, error, error, done);
@@ -138,7 +137,7 @@ module.exports = {
 
             function error(status, err) {
                 if (status == -1) {
-                    basic.consoleLogger("ERROR: clientMessage event_Handler: " + err);
+                    basic.consoleLogger("ERROR: clientQuestion event_Handler: " + err);
                 } else if (status == 0) {
                     //means this is the first question. Save it
                     thisQuestionIndex = 0;
@@ -156,9 +155,9 @@ module.exports = {
     },
 
 
-    upvote: function (req, res, theHarvardUser, io, questionClass, buttonClass) {
+    upvote: function (req, res, io, theHarvardUser, upvotedIndex) {
         basic.consoleLogger("upvote: upvote event handler called");
-        //push the new upvote's button class to the respective upvoter
+        //push the new upvote's index to the respective upvoter
         function error(status, err) {
             if (status == -1 || status == 0) {
                 basic.consoleLogger("ERROR: upvote: event_handlers " + err);
@@ -167,34 +166,35 @@ module.exports = {
 
         function success() {
             function broadcastTop() {
-                function broadcaster(topVotedObject) {
+                function broadcaster(topVotedArrayOfObjects) {
 
-                    function pushed() {
+                    function pushed(votedQuestionIndexes) {
                         function personalizedDone() {
-                            ioJs.emitToAll(io, 'arrangement', topVotedObject);
+                            ioJs.emitToAll(io, 'topVoted', topVotedArrayOfObjects);
                             basic.consoleLogger('upvote: Success');
                         }
 
-                        //send the upvoter their current upvoted questions
-                        ioJs.emitToOne(theHarvardUser.socketRoom, io, "myUpvotedButtonClasses", theHarvardUser.votedButtonClasses, personalizedDone);
+                        //send the upvoter their current upvoted question Indexes
+                        ioJs.emitToOne(theHarvardUser.socketRoom, io, "myUpvotedIndexes", votedQuestionIndexes, personalizedDone);
                     }
 
-                    //update theHarvardUser(to avoid retrieving) by pushing the new buttonClass
-                    function pushButtonClass(pushed) {
-                        theHarvardUser.votedButtonClasses.push(buttonClass);
-                        pushed()
+                    //update theHarvardUser(to avoid retrieving) by pushing the votedQuestionIndexes
+                    function pushUpvotedIndex(pushed) {
+                        var votedQuestionIndexes = theHarvardUser.votedQuestionIndexes;
+                        votedQuestionIndexes.push(upvotedIndex);
+                        pushed(votedQuestionIndexes);
                     }
 
-                    pushButtonClass(pushed)
+                    pushUpvotedIndex(pushed)
                 }
 
                 dbJs.findTopVotedQuestions(-1, 7, error, error, broadcaster);
             }
 
-            dbJs.incrementQuestionVotes(questionClass, error, error, broadcastTop);
+            dbJs.incrementQuestionVotes(upvotedIndex, error, error, broadcastTop);
         }
 
-        dbJs.pushUpvoteToUpvoter(req.user.id, buttonClass, error, error, success);
+        dbJs.pushUpvoteToUpvoter(req.user.id, upvotedIndex, error, error, success);
     },
 
 

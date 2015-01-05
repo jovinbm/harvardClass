@@ -8,14 +8,13 @@ var Schema = mongoose.Schema;
 var questionSchema = new Schema({
     questionIndex: {type: Number, default:0, required:true, unique: true, index: true},
     senderName: {type: String, required: true, unique: false, index: true},
+    senderDisplayName:{type: String, required: true, unique: false, index: true},
+    senderEmail: {type: String, required: true, unique: false, index: true},
     senderOpenId: {type: String, required: true, unique: false, index: true},
-    message: {type: String, default: "Nothing to show", required: true},
-    shortMessage: {type: String, default: "Nothing to show", required: true},
-    messageClass: {type: String, required: true, unique:true, index: true},
-    buttonClass: {type: String, required: true, unique: true, index: true},
+    question: {type: String, required: true},
+    shortQuestion: {type: String, required: true},
     votes: {type: Number, default: 0, index: true},
-    votedButtonClasses: { type : Array , "default" : [], index: true},
-    time: {type: Date, default: Date.now, index: true}
+    timeAsked: {type: Date, default: Date.now, index: true}
 });
 
 module.exports = questionSchema;
