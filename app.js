@@ -9,8 +9,7 @@ var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass
 /*
  passport configuration
  */
-var returnURL = "https://harvardclass.herokuapp.com/harvardId";
-var realmURL = "https://harvardclass.herokuapp.com";
+var returnURL = "https://harvardclass.herokuapp.com/harvardId"; var realmURL = "https://harvardclass.herokuapp.com";
 //var returnURL = "http://localhost:3000/harvardId"; var realmURL = "http://localhost:3000/";
 
 
