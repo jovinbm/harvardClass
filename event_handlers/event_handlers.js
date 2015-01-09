@@ -10,6 +10,8 @@ var dbJs = require('../functions/db.js');
 var online = require('../functions/online.js');
 
 var onlineMinutesLimit = 2;
+//limit for the recent history questions
+var historyLimit = 40;
 
 //variable to hold online users
 var usersOnline = [];
@@ -53,8 +55,6 @@ module.exports = {
     getHistory: function (req, res, io, theHarvardUser, currentQuestionIndex) {
         basic.consoleLogger("getHistory: getHistory called");
         var socketRoom = theHarvardUser.socketRoom;
-        //define limit: How many do you want?
-        var historyLimit = 40;
         //retrieve the history
         function error(status, err) {
             if (status == -1 || status == 0) {
@@ -73,7 +73,7 @@ module.exports = {
             ioJs.emitToOne(socketRoom, io, "myUpvotedIndexes", theHarvardUser.votedQuestionIndexes, success);
         }
 
-        dbJs.getRecentQuestions(-1, currentQuestionIndex, 20, error, error, success)
+        dbJs.getRecentQuestions(-1, currentQuestionIndex, historyLimit, error, error, success)
     },
 
 
