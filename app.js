@@ -1,21 +1,19 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-//your mongoDB database URL goes here (uncomment one)
+
 //var dbURL = 'mongodb://localhost:27017';
 var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 
-/*
- passport configuration
- */
-var returnURL = "https://harvardclass.herokuapp.com/harvardId"; var realmURL = "https://harvardclass.herokuapp.com";
-//var returnURL = "http://localhost:3000/harvardId"; var realmURL = "http://localhost:3000/";
+//harvard openId config
+var returnURL = "https://harvardclass.herokuapp.com/harvardId";
+var realmURL = "https://harvardclass.herokuapp.com";
+//var returnURL = "http://localhost:3000/harvardId";
+//var realmURL = "http://localhost:3000/";
 
 
-/*
- THE APP
- */
+//THE APP
 var express = require('express');
 var app = require('express')();
 var server = require('http').Server(app);
@@ -58,7 +56,7 @@ db.once('open', function () {
     basic.consoleLogger("Successfully connected to server");
 });
 
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
