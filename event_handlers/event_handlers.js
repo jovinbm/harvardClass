@@ -54,7 +54,7 @@ module.exports = {
         basic.consoleLogger("getHistory: getHistory called");
         var socketRoom = theHarvardUser.socketRoom;
         //define limit: How many do you want?
-        var historyLimit = 20;
+        var historyLimit = 40;
         //retrieve the history
         function error(status, err) {
             if (status == -1 || status == 0) {
