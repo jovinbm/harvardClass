@@ -148,7 +148,8 @@
                             </td>
                             <td class='col-lg-1 col-md-1 col-sm-2 col-xs-2' align='center'>
                                 <button type="button" ng-class="questionReference[eachTop.questionIndex].buttonClass"
-                                        ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
+                                        ng-disabled="questionReference[eachTop.questionIndex].ifDisabled"
+                                        ng-click="upvote(eachTop.questionIndex, $event)">
                                     <span class="voteNumber">{{eachTop.votes}}</span>
                                 </button>
                             </td>
