@@ -86,7 +86,7 @@ module.exports = {
         basic.consoleLogger('newQuestion: NEW_QUESTION event handler called');
         var thisQuestionIndex;
         //query the recent question's index
-        if (!(/^\s+$/.test(theQuestion.question))) {
+        if (!(/^\s+$/.test(theQuestion.question)) && theQuestion.length != 0) {
             function save(index) {
                 function made(question) {
                     function saved(savedQuestion) {

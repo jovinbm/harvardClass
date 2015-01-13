@@ -146,10 +146,12 @@ angular.module('qaApp')
     .controller('AskController', ['$location', '$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'userQuestions',
         function ($location, $scope, socket, socketRoom, initializer, globals, userQuestions) {
             $scope.ask = function () {
-                userQuestions.postQuestion($scope.theQuestion)
-                    .error(function (errorResponse) {
-                        $window.location.href = "/error/error500.html";
-                    });
+                if ($scope.theQuestion.length != 0) {
+                    userQuestions.postQuestion($scope.theQuestion)
+                        .error(function (errorResponse) {
+                            $window.location.href = "/error/error500.html";
+                        });
+                }
                 $scope.theQuestion = '';
             }
         }]);
