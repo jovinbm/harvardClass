@@ -101,10 +101,8 @@
             <h5>
                 <span>
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                    Question Feed:
+                    Question Feed
                 </span>
-                <small>
-                    <span class="questionFeedDate">Date</span></small>
             </h5>
             <table class="table table-condensed question_feed ng-cloak">
                 <tr ng-repeat="eachQuestion in questions"
@@ -139,7 +137,7 @@
 
                 <!--start of top voted questions-->
                 <div class="col-lg-9 col-md-12 col-sm-12 col-xs-9">
-                    <h5>Top Voted Questions</h5>
+                    <h5><i class="fa fa-line-chart"></i>  Trending</h5>
                     <table class="table table-condensed topQuestions ng-cloak">
                         <tr ng-repeat="eachTop in topVotedQuestions"
                             ng-class="questionReference[eachTop.questionIndex].questionClass">
@@ -162,7 +160,7 @@
                 <div class="col-lg-3 col-md-5 col-sm-5 col-xs-3" style="text-align: center"
                      ng-controller="OnlineUsersController">
 
-                    <h5>Online</h5>
+                    <h5><i class="fa fa-users"></i>  Users</h5>
                     <table class="table table-condensed onlineUsers ng-cloak">
                         <tr ng-repeat="(key, value) in onlineUsers">
                             <td class='onlineUser'><i class='fa fa-user'></i> {{value.customUsername}}</td>
