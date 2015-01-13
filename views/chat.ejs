@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="qaApp">
 <head lang="en">
 
     <meta charset="utf-8"/>
@@ -38,8 +38,7 @@
     <link rel="stylesheet" href="css/chat.css">
 
 </head>
-<body>
-
+<body ng-controller="MainController">
 
 <!--start of nav-->
 
@@ -70,8 +69,18 @@
                         ID: <%= customUsername %> <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="logoutCustomChat">Logout from Session</a></li>
-                        <li><a href="#" class="logoutHarvardChat">Logout from Harvard</a></li>
+                        <li>
+                            <a href="#"
+                               class="logoutCustomChat"
+                               ng-click="logoutCustomChat()">Logout from Session
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"
+                               class="logoutHarvardChat"
+                               ng-click="logoutHarvardChat()">Logout from Harvard
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -81,13 +90,14 @@
 </div>
 <!--end of nav-->
 
+
 <!--middle container for news-feed, top voted questions and online users-->
 <div class="container">
 
     <div class="row">
 
         <!--column for newsfeed-->
-        <div class="col-lg-7 col-md-8 col-sm-8 col-xs-12">
+        <div class="col-lg-7 col-md-8 col-sm-8 col-xs-12" ng-controller="QuestionFeedController">
             <h5>
                 <span>
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -96,32 +106,66 @@
                 <small>
                     <span class="questionFeedDate">Date</span></small>
             </h5>
-            <table class="table table-condensed table-striped question_feed">
-
+            <table class="table table-condensed question_feed ng-cloak">
+                <tr ng-repeat="eachQuestion in questions"
+                    ng-class="questionReference[eachQuestion.questionIndex].questionClass">
+                    <td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs senderName'>
+                        {{eachQuestion.senderName}}
+                    </td>
+                    <td class='col-lg-9 col-md-9 col-sm-8 col-xs-10'>
+                        {{eachQuestion.question}}
+                        <br/>
+                        <small class="questionTime pull-right">
+                            {{questionReference[eachQuestion.questionIndex].questionTime}}
+                        </small>
+                    </td>
+                    <td class='col-lg-1 col-md-1 col-sm-2 col-xs-2' align='center'>
+                        <button type='button'
+                                ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
+                                ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
+                                ng-click="upvote(eachQuestion.questionIndex, $event)">
+                            <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                        </button>
+                    </td>
+                </tr>
             </table>
         </div>
         <!--end of newsfeed-->
 
         <!--start of top voted questions and online column-->
-        <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12" ng-controller="TopVotedController">
 
             <div class="row">
 
                 <!--start of top voted questions-->
                 <div class="col-lg-9 col-md-12 col-sm-12 col-xs-9">
                     <h5>Top Voted Questions</h5>
-                    <table class="table table-condensed table-striped topQuestions">
-
+                    <table class="table table-condensed topQuestions ng-cloak">
+                        <tr ng-repeat="eachTop in topVotedQuestions"
+                            ng-class="questionReference[eachTop.questionIndex].questionClass">
+                            <td class='col-lg-10 col-md-10 col-sm-9 col-xs-9'>
+                                {{eachTop.shortQuestion}}
+                            </td>
+                            <td class='col-lg-2 col-md-2 col-sm-3 col-xs-2' align='center'>
+                                <button type="button" ng-class="questionReference[eachTop.questionIndex].buttonClass"
+                                        ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
+                                    <span class="voteNumber">{{eachTop.votes}}</span>
+                                </button>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 <!--end of top voted questions-->
 
                 <!--start of online users-->
-                <div class="col-lg-3 col-md-5 col-sm-5 col-xs-3" style="text-align: center">
+                <div class="col-lg-3 col-md-5 col-sm-5 col-xs-3" style="text-align: center"
+                     ng-controller="OnlineUsersController">
 
                     <h5>Online</h5>
-                    <table class="table table-condensed table-striped onlineUsers">
-
+                    <table class="table table-condensed onlineUsers ng-cloak">
+                        <tr ng-repeat="(key, value) in onlineUsers">
+                            <td class='onlineUser'><i class='fa fa-user'></i> {{value.customUsername}}</td>
+                        </tr>
                     </table>
                 </div>
 
@@ -130,27 +174,39 @@
         </div>
         <!--end of online users column-->
 
-
     </div>
     <!--end of row-->
 
 </div>
 <!--end of mid container-->
 
+
 <!--start of question input field-->
 <!--<div class="container navbar-fixed-bottom">-->
 <!--<div class="panel-footer" id="footerconst">-->
-<div class='navbar navbar-default navbar-fixed-bottom'>
+<div class='navbar navbar-default navbar-fixed-bottom' ng-controller="AskController">
     <div class="container">
 
-        <textarea class="form-control" id="qfield" placeholder="Type your question" rows="3"></textarea>
+        <form ng-submit="ask()" name="askForm">
+            <textarea class="form-control"
+                      id="qfield"
+                      placeholder="Type your question"
+                      rows="3"
+                      ng-model="theQuestion"
+                      required></textarea>
 
-        <div class="pull-right">
-            <button class="navbar-btn btn btn-align btn-info">clarify?</button>
-            <button class="navbar-btn btn btn-align btn-info">give an example?</button>
-            <button class="navbar-btn btn btn-warning" type="button" id="ask">ASK
-            </button>
-        </div>
+            <div class="pull-right">
+                <button class="navbar-btn btn btn-align btn-info"
+                        ng-disabled="askForm.$invalid">clarify?
+                </button>
+                <button class="navbar-btn btn btn-align btn-info"
+                        ng-disabled="askForm.$invalid">give an example?
+                </button>
+                <button class="navbar-btn btn btn-warning" type="submit"
+                        ng-disabled="askForm.$invalid">ASK
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 <!--end of question input field-->
@@ -161,22 +217,21 @@
 <!-- socket.io javascript -->
 <script type="text/javascript" src="socket.io/socket.io.js"></script>
 
-<!-- jquery -->
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- jQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<!-- Boostrap.js -->
+<!--AngularJS script-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
+
+<!-- Bootstrap.js -->
 <script type="text/javascript"
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 <!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 
-<!-- loads jquery cookie plugin -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-
-<!-- customlogin javascript file: should be loaded after jquery-->
-<script type="text/javascript" src="js/chat.js"></script>
+<script type="text/javascript" src="angular_assets/qaApp/mainApp.js"></script>
+<script type="text/javascript" src="angular_assets/qaApp/services.js"></script>
+<script type="text/javascript" src="angular_assets/qaApp/controllers.js"></script>
 </body>
 </html>

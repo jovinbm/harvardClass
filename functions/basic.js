@@ -16,7 +16,10 @@ module.exports = {
             if (myArray[i][property] === value) return i;
         }
         return -1;
+    },
+
+
+    searchArrayIfExists: function (name, theArray, success) {
+        return (theArray.indexOf(name) > -1)
     }
-
-
 };

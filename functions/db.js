@@ -17,7 +17,7 @@ module.exports = {
                 if (err) {
                     error_neg_1(-1, err);
                 } else if (theHarvardUser == null || theHarvardUser == undefined) {
-                    error_0(0);
+                    error_0(0, err);
                 } else {
                     success(theHarvardUser);
                 }
@@ -120,7 +120,9 @@ module.exports = {
         Question.find({votes: {$gt: 0}}).sort({votes: sort}).limit(limit).exec(function (err, topVotedArrayOfObjects) {
             if (err) {
                 error_neg_1(-1, err);
-            } else {
+            }else if(topVotedArrayOfObjects.length == 0){
+                error_0(0);
+            }else {
                 success(topVotedArrayOfObjects);
             }
         });

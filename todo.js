@@ -18,8 +18,4 @@
 
 //todo -- add google analytics to site
 
-//todo -- increment the current question index in chat.js when the user receives a new question -- for getHistory
-
 //todo - slide on left for xs grid on chat to see top voted and online
-
-//todo -- solve logout remove in chat.js
