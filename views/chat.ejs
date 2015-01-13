@@ -109,17 +109,17 @@
             <table class="table table-condensed question_feed ng-cloak">
                 <tr ng-repeat="eachQuestion in questions"
                     ng-class="questionReference[eachQuestion.questionIndex].questionClass">
-                    <td class='col-lg-1 col-md-1 col-sm-2 col-xs-1 hidden-xs senderName'>
+                    <td class='col-lg-1 col-md-1 col-sm-2 hidden-xs senderName'>
                         {{eachQuestion.senderName}}
                     </td>
-                    <td class='col-lg-9 col-md-9 col-sm-8 col-xs-10'>
+                    <td class='col-lg-10 col-md-10 col-sm-9 col-xs-11'>
                         {{eachQuestion.question}}
                         <br/>
-                        <small class="questionTime pull-right">
+                        <small class="questionTime">
                             {{questionReference[eachQuestion.questionIndex].questionTime}}
                         </small>
                     </td>
-                    <td class='col-lg-1 col-md-1 col-sm-2 col-xs-2' align='center'>
+                    <td class='col-lg-1 col-md-1 col-sm-1 col-xs-1' align='center'>
                         <button type='button'
                                 ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
                                 ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
@@ -143,10 +143,10 @@
                     <table class="table table-condensed topQuestions ng-cloak">
                         <tr ng-repeat="eachTop in topVotedQuestions"
                             ng-class="questionReference[eachTop.questionIndex].questionClass">
-                            <td class='col-lg-10 col-md-10 col-sm-9 col-xs-9'>
+                            <td class='col-lg-11 col-md-11 col-sm-10 col-xs-10'>
                                 {{eachTop.shortQuestion}}
                             </td>
-                            <td class='col-lg-2 col-md-2 col-sm-3 col-xs-2' align='center'>
+                            <td class='col-lg-1 col-md-1 col-sm-2 col-xs-2' align='center'>
                                 <button type="button" ng-class="questionReference[eachTop.questionIndex].buttonClass"
                                         ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
                                     <span class="voteNumber">{{eachTop.votes}}</span>
