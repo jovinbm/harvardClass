@@ -109,15 +109,14 @@
                     Question Feed
                 </span>
                 <span class="hidden-sm hidden-md hidden-lg">
-                    <button type="button" class="btn btn-primary btn-xs pull-right">
                         <a type="button"
-                           class="btn btn-primary btn-xs"
+                           class="btn btn-primary btn-xs pull-right"
                            href="#myModal"
                            role="button"
                            data-toggle="modal">
                             <i class="fa fa-pencil"></i> New Question
                         </a>
-                    </button></span>
+                </span>
             </h5>
 
 
@@ -156,7 +155,7 @@
 
             <div class="row">
                 <!--start of top voted questions-->
-                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-9">
+                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-8">
                     <h5 id="trending"><i class="fa fa-line-chart"></i> Trending</h5>
                     <ul class="list-group">
                         <li class="list-group-item ng-cloak"
@@ -177,7 +176,7 @@
                 <!--end of top voted questions-->
 
                 <!--start of online users-->
-                <div class="col-lg-3 col-md-5 col-sm-5 col-xs-3" style="text-align: center"
+                <div class="col-lg-3 col-md-5 col-sm-5 col-xs-4" style="text-align: center"
                      ng-controller="OnlineUsersController">
 
                     <h5><i class="fa fa-users"></i> Users</h5>
@@ -223,23 +222,25 @@
             </li>
         </ul>
 
-        <ul class="nav nav-pills hidden-sm hidden-md hidden-lg bottom-nav-pills">
-            <li>
-                <small><a href="#myModal"
-                          data-toggle="modal">
-                        <i class="fa fa-pencil"></i> New Question
-                    </a></small>
-            </li>
-            <li>
-                <small><a href="#trending">
+        <div class="span12 text-center">
+            <ul class="nav nav-pills hidden-sm hidden-md hidden-lg bottom-nav-pills">
+                <li>
+                    <a href="#myModal"
+                       data-toggle="modal">
+                        <i class="fa fa-pencil"></i> New
+                    </a>
+                </li>
+                <li>
+                    <a href="#trending">
                         <i class="fa fa-line-chart"></i> Trending
-                    </a></small>
-            </li>
-            <li role="presentation">
-                <small><a href="#onlineUsers"><i class="fa fa-users"></i> Users
-                    </a></small>
-            </li>
-        </ul>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#onlineUsers"><i class="fa fa-users"></i> Users
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <!--end of bottom nav-->

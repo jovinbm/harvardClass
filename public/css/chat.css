@@ -44,6 +44,10 @@ questions feed
 
 /*bottom nav bar
 */
+.bottom-nav-pills {
+    display: inline-block;
+}
+
 body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a {
     color: #0b97c4;
 }
