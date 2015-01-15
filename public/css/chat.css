@@ -34,7 +34,7 @@ questions feed
 
 /*question input field/modal*/
 .ta-editor {
-    min-height: 300px;
+    min-height: 100px;
     height: auto;
     overflow: auto;
     font-family: inherit;
