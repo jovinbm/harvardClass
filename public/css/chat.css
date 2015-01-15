@@ -48,7 +48,10 @@ questions feed
     display: inline-block;
 }
 
-body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul > li > a:focus{
+/*disabling focus outline*/
+body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul > li > a:focus,
+body > div.navbar.navbar-default.navbar-fixed-top > div > div.collapse.navbar-collapse.navHeaderCollapse > a:focus,
+body > div.container > div > div.col-lg-7.col-md-8.col-sm-8.col-xs-12.ng-scope > h5 > span.hidden-sm.hidden-md.hidden-lg > a:focus {
     outline: none;
 }
 
