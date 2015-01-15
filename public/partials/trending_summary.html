@@ -1,0 +1,27 @@
+<!--start of trending questions-->
+<div ng-class="columnClass">
+    <div ng-controller="TopVotedController">
+        <h5 id="trending"
+            ng-click="changeTab('trending')">
+            <a href="#">
+                <i class="fa fa-line-chart"></i> Trending
+            </a>
+        </h5>
+        <ul class="list-group">
+            <li class="list-group-item ng-cloak"
+                ng-repeat="(key, eachTop) in topVotedQuestions"
+                ng-class="[
+                            questionReference[eachTop.questionIndex].questionClass,
+                            questionReference[eachTop.questionIndex].listGroupClass
+                            ]"
+                ng-disabled="questionReference[eachTop.questionIndex].ifDisabled"
+                ng-click="upvote(eachTop.questionIndex, $event)">
+                            <span class="badge voteNumber">
+                                {{eachTop.votes}}
+                            </span>
+                {{eachTop.heading}}
+            </li>
+        </ul>
+    </div>
+</div>
+<!--end of trending questions-->

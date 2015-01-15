@@ -11,7 +11,7 @@ body {
 /*
 questions feed
 */
-.media {
+.main-media {
     border-bottom: 1px solid #ccc;
 }
 
@@ -48,13 +48,18 @@ questions feed
     display: inline-block;
 }
 
-/*disabling focus outline*/
+/*disabling focus effects*/
 ul > li > a:focus,
 div.collapse.navbar-collapse.navHeaderCollapse > a:focus,
 span.hidden-sm.hidden-md.hidden-lg > a:focus {
     outline: none;
 }
 
-body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a {
+ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a,
+#trending{
     color: #0b97c4;
+}
+
+a:hover{
+    text-decoration: none;
 }

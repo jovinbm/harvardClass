@@ -28,6 +28,7 @@ module.exports = {
         }
         //add them to the socketId index for faster searching later
         socketIdIndex[userObject.socketId[0]] = room;
+        ioJs.emitToAll("usersOnline", usersOnline);
     },
 
     removeUser: function (socketId, socketRoom, success) {

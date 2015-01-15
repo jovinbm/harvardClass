@@ -121,8 +121,6 @@ app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutApi.
 app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutApi.logoutCustomChat);
 app.post('/api/logoutHarvardChat', authenticate.ensureAuthenticated, logoutApi.logoutHarvardChat);
 
-app.get('*', routes.loginHtml);
-
 //start server
 server.listen(port);
 

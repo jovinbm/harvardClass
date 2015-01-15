@@ -1,0 +1,61 @@
+<!--start of bottom nav-->
+<div class="nav navbar navbar-default navbar-fixed-bottom ng-cloak">
+    <div class="container">
+        <p class="navbar-text pull-left hidden-xs">
+            <i class="fa fa-copyright"></i> 2015 harvardclass.herokuapp.com
+        </p>
+        <ul class="nav navbar-nav pull-right hidden-xs bottom-nav-pills">
+            <li>
+                <a href="#myModal"
+                   data-toggle="modal">
+                    <i class="fa fa-pencil"></i> New Question
+                </a>
+            </li>
+            <li ng-click="changeTab('trending')"
+                ng-show="tab == 'home'">
+                <a href="#">
+                    <i class="fa fa-line-chart"></i> Trending
+                </a>
+            </li>
+            <li ng-click="changeTab('home')"
+                ng-show="tab == 'trending'">
+                <a href="#">
+                    <i class="fa fa-home"></i> Home
+                </a>
+            </li>
+            </li>
+            <li>
+                <a href="#onlineUsers"><i class="fa fa-users"></i> Users
+                </a>
+            </li>
+        </ul>
+
+        <div class="span12 text-center">
+            <ul class="nav nav-pills hidden-sm hidden-md hidden-lg bottom-nav-pills">
+                <li>
+                    <a href="#myModal"
+                       data-toggle="modal">
+                        <i class="fa fa-pencil"></i> New
+                    </a>
+                </li>
+                <li ng-click="changeTab('trending')"
+                    ng-show="tab == 'home'">
+                    <a href="#">
+                        <i class="fa fa-line-chart"></i> Trending
+                    </a>
+                </li>
+                <li ng-click="changeTab('home')"
+                    ng-show="tab == 'trending'">
+                    <a href="#">
+                        <i class="fa fa-home"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#onlineUsers"><i class="fa fa-users"></i> Users
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--end of bottom nav-->

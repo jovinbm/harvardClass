@@ -70,6 +70,7 @@ angular.module('qaApp')
             customUsername: function (newCustomUsername) {
                 if (newCustomUsername) {
                     myCustomUsername = newCustomUsername;
+                    return myCustomUsername;
                 } else {
                     return myCustomUsername;
                 }
@@ -117,6 +118,7 @@ angular.module('qaApp')
             usersOnline: function (newUsersOnline) {
                 if (newUsersOnline) {
                     usersOnline = newUsersOnline;
+                    return usersOnline;
                 } else {
                     return usersOnline;
                 }
@@ -181,6 +183,11 @@ angular.module('qaApp')
                         detailPrototype[index].ifDisabled = true;
                     });
                 }
+                return detailPrototype;
+            },
+
+
+            getReference: function(){
                 return detailPrototype;
             },
 

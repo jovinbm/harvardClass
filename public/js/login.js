@@ -2,14 +2,6 @@ $(document).ready(function () {
     //my custom form validator plugin
     $('.emailForm').goValidate();
 
-    /*the redirect url for logout
-     the logout URL for temp production and development purposes(uncomment one)*/
-    //var logoutURL = "//" + window.location.hostname;
-    var logoutURL = "//" + window.location.hostname + ":3000";
-
-
-    //INTERACTIONS
-
     //using bootstrap validator for form validation
     $("#studentLoginForm").bootstrapValidator();
 
@@ -17,15 +9,13 @@ $(document).ready(function () {
         sendLogoutHarvardLogin();
     });
 
-    //FUNCTIONS
-
     //js for logout from harvard ID
     function sendLogoutHarvardLogin() {
         $.ajax({
             url: "/api/logoutHarvardLogin",
             type: "POST",
             success: function () {
-                window.location = logoutURL;
+                window.location = "//" + window.location.hostname + ":" + window.location.port;
             }
         });
     }

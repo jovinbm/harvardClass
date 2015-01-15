@@ -85,7 +85,7 @@ module.exports = {
 
         function success(theHarvardUser) {
             if (req.user && theHarvardUser.customLoggedInStatus == 1) {
-                res.render('chat', {customUsername: theHarvardUser.customUsername});
+                res.render('chat');
             } else if (req.user) {
                 res.redirect("login1.html");
             } else {

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Harvard Website to ask questions in class"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Harvard Question and Answer Website"/>
     <meta name="author" content="Jovin Mwilanga"/>
-    <title>HarvardClass - Login</title>
+    <link rel="author" href="https://plus.google.com/+JovinMwilanga"/>
 
     <!--google analytics-->
     <script>
@@ -26,19 +27,27 @@
 
     </script>
 
-    <!-- loads bootstrap.css -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <!-- loads bootstrap css -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
     <!--loads font awesome-->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 
-    <!-- loads stylesheet for form bootstrap validator plugin -->
+    <!--normalize.css-->
+    <link rel="stylesheet" href="/bower_components/normalize.css/normalize.css"/>
+
+    <!-- bootstrap validator css -->
     <link rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
 
     <!-- loads custom css file -->
     <link rel="stylesheet" href="/public/css/login.css">
 
+
+    <title>HarvardClass - Login</title>
 </head>
 
 <body>
@@ -82,8 +91,6 @@
 
 <!--start of jumbotron-->
 <div class='container'>
-
-    <!--the text-center class centers everything in it-->
     <div class="jumbotron text-center">
 
         <h1>HARVARD CLASS</h1>
@@ -150,7 +157,6 @@
                    data-bv-stringlength-message="The class code must be at least 5 and at most 10 characters long"/>
         </div>
 
-        <!--<button type="submit" class="btn btn-default btn-block">Get in Class</button>-->
         <div class="form-group">
             <button type="submit" class="btn btn-default btn-block">Get in Class</button>
         </div>
@@ -181,11 +187,7 @@
 
 <!--start of footer-->
 <div class='navbar navbar-default navbar-fixed-bottom'>
-    <!--'container div makes sure of correct alignment-->
     <div class="container">
-
-        <!--the class navbar-text makes sure that the text is correctly centered in the navbar-->
-        <!--the class pull-left floats the buttons to the left-->
         <p class="navbar-text pull-left">
             Site Built By Jovin Mwilanga:
             <a href="https://www.google.com/+JovinMwilanga" target="_blank">
@@ -199,8 +201,6 @@
             </a>
         </p>
 
-        <!--the class navbar-btn styles the buttons for the nav-->
-        <!--the class pull-right floats the buttons to the right-->
         <div class="pull-right">
             <a class="navbar-btn btn btn-warning btn-xs">Status: Development</a>
             <a href="#myModal" role="button" class="btn btn-info btn-xs" data-toggle="modal">Shoot Me an Email</a>
@@ -248,22 +248,15 @@
 
 
 <!-- JAVASCRIPT -->
-
-<!-- socket.io javascript -->
-<script type="text/javascript" src="socket.io/socket.io.js"></script>
-
 <!-- jquery -->
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<!-- Boostrap.js -->
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<!-- Bootstrap.js -->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 <!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-
-<!-- loads jquery cookie plugin -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 
 <!-- loads jquery for bootstrapvalidator plugin -->
 <script type="text/javascript"

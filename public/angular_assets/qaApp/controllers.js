@@ -4,8 +4,25 @@
 angular.module('qaApp')
     .controller('MainController', ['$location', '$window', '$scope', '$interval', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'upvoteService', 'logoutService',
         function ($location, $window, $scope, $interval, socket, socketRoom, initializer, globals, detailStorage, upvoteService, logoutService) {
-            console.log("Hello!");
-            $scope.questionReference = {};
+            $scope.customUsername = globals.customUsername();
+            $scope.questionReference = detailStorage.getReference();
+
+            $scope.colClasses = {
+                "onlineColumn": {
+                    "home": "col-lg-2 col-md-1 hidden-sm hidden-xs",
+                    "trending": "col-lg-2 col-md-1 col-sm-2 hidden-xs"
+                }
+            };
+            $scope.currentColClasses = {
+                "onlineColumn": "col-lg-2 col-md-1 hidden-sm hidden-xs"
+            };
+
+            $scope.tab = 'home';
+            $scope.changeTab = function (tab) {
+                console.log("clicked");
+                $scope.tab = tab;
+                $scope.currentColClasses.onlineColumn = $scope.colClasses.onlineColumn[tab];
+            };
 
             $scope.upvote = function (index, $event) {
                 $scope.questionReference = detailStorage.disableButton(index);
@@ -66,7 +83,7 @@ angular.module('qaApp')
             //receives a the clients customUsername and sets it as the customUsername
             socket.on('logged-in', function (name) {
                 console.log("'loggedin' event received");
-                globals.customUsername(name);
+                $scope.customUsername = globals.customUsername(name);
             });
 
             //receives this client's upvoted questions indexes
@@ -86,7 +103,7 @@ angular.module('qaApp')
 
     .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter',
         function ($scope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter) {
-            $scope.questions = {};
+            $scope.questions = sortObjectToArrayFilter(globals.currentQuestions());
 
             /*receive an array containing the recent history(this array has objects with individual questions)*/
             socket.on('questionHistory', function (historyArray) {
@@ -115,7 +132,7 @@ angular.module('qaApp')
 
     .controller('TopVotedController', ['$scope', 'socket', 'globals',
         function ($scope, socket, globals) {
-            $scope.topVotedQuestions = {};
+            $scope.topVotedQuestions = globals.currentTop();
 
             //receives an array containing the top voted questions
             socket.on('topVoted', function (topVotedArrayOfObjects) {
@@ -127,13 +144,12 @@ angular.module('qaApp')
 
     .controller('OnlineUsersController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals',
         function ($scope, socket, socketRoom, initializer, globals) {
-            $scope.onlineUsers = {};
+            $scope.onlineUsers = globals.usersOnline();
 
             /*receives an object (at regular intervals) containing the currently online users*/
             socket.on('usersOnline', function (onlineUsers) {
                 console.log("'usersOnline' event received");
-                globals.usersOnline(onlineUsers);
-                $scope.onlineUsers = globals.usersOnline();
+                $scope.onlineUsers = globals.usersOnline(onlineUsers);
             });
         }])
 
