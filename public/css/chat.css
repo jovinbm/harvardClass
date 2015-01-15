@@ -48,6 +48,10 @@ questions feed
     display: inline-block;
 }
 
+body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul > li > a:focus{
+    outline: none;
+}
+
 body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a {
     color: #0b97c4;
 }
