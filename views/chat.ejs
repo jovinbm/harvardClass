@@ -255,7 +255,7 @@
      ng-controller="AskController">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header hidden-xs">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="myModalLabel">Ask a new question</h3>
             </div>
@@ -263,10 +263,10 @@
             <div class="modal-body">
                 <form name="askForm">
                     <div class="form-group">
-                        <label for="heading">Heading</label>
-                        <input class="form-control"
+                        <label for="heading" class="hidden-xs">Heading</label>
+                        <input class="form-control input-sm"
                                id="heading"
-                               placeholder="Please type a brief heading (10 to 50 chars)"
+                               placeholder="Brief heading (10 to 50 chars)"
                                type="text"
                                ng-model="theHeading"
                                required
@@ -275,15 +275,13 @@
                     </div>
                     <div class="form-group">
                         <div text-angular
-                             ta-toolbar="[['p','pre','h5','h6'],['bold','italics','underline','quote'],['ul','ol','undo','redo','clear'],['justifyLeft','justifyRight','indent','outdent']]"
+                             ta-toolbar="[['pre','h6','bold','italics','underline','quote','ul','ol','undo','redo','indent','outdent']]"
                              ng-model="theQuestion"
                              required
                              placeholder="Your question here"></div>
                     </div>
                 </form>
-            </div>
 
-            <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                 <button type="submit"
                         class="btn btn-warning pull-right"
@@ -297,6 +295,21 @@
                         data-dismiss="modal">clarify?
                 </button>
             </div>
+
+            <!--<div class="modal-footer">-->
+                <!--<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>-->
+                <!--<button type="submit"-->
+                        <!--class="btn btn-warning pull-right"-->
+                        <!--ng-click="ask()"-->
+                        <!--ng-disabled="askForm.$invalid"-->
+                        <!--data-dismiss="modal">ASK-->
+                <!--</button>-->
+                <!--<button type="submit"-->
+                        <!--class="btn btn-info pull-right"-->
+                        <!--ng-disabled="askForm.$invalid"-->
+                        <!--data-dismiss="modal">clarify?-->
+                <!--</button>-->
+            <!--</div>-->
         </div>
     </div>
 </div>
