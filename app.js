@@ -51,12 +51,13 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use("/public", express.static(path.join(__dirname, '/public')));
+app.use("/bower_components", express.static(path.join(__dirname, '/bower_components')));
 app.use(cookieParser());
 app.use(session({
-    key: 'your.sid-key',
-    cookie: {path: '/', httpOnly: true, secure: false, maxAge: null},
-    secret: '1234567890QWERTY',
+    key: 'hstatickey',
+    cookie: {path: '/', httpOnly: true, secure: false, maxAge: 604800000000},
+    secret: 'hssjbm12234bsidh)))^Hjdsb',
     store: new MongoStore({mongooseConnection: mongoose.connection}),
     saveUninitialized: false,
     resave: false

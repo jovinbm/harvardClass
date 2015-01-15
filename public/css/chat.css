@@ -8,11 +8,26 @@ html {
 }
 
 body {
-    padding-bottom: 140px;
+    padding-top: 70px;
+    padding-bottom: 70px;
 }
 
-/***************** questions feed *************************/
-.senderName {
+/*
+questions feed
+*/
+.media {
+    border-bottom: 1px solid #ccc;
+}
+
+.media-body {
+    width: 100%;
+}
+
+.upvote {
+    margin-bottom: 2px;
+}
+
+.userName {
     font-weight: bold;
     color: #0b97c4;
 }
@@ -21,26 +36,18 @@ body {
     color: darkgray;
 }
 
-/*bottom ask field*/
-.navbar-fixed-bottom {
-    z-index: 4;
+/*question input field/modal*/
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: inherit;
+    font-size: 100%;
+    margin: 20px 0;
 }
 
-/*wrapping text to one line*/
-table {
-    table-layout: fixed;
-    word-wrap: break-word;
-}
-
-/******************* end of questions field *******************/
-
-/***************** top voted column *************************/
-/***************** end of top voted column *************************/
-
-/***************** online users column *************************/
-
-.fa-user {
+/*bottom nav bar
+*/
+body > div.nav.navbar.navbar-default.navbar-fixed-bottom > div > ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a {
     color: #0b97c4;
 }
-
-/***************** end of online users column *************************/

@@ -141,9 +141,11 @@ angular.module('qaApp')
                     /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
                     if (searchArrayIfExists(questionIndex, myUpvotedIndexes)) {
                         temp.buttonClass = questionClass + "b" + " btn btn-warning btn-xs upvote";
+                        temp.listGroupClass = "list-group-item-warning";
                         temp.ifDisabled = true;
                     } else {
                         temp.buttonClass = questionClass + "b" + " btn btn-info btn-xs upvote";
+                        temp.listGroupClass = "list-group-item-info";
                         temp.ifDisabled = false;
                     }
 
@@ -159,6 +161,7 @@ angular.module('qaApp')
                     var currentIndexes = globals.upvotedIndexes();
                     currentIndexes.forEach(function (index) {
                         detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-warning btn-xs upvote";
+                        detailPrototype[index].listGroupClass = "list-group-item-warning";
                         detailPrototype[index].ifDisabled = true;
                     });
                 }
@@ -178,19 +181,20 @@ angular.module('qaApp')
 
     .factory('userQuestions', ['$http', function ($http) {
         return {
-            postQuestion: function (questionString) {
+            postQuestion: function (questionObject) {
                 var shortQuestion = "";
                 //trim 130 characters to be used for top voted
-                if (questionString.length > 130) {
+                if (questionObject.theQuestion.length > 130) {
                     for (var i = 0; i < 130; i++) {
-                        shortQuestion = shortQuestion + questionString[i];
+                        shortQuestion = shortQuestion + questionObject.theQuestion[i];
                     }
                     shortQuestion = shortQuestion + "...";
                 } else {
-                    shortQuestion = questionString;
+                    shortQuestion = questionObject.theQuestion;
                 }
                 var questionToDatabase = {
-                    "question": questionString,
+                    "heading": questionObject.theHeading,
+                    "question": questionObject.theQuestion,
                     "shortQuestion": shortQuestion
                 };
                 return $http.post('/api/newQuestion', questionToDatabase);
@@ -203,7 +207,7 @@ angular.module('qaApp')
         return {
             postUpvote: function (upvoteIndex) {
                 var upvoteToDatabase = {
-                    "upvoteIndex": upvoteIndex,
+                    "upvoteIndex": upvoteIndex
                 };
                 return $http.post('/api/newUpvote', upvoteToDatabase);
             }

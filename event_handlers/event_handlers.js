@@ -86,7 +86,9 @@ module.exports = {
         basic.consoleLogger('newQuestion: NEW_QUESTION event handler called');
         var thisQuestionIndex;
         //query the recent question's index
-        if (!(/^\s+$/.test(theQuestion.question)) && theQuestion.length != 0) {
+        if (!(/^\s+$/.test(theQuestion.heading)) &&
+            theQuestion.heading.length != 0 && !(/^\s+$/.test(theQuestion.question)) &&
+            theQuestion.question.length != 0) {
             function save(index) {
                 function made(question) {
                     function saved(savedQuestion) {
@@ -123,6 +125,11 @@ module.exports = {
             }
 
             dbJs.getRecentQuestions(-1, -1, 1, error, error, success);
+        }else{
+            //the question does not pass the checks
+            //respond to avoid further newQuestion posts
+            res.status(200).send({msg: 'newQuestion success'});
+            basic.consoleLogger('newQuestion: Success');
         }
     },
 

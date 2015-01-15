@@ -71,6 +71,7 @@ module.exports = {
             senderDisplayName: theHarvardUser.displayName,
             senderEmail: theHarvardUser.email,
             senderOpenId: theHarvardUser.id,
+            heading: questionObject.heading,
             question: questionObject.question,
             shortQuestion: questionObject.shortQuestion,
             votes: 0

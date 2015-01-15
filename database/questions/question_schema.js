@@ -11,6 +11,7 @@ var questionSchema = new Schema({
     senderDisplayName: {type: String, required: true, unique: false, index: true},
     senderEmail: {type: String, required: true, unique: false, index: true},
     senderOpenId: {type: String, required: true, unique: false, index: true},
+    heading: {type: String, required: true},
     question: {type: String, required: true},
     shortQuestion: {type: String, required: true},
     votes: {type: Number, default: 0, index: true},

@@ -1,0 +1,25 @@
+{
+  "name": "harvardClass",
+  "version": "1.0.0",
+  "homepage": "https://harvardclass.herokuapp.com",
+  "authors": [
+    "Jovin Mwilanga <jovinbeda@hotmail.com>"
+  ],
+  "description": "A question and answer website for Harvard University",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "harvard",
+    "class"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

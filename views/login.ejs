@@ -37,44 +37,39 @@
           href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
 
     <!-- loads custom css file -->
-    <link rel="stylesheet" href="css/login.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/login.css">
 
 </head>
 
 <body>
 
 <!--start of nav-->
-
-<!--the class static-top sticks nav bar at top, and fixed-top just fixes it at top-->
-<div class="navbar navbar-inverse navbar-static-top">
-
-    <!--'container' div makes sure our content is well centered on the screen-->
+<div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-        <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> HarvardClass</a>
-
-        <!--button to target the navbar-right which will appear on collapse of navbar items-->
-        <button class='navbar-toggle' data-toggle="collapse" data-target=".navHeaderCollapse">
-
-            <!--create the breadcrumb-->
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-
-        </button>
+        <div class="navbar-header">
+            <!--button to target the navbar-right which will appear on collapse of navbar items-->
+            <button type="button" class='navbar-toggle collapsed' data-toggle="collapse"
+                    data-target=".navHeaderCollapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                HarvardClass
+            </a>
+        </div>
 
         <!--this navbar will be collapsed on mobile-->
         <div class="collapse navbar-collapse navHeaderCollapse">
-
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="https://canvas.harvard.edu/" target="_blank">Canvas</a></li>
                 <li><a href="https://my.harvard.edu" target="_blank">my.harvard.edu</a></li>
-                <li id='signInName'><a href="#">About</a></li>
+                <li><a href="https://canvas.harvard.edu/" target="_blank">Canvas</a></li>
+                <li><a href="#">About</a></li>
             </ul>
         </div>
     </div>
 </div>
 <!--end of nav-->
-
 <!--start of jumbotron-->
 <div class='container'>
 
@@ -169,7 +164,7 @@
                 <h3 id="myModalLabel">I'd Love to Hear From You</h3>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal col-sm-12 emailForm" method="post" action="/sendEmail">
+                <form class="emailForm" method="post" action="/sendEmail">
                     <div class="form-group"><label>Name</label><input class="form-control required"
                                                                       placeholder="Your name" data-placement="top"
                                                                       data-trigger="manual"
@@ -186,13 +181,11 @@
                                                                         data-content="Must be a valid e-mail address (user@gmail.com)"
                                                                         type="text" name="email"></div>
                     <div class="form-group">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-success pull-right">Send It!</button>
                         <p class="help-block pull-left text-danger hide" id="form-error">&nbsp; The form is not
                             valid. </p></div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
             </div>
         </div>
     </div>
@@ -223,9 +216,10 @@
         src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 
 <!-- customlogin javascript file: should be loaded after jquery-->
-<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="/public/js/login.js"></script>
 
-<!--my custom javascript file with pluging-->
-<script type="text/javascript" src="js/custom_plugin"></script>
+<!--modal validator plugin-->
+<script type="text/javascript" src="/public/js/custom_plugin.js"></script>
+
 </body>
 </html>

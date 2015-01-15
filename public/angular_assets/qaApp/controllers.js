@@ -11,7 +11,7 @@ angular.module('qaApp')
                 $scope.questionReference = detailStorage.disableButton(index);
                 upvoteService.postUpvote(index)
                     .error(function (errResponse) {
-                        $window.location.href = "/error/error500.html";
+                        $window.location.href = "/public/error/error500.html";
                     });
             };
 
@@ -21,7 +21,7 @@ angular.module('qaApp')
                         $window.location.href = "/login1.html";
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/error/error500.html";
+                        $window.location.href = "/public/error/error500.html";
                     });
             };
 
@@ -31,7 +31,7 @@ angular.module('qaApp')
                         $window.location.href = "/login.html";
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/error/error500.html";
+                        $window.location.href = "/public/error/error500.html";
                     });
             };
 
@@ -45,7 +45,7 @@ angular.module('qaApp')
                     });
                 })
                 .error(function (errResponse) {
-                    $window.location.href = "/error/error500.html";
+                    $window.location.href = "/public/error/error500.html";
                 });
 
             socket.on('joined', function () {
@@ -59,7 +59,7 @@ angular.module('qaApp')
                         });
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/error/error500.html";
+                        $window.location.href = "/public/error/error500.html";
                     });
             });
 
@@ -146,17 +146,16 @@ angular.module('qaApp')
     .controller('AskController', ['$location', '$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'userQuestions',
         function ($location, $scope, socket, socketRoom, initializer, globals, userQuestions) {
             $scope.ask = function () {
-                if ($scope.theQuestion.length != 0) {
-                    userQuestions.postQuestion($scope.theQuestion)
+                if ($scope.theQuestion.length != 0 && $scope.theHeading.length != 0) {
+                    userQuestions.postQuestion({
+                        "theQuestion": $scope.theQuestion,
+                        "theHeading": $scope.theHeading
+                    })
                         .error(function (errorResponse) {
                             $window.location.href = "/error/error500.html";
                         });
                 }
                 $scope.theQuestion = '';
+                $scope.theHeading = '';
             }
         }]);
-
-
-//angular.element(document).ready(function () {
-//    angular.bootstrap(document, ['qaApp']);
-//});
