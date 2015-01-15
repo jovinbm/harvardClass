@@ -54,8 +54,9 @@ angular.module('qaApp')
     .factory('globals', [function () {
         var myCustomUsername;
         var mySocketRoom;
-        var questionFeedDate;
         var usersOnline = {};
+        var currentQuestions = {};
+        var currentTop = {};
 
         /*myUpvotedIndexes is an array storing button indexes corresponding to all the questions this client has upvoted. It should be updated on every start and when the topVoted function is called*/
         var myUpvotedIndexes = [];
@@ -82,11 +83,14 @@ angular.module('qaApp')
                 }
             },
 
-            questionFeedDate: function (newQuestionFeedDate) {
-                if (newQuestionFeedDate) {
-                    questionFeedDate = newQuestionFeedDate;
+            currentQuestions: function (questionArray) {
+                if (questionArray) {
+                    questionArray.forEach(function (questionObject) {
+                        currentQuestions[questionObject.questionIndex] = questionObject;
+                    });
+                    return currentQuestions;
                 } else {
-                    return questionFeedDate;
+                    return currentQuestions;
                 }
             },
 
@@ -97,6 +101,18 @@ angular.module('qaApp')
                     return myUpvotedIndexes;
                 }
             },
+
+
+            currentTop: function (topArray) {
+                if (topArray) {
+                    currentTop = {};
+                    topArray.forEach(function (topObject) {
+                        currentTop[topObject.questionIndex] = topObject;
+                    });
+                }
+                return currentTop;
+            },
+
 
             usersOnline: function (newUsersOnline) {
                 if (newUsersOnline) {

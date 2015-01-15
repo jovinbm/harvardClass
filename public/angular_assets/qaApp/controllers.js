@@ -84,20 +84,15 @@ angular.module('qaApp')
         }])
 
 
-    .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage',
-        function ($scope, socket, socketRoom, initializer, globals, detailStorage) {
-            $scope.questions = [];
-            $scope.addNewQuestion = function (questionObject) {
-                $scope.questions.unshift(questionObject);
-            };
+    .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter',
+        function ($scope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter) {
+            $scope.questions = {};
 
             /*receive an array containing the recent history(this array has objects with individual questions)*/
             socket.on('questionHistory', function (historyArray) {
                 console.log("'questionHistory' event received");
                 $scope.$emit('updateReference', detailStorage.add(historyArray));
-                historyArray.forEach(function (questionObject) {
-                    $scope.questions.push(questionObject);
-                });
+                $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(historyArray));
             });
 
             //receives an object containing a question to be added to the feed. Calls 'addMessage'
@@ -107,7 +102,7 @@ angular.module('qaApp')
                 var tempQuestionArray = [];
                 tempQuestionArray.push(questionObject);
                 $scope.$emit('updateReference', detailStorage.add(tempQuestionArray));
-                $scope.addNewQuestion(questionObject);
+                $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(tempQuestionArray));
             });
 
             /*increments currentQuestionIndex which is used to keep track of the current index the user is at*/
@@ -118,14 +113,14 @@ angular.module('qaApp')
         }])
 
 
-    .controller('TopVotedController', ['$scope', 'socket',
-        function ($scope, socket) {
-            $scope.topVotedQuestions = [];
+    .controller('TopVotedController', ['$scope', 'socket', 'globals',
+        function ($scope, socket, globals) {
+            $scope.topVotedQuestions = {};
 
             //receives an array containing the top voted questions
             socket.on('topVoted', function (topVotedArrayOfObjects) {
                 console.log("'topVoted' event received");
-                $scope.topVotedQuestions = topVotedArrayOfObjects;
+                $scope.topVotedQuestions = globals.currentTop(topVotedArrayOfObjects);
             });
         }])
 

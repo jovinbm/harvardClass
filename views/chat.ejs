@@ -159,7 +159,7 @@
                     <h5 id="trending"><i class="fa fa-line-chart"></i> Trending</h5>
                     <ul class="list-group">
                         <li class="list-group-item ng-cloak"
-                            ng-repeat="eachTop in topVotedQuestions"
+                            ng-repeat="(key, eachTop) in topVotedQuestions"
                             ng-class="[
                             questionReference[eachTop.questionIndex].questionClass,
                             questionReference[eachTop.questionIndex].listGroupClass
@@ -295,21 +295,6 @@
                         data-dismiss="modal">clarify?
                 </button>
             </div>
-
-            <!--<div class="modal-footer">-->
-                <!--<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>-->
-                <!--<button type="submit"-->
-                        <!--class="btn btn-warning pull-right"-->
-                        <!--ng-click="ask()"-->
-                        <!--ng-disabled="askForm.$invalid"-->
-                        <!--data-dismiss="modal">ASK-->
-                <!--</button>-->
-                <!--<button type="submit"-->
-                        <!--class="btn btn-info pull-right"-->
-                        <!--ng-disabled="askForm.$invalid"-->
-                        <!--data-dismiss="modal">clarify?-->
-                <!--</button>-->
-            <!--</div>-->
         </div>
     </div>
 </div>
@@ -345,6 +330,8 @@
 
 <script type="text/javascript" src="/public/js/chat.js"></script>
 <script type="text/javascript" src="/public/angular_assets/qaApp/mainApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/qaApp/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/qaApp/directives.js"></script>
 <script type="text/javascript" src="/public/angular_assets/qaApp/services.js"></script>
 <script type="text/javascript" src="/public/angular_assets/qaApp/controllers.js"></script>
 </body>
