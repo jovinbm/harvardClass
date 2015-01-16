@@ -5,6 +5,7 @@
 /*Define functions that interact with the database*/
 var basic = require('../functions/basic.js');
 var Question = require("../database/questions/question_model.js");
+var Comment = require("../database/comments/comment_model.js");
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
 module.exports = {

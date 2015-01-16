@@ -17,31 +17,31 @@
     </h5>
 
 
-    <div class="media main-media" ng-repeat="eachQuestion in questions"
-         ng-class="questionReference[eachQuestion.questionIndex].questionClass">
-        <a class="media-left media-top" href="#">
-            <p class="userName">{{eachQuestion.senderName}}</p>
-        </a>
+    <ul class="media-list">
+        <li class="media main-media" ng-repeat="eachQuestion in questions"
+            ng-class="questionReference[eachQuestion.questionIndex].questionClass">
+            <a class="media-left media-top" href="#">
+                <p class="userName">{{eachQuestion.senderName}}</p>
+            </a>
 
-        <div class="media-body">
-            <h4 class="media-heading">{{eachQuestion.heading}}</h4>
+            <div class="media-body">
+                <h4 class="media-heading">{{eachQuestion.heading}}</h4>
 
-            <p ta-bind ng-model="eachQuestion.question"></p>
+                <p ta-bind ng-model="eachQuestion.question"></p>
 
-            <small>{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
+                <small>{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
 
-            <button type='button'
-                    class="pull-right"
-                    ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
-                    ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
-                    ng-click="upvote(eachQuestion.questionIndex, $event)">
+                <button type='button'
+                        class="pull-right"
+                        ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
+                        ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
+                        ng-click="upvote(eachQuestion.questionIndex, $event)">
 
-                <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 
-            </button>
-
-        </div>
-
-    </div>
+                </button>
+            </div>
+        </li>
+    </ul>
 
 </div>

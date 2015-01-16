@@ -9,7 +9,7 @@ var basic = require('../functions/basic.js');
 
 module.exports = {
 
-    //this funtion emits an event to the respective user
+    //this function emits an event to the respective user
     emitToOne: function (socketRoom, serverEvent, content, success) {
         app.io.sockets.in(socketRoom).emit(serverEvent, content);
         if (success) {

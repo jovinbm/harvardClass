@@ -4,6 +4,7 @@
 //import modules
 var app = require('../app.js');
 var Question = require("../database/questions/question_model.js");
+var Comment = require("../database/comments/comment_model.js");
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 var basic = require('../functions/basic.js');
 var ioJs = require('../functions/io.js');
