@@ -2,26 +2,15 @@
  * Created by jovinbm on 1/10/15.
  */
 angular.module('qaApp')
-    .controller('MainController', ['$location', '$window', '$scope', '$interval', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'upvoteService', 'logoutService',
-        function ($location, $window, $scope, $interval, socket, socketRoom, initializer, globals, detailStorage, upvoteService, logoutService) {
+    .controller('MainController', ['$location', '$window', '$scope', '$rootScope', '$interval', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'upvoteService', 'logoutService', 'classService',
+        function ($location, $window, $scope, $rootScope, $interval, socket, socketRoom, initializer, globals, detailStorage, upvoteService, logoutService, classService) {
             $scope.customUsername = globals.customUsername();
             $scope.questionReference = detailStorage.getReference();
+            $scope.tab = classService.tab();
 
-            $scope.colClasses = {
-                "onlineColumn": {
-                    "home": "col-lg-2 col-md-1 hidden-sm hidden-xs",
-                    "trending": "col-lg-2 col-md-1 col-sm-2 hidden-xs"
-                }
-            };
-            $scope.currentColClasses = {
-                "onlineColumn": "col-lg-2 col-md-1 hidden-sm hidden-xs"
-            };
-
-            $scope.tab = 'home';
             $scope.changeTab = function (tab) {
                 console.log("clicked");
-                $scope.tab = tab;
-                $scope.currentColClasses.onlineColumn = $scope.colClasses.onlineColumn[tab];
+                $scope.tab = classService.tab(tab);
             };
 
             $scope.upvote = function (index, $event) {
@@ -101,9 +90,10 @@ angular.module('qaApp')
         }])
 
 
-    .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter',
-        function ($scope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter) {
+    .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'classService',
+        function ($scope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter, classService) {
             $scope.questions = sortObjectToArrayFilter(globals.currentQuestions());
+            $scope.columnClass = classService.qClass();
 
             /*receive an array containing the recent history(this array has objects with individual questions)*/
             socket.on('questionHistory', function (historyArray) {
@@ -130,9 +120,10 @@ angular.module('qaApp')
         }])
 
 
-    .controller('TopVotedController', ['$scope', 'socket', 'globals',
-        function ($scope, socket, globals) {
+    .controller('TopVotedController', ['$scope', 'socket', 'globals', 'classService',
+        function ($scope, socket, globals, classService) {
             $scope.topVotedQuestions = globals.currentTop();
+            $scope.columnClass = classService.trClass();
 
             //receives an array containing the top voted questions
             socket.on('topVoted', function (topVotedArrayOfObjects) {
@@ -142,9 +133,13 @@ angular.module('qaApp')
         }])
 
 
-    .controller('OnlineUsersController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals',
-        function ($scope, socket, socketRoom, initializer, globals) {
+    .controller('OnlineUsersController', ['$scope', '$rootScope', 'socket', 'socketRoom', 'initializer', 'globals', 'classService',
+        function ($scope, $rootScope, socket, socketRoom, initializer, globals, classService) {
             $scope.onlineUsers = globals.usersOnline();
+            $scope.columnClass = classService.oClass();
+            $scope.$watch('tab', function () {
+                $scope.columnClass = classService.oClass();
+            });
 
             /*receives an object (at regular intervals) containing the currently online users*/
             socket.on('usersOnline', function (onlineUsers) {

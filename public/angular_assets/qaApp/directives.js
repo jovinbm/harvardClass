@@ -27,7 +27,6 @@ angular.module('qaApp')
         return {
             templateUrl: 'public/partials/questionFeed.html',
             link: function ($scope, $element, $attrs) {
-                $scope.columnClass = "col-lg-7 col-md-7 col-sm-8 col-xs-12";
             }
         }
     }])
@@ -35,7 +34,6 @@ angular.module('qaApp')
         return {
             templateUrl: 'public/partials/trending_summary.html',
             link: function ($scope, $element, $attrs) {
-                $scope.columnClass = "col-lg-3 col-md-4 col-sm-4 hidden-xs";
             }
         }
     }])
@@ -50,7 +48,6 @@ angular.module('qaApp')
         return {
             templateUrl: 'public/partials/trending.html',
             link: function ($scope, $element, $attrs) {
-                $scope.columnClass = "col-lg-10 col-md-11 col-sm-10 col-xs-12";
             }
         }
     }]);

@@ -135,6 +135,47 @@ angular.module('qaApp')
     }])
 
 
+    .factory('classService', ['globals', function (globals) {
+        var currentTab = "home";
+        var colClasses = {
+            "questionFeed": {
+                "default": "col-lg-7 col-md-7 col-sm-8 col-xs-12"
+            },
+            "trending": {
+                "default": "col-lg-3 col-md-4 col-sm-4 hidden-xs",
+                "home": "col-lg-3 col-md-4 col-sm-4 hidden-xs",
+                "trending": "col-lg-10 col-md-11 col-sm-10 col-xs-12"
+            },
+            "onlineColumn": {
+                "default": "col-lg-2 col-md-1 hidden-sm hidden-xs",
+                "home": "col-lg-2 col-md-1 hidden-sm hidden-xs",
+                "trending": "col-lg-2 col-md-1 col-sm-2 hidden-xs"
+            }
+        };
+
+        return {
+            tab: function (tab) {
+                if (tab) {
+                    currentTab = tab
+                }
+                return currentTab;
+            },
+
+            trClass: function () {
+                return colClasses.trending[currentTab];
+            },
+
+            qClass: function () {
+                return colClasses.questionFeed.default;
+            },
+
+            oClass: function () {
+                return colClasses.onlineColumn[currentTab];
+            }
+        }
+    }])
+
+
     .factory('detailStorage', ['globals', function (globals) {
         var detailPrototype = {};
         return {
@@ -187,7 +228,7 @@ angular.module('qaApp')
             },
 
 
-            getReference: function(){
+            getReference: function () {
                 return detailPrototype;
             },
 

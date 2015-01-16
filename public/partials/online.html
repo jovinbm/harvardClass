@@ -1,15 +1,12 @@
-<!--start of online users-->
-<div ng-class="currentColClasses.onlineColumn"
+<div ng-controller="OnlineUsersController"
+     ng-class="columnClass"
      style="text-align: center">
-    <div ng-controller="OnlineUsersController">
-        <h5>Users</h5>
-        <table class="table table-condensed ng-cloak" id="onlineUsers">
-            <tr ng-repeat="(key, value) in onlineUsers">
-                <td class='onlineUser userName'>
-                    {{value.customUsername}}
-                </td>
-            </tr>
-        </table>
-    </div>
-    <!--end of online users column-->
+    <h5>Users</h5>
+    <table class="table table-condensed ng-cloak" id="onlineUsers">
+        <tr ng-repeat="(key, value) in onlineUsers">
+            <td class='onlineUser userName'>
+                {{value.customUsername}}
+            </td>
+        </tr>
+    </table>
 </div>
