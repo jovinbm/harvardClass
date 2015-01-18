@@ -2,15 +2,22 @@
  * Created by jovinbm on 1/10/15.
  */
 angular.module('qaApp')
-    .controller('MainController', ['$location', '$window', '$scope', '$rootScope', '$interval', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'upvoteService', 'logoutService', 'classService',
-        function ($location, $window, $scope, $rootScope, $interval, socket, socketRoom, initializer, globals, detailStorage, upvoteService, logoutService, classService) {
+    .controller('MainController', ['$location', '$window', '$scope', '$rootScope', '$interval', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'upvoteService', 'logoutService', 'stateService',
+        function ($location, $window, $scope, $rootScope, $interval, socket, socketRoom, initializer, globals, detailStorage, upvoteService, logoutService, stateService) {
             $scope.customUsername = globals.customUsername();
             $scope.questionReference = detailStorage.getReference();
-            $scope.tab = classService.tab();
+            $scope.questionOnView = stateService.questionOnView();
+            $scope.tab = stateService.tab();
 
             $scope.changeTab = function (tab) {
                 console.log("clicked");
-                $scope.tab = classService.tab(tab);
+                $scope.tab = stateService.tab(tab);
+            };
+
+            $scope.fullQuestion = function (index) {
+                console.log("clicked");
+                $scope.tab = stateService.tab("fullQuestion");
+                $scope.questionOnView = index;
             };
 
             $scope.upvote = function (index, $event) {
@@ -90,10 +97,15 @@ angular.module('qaApp')
         }])
 
 
-    .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'classService',
-        function ($scope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter, classService) {
+    .controller('QuestionFeedController', ['$scope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService',
+        function ($scope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter, stateService) {
             $scope.questions = sortObjectToArrayFilter(globals.currentQuestions());
-            $scope.columnClass = classService.qClass();
+            $scope.columnClass = stateService.qClass();
+
+            $scope.isCollapsed = false;
+            $scope.changeCollapse = function () {
+                $scope.isCollapsed = !$scope.isCollapsed;
+            };
 
             /*receive an array containing the recent history(this array has objects with individual questions)*/
             socket.on('questionHistory', function (historyArray) {
@@ -119,11 +131,50 @@ angular.module('qaApp')
             });
         }])
 
+    .controller('CommentController', ['$scope', '$rootScope', 'socket', 'socketRoom', 'initializer', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'commentService',
+        function ($scope, $rootScope, socket, socketRoom, initializer, globals, detailStorage, sortObjectToArrayFilter, stateService, commentService) {
 
-    .controller('TopVotedController', ['$scope', 'socket', 'globals', 'classService',
-        function ($scope, socket, globals, classService) {
+            $scope.newComment = function (questionIndex) {
+                if ($scope.theComment.length != 0) {
+                    commentService.postComment({
+                        "theComment": $scope.theComment,
+                        "questionIndex": questionIndex
+                    }).success(function (resp) {
+                        $scope.theComment = '';
+                        $scope.changeCollapse();
+                    })
+                        .error(function (errorResponse) {
+                            $window.location.href = "/error/error500.html";
+                        });
+                }
+            };
+
+            /*receive an array containing the recent history(this array has objects with individual questions)*/
+            socket.on('commentHistory', function (commentObject) {
+                /*commentObject = {
+                 commentArray: [],
+                 lastIndex: "Number"
+                 };*/
+                console.log("'commentHistory' event received");
+                commentService.add(commentObject);
+            });
+
+            //receives an object containing a question to be added to the feed.
+            //socket.on('newComment', function (commentObject) {
+            //    console.log("'newComment' event received");
+            //    //make a temp array to make it compatible with the factories
+            //    var tempCommentArray = [];
+            //    tempCommentArray.push(commentObject);
+            //    $scope.$emit('updateReference', detailStorage.add(tempCommentArray));
+            //    $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(tempCommentArray));
+            //});
+        }])
+
+
+    .controller('TopVotedController', ['$scope', 'socket', 'globals', 'stateService',
+        function ($scope, socket, globals, stateService) {
             $scope.topVotedQuestions = globals.currentTop();
-            $scope.columnClass = classService.trClass();
+            $scope.columnClass = stateService.trClass();
 
             //receives an array containing the top voted questions
             socket.on('topVoted', function (topVotedArrayOfObjects) {
@@ -133,12 +184,12 @@ angular.module('qaApp')
         }])
 
 
-    .controller('OnlineUsersController', ['$scope', '$rootScope', 'socket', 'socketRoom', 'initializer', 'globals', 'classService',
-        function ($scope, $rootScope, socket, socketRoom, initializer, globals, classService) {
+    .controller('OnlineUsersController', ['$scope', '$rootScope', 'socket', 'socketRoom', 'initializer', 'globals', 'stateService',
+        function ($scope, $rootScope, socket, socketRoom, initializer, globals, stateService) {
             $scope.onlineUsers = globals.usersOnline();
-            $scope.columnClass = classService.oClass();
+            $scope.columnClass = stateService.oClass();
             $scope.$watch('tab', function () {
-                $scope.columnClass = classService.oClass();
+                $scope.columnClass = stateService.oClass();
             });
 
             /*receives an object (at regular intervals) containing the currently online users*/
@@ -163,5 +214,5 @@ angular.module('qaApp')
                 }
                 $scope.theQuestion = '';
                 $scope.theHeading = '';
-            }
+            };
         }]);

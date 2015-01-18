@@ -29,17 +29,23 @@
 
                 <p ta-bind ng-model="eachQuestion.question"></p>
 
-                <small>{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
+                <small class="questionTime">{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
 
-                <button type='button'
-                        class="pull-right"
-                        ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
-                        ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
-                        ng-click="upvote(eachQuestion.questionIndex, $event)">
+                <div class="pull-right">
+                    <a type="button"
+                       class="btn btn-default btn-xs"
+                       ng-click="fullQuestion(eachQuestion.questionIndex)">
+                        <i class="fa fa-plus"></i> Go to conversation
+                    </a>
+                    <button type='button'
+                            ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
+                            ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
+                            ng-click="upvote(eachQuestion.questionIndex, $event)">
 
-                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                        <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 
-                </button>
+                    </button>
+                </div>
             </div>
         </li>
     </ul>

@@ -14,7 +14,9 @@ var harvardUsersSchema = new Schema({
     customCode: {type: String, default: "abcde", unique: false, index: true},
     customLoggedInStatus: {type: Number, default: 0, unique: false, index: true},
     askedQuestionsIndexes: {type: Array, "default": [], unique: false, index: true},
+    postedCommentUniqueIds: {type: Array, "default": [], unique: false, index: true},
     votedQuestionIndexes: {type: Array, "default": [], unique: false, index: true},
+    promotedCommentsUniqueIds: {type: Array, "default": [], unique: false, index: true},
     time: {type: Date, default: Date.now, unique: false, index: true}
 });
 

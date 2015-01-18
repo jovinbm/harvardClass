@@ -10,7 +10,6 @@ var basic = require('../functions/basic.js');
 var ioJs = require('../functions/io.js');
 var dbJs = require('../functions/db.js');
 var online = require('../functions/online.js');
-var historyLimit = app.historyLimit;
 
 //define and export all the event handlers
 module.exports = {
@@ -34,6 +33,7 @@ module.exports = {
 
     getHistory: function (req, res, theHarvardUser, currentQuestionIndex) {
         basic.consoleLogger("getHistory: getHistory called");
+        var historyLimit = 50;
         var socketRoom = theHarvardUser.socketRoom;
         //retrieve the history
 
@@ -83,6 +83,54 @@ module.exports = {
     },
 
 
+    getComments: function (req, res, theHarvardUser, questionIndex, lastCommentIndex) {
+        var regexp = new RegExp("q" + questionIndex + "c.");
+        var commentLimit = 30;
+        basic.consoleLogger("getComments: getComments called");
+        var socketRoom = theHarvardUser.socketRoom;
+        //retrieve the comments
+
+        function error(status, err) {
+            if (status == -1) {
+                basic.consoleLogger("getComments event handler: Error while retrieving history" + err);
+                /*complete the ajax request by sending the client the internal server error*/
+                res.status(500).send({msg: 'getComments: Error while retrieving top voted', err: err});
+                basic.consoleLogger('getComments: failed!');
+            } else if (status == 0) {
+                //send an empty array
+                ioJs.emitToOne(socketRoom, 'comments', {
+                    "comments": [],
+                    "index": 0
+                });
+                res.status(200).send({msg: "getComments: success: Did not find anything"});
+                basic.consoleLogger('getComments: success: Did not find anything');
+            }
+        }
+
+
+        function getComments(filteredPromoted) {
+
+            function success(comments) {
+                function doneComments() {
+                    res.status(200).send({msg: "getComments: success: Sent comments"});
+                    basic.consoleLogger('getComments: success: Sent comments');
+                }
+
+                ioJs.emitToOne(socketRoom, "comments", {
+                    "comments": comments,
+                    "index": lastCommentIndex + commentLimit,
+                    "myPromotes": filteredPromoted
+                }, doneComments);
+                basic.consoleLogger("YESSSSS index = " + (commentLimit));
+            }
+
+            dbJs.getComments(-1, questionIndex, lastCommentIndex, commentLimit, error, error, success)
+        }
+
+        basic.filterArray(theHarvardUser.promotedCommentsUniqueIds, regexp, getComments)
+    },
+
+
     newQuestion: function (req, res, theHarvardUser, theQuestion) {
         basic.consoleLogger('newQuestion: NEW_QUESTION event handler called');
         var thisQuestionIndex;
@@ -126,11 +174,66 @@ module.exports = {
             }
 
             dbJs.getRecentQuestions(-1, -1, 1, error, error, success);
-        }else{
+        } else {
             //the question does not pass the checks
             //respond to avoid further newQuestion posts
-            res.status(200).send({msg: 'newQuestion success'});
-            basic.consoleLogger('newQuestion: Success');
+            res.status(200).send({msg: 'newQuestion did not pass checks'});
+            basic.consoleLogger('newQuestion: Not executed: Did not pass checks');
+        }
+    },
+
+
+    newComment: function (req, res, theHarvardUser, theComment) {
+        basic.consoleLogger('newComment: NEW_COMMENT event handler called');
+        var thisCommentIndex;
+        //query the recent question's index
+        if (!(/^\s+$/.test(theComment.comment)) &&
+            theComment.comment.length != 0) {
+            function save(index) {
+                function made(comment) {
+                    function saved(savedComment) {
+                        function done(commentObject) {
+                            ioJs.emitToAll('newComment', {
+                                comment: commentObject
+                            });
+                            res.status(200).send({msg: 'newComment success'});
+                            basic.consoleLogger('newComment: Success');
+                        }
+
+                        dbJs.pushCommentToCommenter(req.user.id, savedComment, error, error, done);
+                    }
+
+                    dbJs.saveNewComment(comment, error, error, saved);
+                }
+
+
+                dbJs.makeNewComment(theComment, index, theHarvardUser, made);
+            }
+
+            function error(status, err) {
+                if (status == -1) {
+                    basic.consoleLogger("ERROR: newComment event_Handler: " + err);
+                    res.status(500).send({msg: 'ERROR: newComment Event Handler: ', err: err});
+                    basic.consoleLogger("newComment failed!");
+                } else if (status == 0) {
+                    //means this is the first comment. Save it
+                    thisCommentIndex = 0;
+                    save(thisCommentIndex);
+                }
+            }
+
+            function success(result) {
+                thisCommentIndex = result[0].commentIndex + 1;
+                save(thisCommentIndex);
+            }
+
+            dbJs.getLatestCommentIndex(theComment.questionIndex, -1, 1, error, error, success);
+
+        } else {
+            //the comment does not pass the checks
+            //respond to avoid further newComment posts
+            res.status(200).send({msg: 'newComment did not pass checks'});
+            basic.consoleLogger('newComment: Not executed: Did not pass checks');
         }
     },
 
@@ -150,7 +253,7 @@ module.exports = {
             } else if (status == 0) {
                 //send an empty array ==> the client js handles empty array of upvote indexes very well
                 ioJs.emitToOne(theHarvardUser.socketRoom, "myUpvotedIndexes", []);
-                res.status(500).send({msg: "newUpvote: partial ERROR: query returned null/undefined"});
+                res.status(200).send({msg: "newUpvote: partial ERROR: query returned null/undefined"});
                 basic.consoleLogger('**partial ERROR!: newUpvote event handler: failure: query returned NULL/UNDEFINED');
             }
         }
@@ -187,6 +290,43 @@ module.exports = {
         }
 
         dbJs.pushUpvoteToUpvoter(req.user.id, upvotedIndex, error, error, success);
+    },
+
+
+    newPromote: function (req, res, theHarvardUser, questionIndex, promoteIndex, uniqueId) {
+        basic.consoleLogger("newPromote: newPromote event handler called");
+        //push the new promote index to the respective upvoter
+        function error(status, err) {
+            if (status == -1) {
+                basic.consoleLogger("ERROR: newPromote event handler: Error while executing db operations" + err);
+                /*complete the request by sending the client the internal server error*/
+                res.status(500).send({
+                    msg: 'ERROR: newPromote event handler: Error while executing db operations',
+                    err: err
+                });
+                basic.consoleLogger('newPromote: failed!');
+            } else if (status == 0) {
+                res.status(200).send({msg: "newPromote: partial ERROR: query returned null/undefined"});
+                basic.consoleLogger('**partial ERROR!: newPromote event handler: failure: query returned NULL/UNDEFINED');
+            }
+        }
+
+        function success() {
+            function broadcastTop() {
+
+                function done(topPromotedArrayOfObjects) {
+                    ioJs.emitToAll('topPromoted', topPromotedArrayOfObjects);
+                    res.status(200).send({msg: 'newPromote success'});
+                    basic.consoleLogger('newPromote: Success');
+                }
+
+                dbJs.findTopPromotedComments(-1, 10, questionIndex, error, error, done);
+            }
+
+            dbJs.incrementCommentPromotes(uniqueId, error, error, broadcastTop);
+        }
+
+        dbJs.pushPromoteToUser(req.user.id, questionIndex, uniqueId, error, error, success);
     },
 
 

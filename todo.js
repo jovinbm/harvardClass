@@ -19,3 +19,5 @@
 //todo -- add google analytics to site
 
 //todo - slide on left for xs grid on chat to see top voted and online
+
+//todo -- return parts of upvoted and promoted to improve performance
