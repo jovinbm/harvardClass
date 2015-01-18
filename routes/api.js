@@ -47,6 +47,7 @@ module.exports = {
                     customUsername: theHarvardUser.customUsername
                 });
             }
+            //TODO -- redirect to custom login
         }
 
         dbJs.findHarvardUser(req.user.id, error, error, success);
@@ -67,6 +68,7 @@ module.exports = {
             if (theHarvardUser.customLoggedInStatus == 1) {
                 event_handlers.ready(req, res, theHarvardUser);
             }
+            //TODO -- redirect to custom login
         }
 
         dbJs.findHarvardUser(req.user.id, error, error, success);
@@ -75,7 +77,7 @@ module.exports = {
     getHistory: function (req, res) {
         basic.consoleLogger('GET_HISTORY event received');
         var currentQuestionIndex = req.body.currentQuestionIndex;
-        //retrieve the customUsername
+        //retrieve the user
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({msg: 'getHistoryPOST: Could not retrieve user', err: err});
@@ -87,6 +89,30 @@ module.exports = {
             if (theHarvardUser.customLoggedInStatus == 1) {
                 event_handlers.getHistory(req, res, theHarvardUser, currentQuestionIndex);
             }
+            //TODO -- redirect to custom login
+        }
+
+        dbJs.findHarvardUser(req.user.id, error, error, success);
+    },
+
+
+    getComments: function (req, res) {
+        basic.consoleLogger('GET_COMMENTS event received');
+        var questionIndex = req.body.questionIndex;
+        var lastCommentIndex = req.body.lastCommentIndex;
+        //retrieve the user
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'getCommentsPOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: getCommentsPOST: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theHarvardUser) {
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                event_handlers.getComments(req, res, theHarvardUser, questionIndex, lastCommentIndex);
+            }
+            //TODO -- redirect to custom login
         }
 
         dbJs.findHarvardUser(req.user.id, error, error, success);
@@ -108,6 +134,28 @@ module.exports = {
             if (theHarvardUser.customLoggedInStatus == 1) {
                 event_handlers.newQuestion(req, res, theHarvardUser, theQuestion);
             }
+            //TODO -- redirect to custom login
+        }
+
+        dbJs.findHarvardUser(req.user.id, error, error, success);
+    },
+
+    newComment: function (req, res) {
+        basic.consoleLogger('NEW_COMMENT event received');
+        var theComment = req.body;
+        //get the Harvard User
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'ERROR: newCommentPOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: newCommentPOST: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theHarvardUser) {
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                event_handlers.newComment(req, res, theHarvardUser, theComment);
+            }
+            //TODO -- redirect to custom login
         }
 
         dbJs.findHarvardUser(req.user.id, error, error, success);
@@ -127,8 +175,44 @@ module.exports = {
 
         //only execute upvote if the user has not voted on the question
         function success(theHarvardUser) {
-            if (theHarvardUser.votedQuestionIndexes.indexOf(upvotedIndex) == -1 && theHarvardUser.customLoggedInStatus == 1) {
-                event_handlers.newUpvote(req, res, theHarvardUser, upvotedIndex);
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                if (theHarvardUser.votedQuestionIndexes.indexOf(upvotedIndex) == -1) {
+                    event_handlers.newUpvote(req, res, theHarvardUser, upvotedIndex);
+                } else {
+                    //upvote process did not pass checks
+                    //respond to avoid further upvote posts
+                    res.status(200).send({msg: 'upvote did not pass checks'});
+                    basic.consoleLogger('upvote: Not executed: Did not pass checks');
+                }
+            } else {
+                //TODO -- redirect to login
+            }
+        }
+
+        dbJs.findHarvardUser(req.user.id, error, error, success);
+    },
+
+
+    newPromote: function (req, res) {
+        basic.consoleLogger('NEW_PROMOTE event received');
+        var questionIndex = req.body.questionIndex;
+        var promoteIndex = req.body.commentIndex;
+        var uniqueId = req.body.uniqueId;
+        //retrieve the user
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'ERROR: newPromotePOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: newPromotePOST: Could not retrieve user: " + err);
+            }
+        }
+
+        //only execute promote if the user has not voted on the question
+        function success(theHarvardUser) {
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                event_handlers.newPromote(req, res, theHarvardUser, questionIndex, promoteIndex, uniqueId);
+
+            } else {
+                //TODO -- redirect to login
             }
         }
 

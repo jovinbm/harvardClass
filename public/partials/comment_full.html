@@ -1,0 +1,25 @@
+<ul class="media-list">
+    <li class="media main-media"
+        ng-repeat="eachComment in comments"
+        ng-class="cmntsReference[eachComment.commentIndex].commentClass">
+        <a class="media-left media-top" href="#">
+            <p class="userName">{{eachComment.senderName}}</p>
+        </a>
+
+        <div class="media-body">
+
+            <p ta-bind ng-model="eachComment.comment"></p>
+
+            <small class="commentTime">{{cmntsReference[eachComment.commentIndex].commentTime}}</small>
+
+            <div class="pull-right">
+                <a type="button"
+                   ng-class="cmntsReference[eachComment.commentIndex].buttonClass"
+                   ng-disabled="cmntsReference[eachComment.commentIndex].ifDisabled"
+                        ng-click="promote(questionOnView, eachComment.commentIndex, eachComment.uniqueId, $event)">
+                    <i class="fa fa-angle-up"></i> Promote
+                </a>
+            </div>
+        </div>
+    </li>
+</ul>

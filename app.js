@@ -3,10 +3,9 @@
  */
 
 //var dbURL = 'mongodb://localhost:27017';
-//var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
-var dbURL = 'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
+var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
+//var dbURL = 'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 
-var historyLimit = 40;
 var usersOnline = [];
 /*usersOnline object looks like this
  usersOnline = [
@@ -114,8 +113,11 @@ app.post('/sendEmail', api.sendEmail);
 app.get('/api/getMyRoom', authenticate.ensureAuthenticated, api.getMyRoom);
 app.post('/api/ready', authenticate.ensureAuthenticated, api.ready);
 app.post('/api/getHistory', authenticate.ensureAuthenticated, api.getHistory);
+app.post('/api/getComments', authenticate.ensureAuthenticated, api.getComments);
 app.post('/api/newQuestion', authenticate.ensureAuthenticated, api.newQuestion);
+app.post('/api/newComment', authenticate.ensureAuthenticated, api.newComment);
 app.post('/api/newUpvote', authenticate.ensureAuthenticated, api.newUpvote);
+app.post('/api/newPromote', authenticate.ensureAuthenticated, api.newPromote);
 
 //handling logouts
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutApi.logoutHarvardLogin);
@@ -126,4 +128,3 @@ app.post('/api/logoutHarvardChat', authenticate.ensureAuthenticated, logoutApi.l
 server.listen(port);
 
 exports.io = io;
-exports.historyLimit = historyLimit;
