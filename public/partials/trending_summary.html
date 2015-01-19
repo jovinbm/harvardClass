@@ -1,4 +1,4 @@
-<div ng-controller="TrendingSummaryCtrl"
+<div ng-controller="TrendingCtrl"
      ng-class="columnClass">
     <h5 id="trending"
         ng-click="changeTab('trending')">
@@ -8,7 +8,7 @@
     </h5>
     <ul class="list-group">
         <li class="list-group-item ng-cloak"
-            ng-repeat="(key, eachTop) in topVotedQuestions"
+            ng-repeat="eachTop in topVotedQuestions"
             ng-class="[
                             questionReference[eachTop.questionIndex].questionClass,
                             questionReference[eachTop.questionIndex].listGroupClass

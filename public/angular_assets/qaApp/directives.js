@@ -104,16 +104,16 @@ angular.module('qaApp')
             }
         }
     }])
-    .directive('onlineFeed', [function () {
+    .directive('trendingFull', [function () {
         return {
-            templateUrl: 'public/partials/online.html',
+            templateUrl: 'public/partials/trending.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
-    .directive('trendingFull', [function () {
+    .directive('onlineFeed', [function () {
         return {
-            templateUrl: 'public/partials/trending.html',
+            templateUrl: 'public/partials/online.html',
             link: function ($scope, $element, $attrs) {
             }
         }

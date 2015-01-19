@@ -9,7 +9,7 @@ angular.module('qaApp')
         var mySocketRoom;
         var usersOnline = {};
         var currentQuestions = {};
-        var currentTop = {};
+        var currentTop = [];
         var upvotedIndexes = [];
         var currentQuestionIndex = -1;
 
@@ -65,10 +65,7 @@ angular.module('qaApp')
 
             currentTop: function (topArray, broadcast) {
                 if (topArray) {
-                    currentTop = {};
-                    topArray.forEach(function (topObject) {
-                        currentTop[topObject.questionIndex] = topObject;
-                    });
+                    currentTop = topArray;
                 }
                 if (broadcast) {
                     $rootScope.$broadcast('currentTop', currentTop);

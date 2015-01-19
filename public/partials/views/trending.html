@@ -3,10 +3,8 @@
     <h5 id="trending"><i class="fa fa-line-chart"></i> Trending</h5>
     <ul class="list-group">
         <li class="list-group-item ng-cloak"
-            ng-repeat="(key, eachTop) in topVotedQuestions"
-            ng-class="[
-                            questionReference[eachTop.questionIndex].questionClass
-                            ]"
+            ng-repeat="eachTop in topVotedQuestions"
+            ng-class="[questionReference[eachTop.questionIndex].questionClass]"
             ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
                             <span class="badge voteNumber">
                                 {{eachTop.votes}}

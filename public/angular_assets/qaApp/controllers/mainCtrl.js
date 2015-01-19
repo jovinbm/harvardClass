@@ -11,7 +11,7 @@ angular.module('qaApp')
             $scope.tab = stateService.tab();
 
             $scope.appState = "home";
-            $scope.changeState = function(newState){
+            $scope.changeState = function (newState) {
                 $scope.appState = newState;
             };
 
@@ -37,9 +37,16 @@ angular.module('qaApp')
                 console.log("'upvotedIndexes' event received");
                 if (indexesArray.length != 0) {
                     globals.upvotedIndexes(indexesArray);
-                    $scope.questionReference = detailStorage.updateReferenceIndexes();
+                    $scope.questionReference = detailStorage.updateReferenceIndexes(true);
                 }
             });
+
+            //receives an array containing the top voted questions
+            socket.on('topVoted', function (topVotedArrayOfObjects) {
+                console.log("'topVoted' event received");
+                $scope.topVotedQuestions = globals.currentTop(topVotedArrayOfObjects, true);
+            });
+
 
             $scope.$on('questionReference', function (event, data) {
                 $scope.questionReference = data;
