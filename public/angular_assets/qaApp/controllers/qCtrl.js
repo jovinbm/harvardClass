@@ -10,6 +10,7 @@ angular.module('qaApp')
             });
 
             $scope.changeTab('home');
+            $scope.changeState('qFeed');
 
             $scope.questions = sortObjectToArrayFilter(globals.currentQuestions());
             $scope.columnClass = stateService.qClass();
@@ -33,6 +34,7 @@ angular.module('qaApp')
         function ($window, $scope, $routeParams, globals, detailStorage, sortObjectToArrayFilter, stateService, questionService) {
             $scope.currentQuestion = stateService.questionOnView($routeParams.index);
             $scope.changeTab('home');
+            $scope.changeState('qFull');
 
             questionService.retrieveQuestion($scope.currentQuestion)
                 .success(function (resp) {

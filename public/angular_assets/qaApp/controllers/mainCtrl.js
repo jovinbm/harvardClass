@@ -10,6 +10,11 @@ angular.module('qaApp')
             $scope.questionOnView = stateService.questionOnView();
             $scope.tab = stateService.tab();
 
+            $scope.appState = "home";
+            $scope.changeState = function(newState){
+                $scope.appState = newState;
+            };
+
             $scope.changeTab = function (tab) {
                 $scope.tab = stateService.tab(tab);
             };

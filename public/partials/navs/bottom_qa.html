@@ -24,9 +24,15 @@
                 </a>
             </li>
             </li>
-            <li>
+            <li ng-show="appState == 'qFeed'">
                 <a href="#onlineUsers"
                    target="_self"><i class="fa fa-users"></i> Users
+                </a>
+            </li>
+            <li ng-click="changeTab('home')"
+                ng-show="appState == 'qFull'">
+                <a href="#/">
+                    <i class="fa fa-home"></i> Home
                 </a>
             </li>
         </ul>
@@ -52,9 +58,15 @@
                         <i class="fa fa-home"></i> Home
                     </a>
                 </li>
-                <li>
+                <li ng-show="appState == 'qFeed'">
                     <a href="#onlineUsers"
                        target="_self"><i class="fa fa-users"></i> Users
+                    </a>
+                </li>
+                <li ng-click="changeTab('home')"
+                    ng-show="appState == 'qFull'">
+                    <a href="#/">
+                        <i class="fa fa-home"></i> Home
                     </a>
                 </li>
             </ul>

@@ -9,8 +9,10 @@ angular.module('qaApp')
                 $scope.topVotedQuestions = globals.currentTop();
             });
 
-            $scope.topVotedQuestions = globals.currentTop();
             $scope.changeTab('trending');
+            $scope.changeState('qFeed');
+
+            $scope.topVotedQuestions = globals.currentTop();
             $scope.columnClass = stateService.trClass();
 
             //receives an array containing the top voted questions
