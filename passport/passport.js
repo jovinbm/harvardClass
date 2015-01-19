@@ -9,7 +9,7 @@ var realmURL = "https://harvardclass.herokuapp.com";
 
 var cuid = require('cuid');
 var basic = require('../functions/basic.js');
-var dbJs = require('../functions/db.js');
+var userDB = require('../db/user_db.js');
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
 module.exports = function (passport, OpenIDStrategy) {
@@ -47,7 +47,7 @@ module.exports = function (passport, OpenIDStrategy) {
                         done(null, theSavedUser)
                     }
 
-                    dbJs.saveHarvardUser(user, saveError, saveError, saveSuccess);
+                    userDB.saveHarvardUser(user, saveError, saveError, saveSuccess);
                 }
             }
 
@@ -55,7 +55,7 @@ module.exports = function (passport, OpenIDStrategy) {
                 done(null, theHarvardUser);
             }
 
-            dbJs.findHarvardUser(id, error, error, success);
+            userDB.findHarvardUser(id, error, error, success);
 
         }
     ));
@@ -77,6 +77,6 @@ module.exports = function (passport, OpenIDStrategy) {
             done(null, theHarvardUser);
         }
 
-        dbJs.findHarvardUser(id, error, error, success);
+        userDB.findHarvardUser(id, error, error, success);
     });
 };

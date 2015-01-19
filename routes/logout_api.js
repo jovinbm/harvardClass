@@ -1,25 +1,15 @@
 /**
  * Created by jovinbm on 1/12/15.
  */
-var email = require("emailjs");
-var mailServer = email.server.connect({
-    user: "jovinbeda@gmail.com",
-    password: "uxccpufouacqxrzm",
-    host: "smtp.gmail.com",
-    ssl: true
-});
-var path = require('path');
 var basic = require('../functions/basic.js');
-var event_handlers = require('../event_handlers/event_handlers.js');
-var dbJs = require('../functions/db.js');
-var Question = require("../database/questions/question_model.js");
-var Comment = require("../database/comments/comment_model.js");
-var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
+var logout_handler = require('../handlers/logout_handler.js');
+var userDB = require('../db/user_db.js');
+
 
 module.exports = {
     logoutHarvardLogin: function (req, res) {
         basic.consoleLogger('LOGOUT HARVARD LOGIN event received');
-        event_handlers.logoutHarvardLogin(req, res);
+        logout_handler.logoutHarvardLogin(req, res);
     },
 
 
@@ -38,13 +28,13 @@ module.exports = {
         function success(theHarvardUser) {
             //toggle the user's customLoggedInStatus
             function toggled() {
-                event_handlers.logoutCustomChat(req, res, theHarvardUser);
+                logout_handler.logoutCustomChat(req, res, theHarvardUser);
             }
 
-            dbJs.toggleCls(req.user.id, 0, error, error, toggled);
+            userDB.toggleCls(req.user.id, 0, error, error, toggled);
         }
 
-        dbJs.findHarvardUser(req.user.id, error, error, success);
+        userDB.findHarvardUser(req.user.id, error, error, success);
     },
 
 
@@ -63,12 +53,12 @@ module.exports = {
         function success(theHarvardUser) {
             //toggle the user's customLoggedInStatus
             function toggled() {
-                event_handlers.logoutHarvardChat(req, res, theHarvardUser);
+                logout_handler.logoutHarvardChat(req, res, theHarvardUser);
             }
 
-            dbJs.toggleCls(req.user.id, 0, error, error, toggled);
+            userDB.toggleCls(req.user.id, 0, error, error, toggled);
         }
 
-        dbJs.findHarvardUser(req.user.id, error, error, success);
+        userDB.findHarvardUser(req.user.id, error, error, success);
     }
 };

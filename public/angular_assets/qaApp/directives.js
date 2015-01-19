@@ -37,11 +37,11 @@ angular.module('qaApp')
             }
         }
     }])
-    .directive('commentFull', ['socket', 'socketRoom', 'commentService', function (socket, socketRoom, commentService) {
+    .directive('commentFull', ['socket', 'socketService', 'commentService', function (socket, socketService, commentService) {
         return {
             templateUrl: 'public/partials/comment_full.html',
             link: function ($scope, $element, $attrs) {
-                $scope.questionIndex = $scope.questionOnView;
+                $scope.questionIndex = $scope.currentQuestion;
                 $scope.cmntsReference = {};
                 $scope.myPromotes = [];
                 $scope.lastCommentIndex = -1;
@@ -66,20 +66,6 @@ angular.module('qaApp')
                         });
                 };
 
-                socket.on('comments', function (commentObject) {
-                    console.log("'comments' event received");
-                    console.log("comments = " + JSON.stringify(commentObject));
-                    $scope.myPromotes = commentObject.myPromotes;
-                    $scope.increaseIndex(commentObject.index);
-                    $scope.cmntsReference = commentService.commentsReference
-                    (
-                        commentObject.comments,
-                        $scope.myPromotes,
-                        $scope.cmntsReference
-                    );
-
-                    $scope.comments = commentObject.comments;
-                });
 
                 socket.on('newComment', function (commentObject) {
                     console.log("'newComment' event received");
@@ -87,17 +73,24 @@ angular.module('qaApp')
                     var temp = [];
                     var newComment = commentObject.comment;
                     temp.push(newComment);
-                    $scope.cmntsReference = commentService.commentsReference
-                    (
+                    $scope.cmntsReference = commentService.commentsReference(
                         temp,
                         $scope.myPromotes,
-                        $scope.cmntsReference
-                    );
+                        $scope.cmntsReference);
 
                     $scope.comments.unshift(newComment);
                 });
 
                 commentService.getComments($scope.questionIndex, $scope.lastCommentIndex)
+                    .success(function (resp) {
+                        $scope.myPromotes = resp.myPromotes;
+                        $scope.increaseIndex(resp.index);
+                        $scope.cmntsReference = commentService.commentsReference(
+                            resp.comments,
+                            $scope.myPromotes,
+                            $scope.cmntsReference);
+                        $scope.comments = resp.comments;
+                    })
                     .error(function (errorResponse) {
                         $window.location.href = "/error/error500.html";
                     });

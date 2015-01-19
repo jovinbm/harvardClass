@@ -20,7 +20,7 @@ questions feed
     width: 100%;
 }
 
-.upvote, .promote {
+.upvote, .promote, .conv, .add {
     margin-bottom: 2px;
 }
 
@@ -31,6 +31,7 @@ questions feed
 
 .questionTime, .commentTime {
     color: darkgray;
+    font-size: 10px;
 }
 
 /*question input field/modal*/
@@ -48,6 +49,10 @@ questions feed
     margin: 10px 0 40px 0;
 }
 
+/*trending*/
+body > div.container > div > div > div.ng-scope > div > ul > li.list-group-item {
+    padding: 7px;
+}
 
 
 /*bottom nav bar

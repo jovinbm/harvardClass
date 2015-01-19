@@ -1,16 +1,10 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-
 //var dbURL = 'mongodb://localhost:27017';
 var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
 //var dbURL = 'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
 
-var usersOnline = [];
-/*usersOnline object looks like this
- usersOnline = [
- {customUsername: name, lastOnline: time}
- ]*/
 
 //THE APP
 var express = require('express');
@@ -27,18 +21,19 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 var OpenIDStrategy = require('passport-openid').Strategy;
+var mongoose = require('mongoose');
+
+
 var routes = require('./routes/router.js');
-var api = require('./routes/api.js');
-var logoutApi = require('./routes/logoutApi.js');
+var basicAPI = require('./routes/basic_api.js');
+var questionAPI = require('./routes/question_api.js');
+var commentAPI = require('./routes/comment_api.js');
+var logoutAPI = require('./routes/logout_api.js');
 var basic = require('./functions/basic.js');
 var online = require('./functions/online.js');
 var authenticate = require('./functions/authenticate.js');
-var event_handlers = require('./event_handlers/event_handlers.js');
-var Question = require("./database/questions/question_model.js");
-var Comment = require("./database/comments/comment_model.js");
-var HarvardUser = require("./database/harvardUsers/harvard_user_model.js");
 
-var mongoose = require('mongoose');
+
 mongoose.connect(dbURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -68,6 +63,31 @@ app.use(passport.session());
 //configure passport
 require('./passport/passport.js')(passport, OpenIDStrategy);
 
+//insert any new client into a unique room = to his socketID
+io.on('connection', function (socket) {
+
+    socket.on('joinRoom', function (data) {
+        var room = data.room;
+        function success(){
+            //emit event to continue execution on client
+            socket.emit('joined');
+        }
+
+        socket.join(room);
+        var user = {
+            socketId: [socket.id],
+            customUsername: data.customUsername
+        };
+        online.addUser(room, user, success);
+    });
+
+    socket.on('disconnect', function () {
+        online.removeUser(socket.id);
+    });
+
+});
+
+
 app.post('/harvardId/login', passport.authenticate('openid'));
 app.get('/harvardId',
     passport.authenticate('openid', {
@@ -76,7 +96,6 @@ app.get('/harvardId',
     }));
 
 
-//handling requests that require page change
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
 app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
@@ -86,45 +105,22 @@ app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
 
-//insert any new client into a unique room = to his socketID
-io.on('connection', function (socket) {
+app.post('/sendEmail', basicAPI.sendEmail);
+app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);
+app.post('/api/startUp', authenticate.ensureAuthenticated, basicAPI.startUp);
 
-    socket.on('joinRoom', function (data) {
-        socket.join(data.room);
-        var room = data.room;
-        var user = {
-            socketId: [socket.id],
-            customUsername: data.customUsername,
-        };
-        online.addUser(room, user);
+app.post('/api/getQuestions', authenticate.ensureAuthenticated, questionAPI.getQuestions);
+app.post('/api/retrieveQuestion', authenticate.ensureAuthenticated, questionAPI.retrieveQuestion);
+app.post('/api/newQuestion', authenticate.ensureAuthenticated, questionAPI.newQuestion);
+app.post('/api/newUpvote', authenticate.ensureAuthenticated, questionAPI.newUpvote);
 
-        //emit event to continue execution on client
-        socket.emit('joined');
-    });
+app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);
+app.post('/api/newPromote', authenticate.ensureAuthenticated, commentAPI.newPromote);
+app.post('/api/getComments', authenticate.ensureAuthenticated, commentAPI.getComments);
 
-    socket.on('disconnect', function () {
-        online.removeUser(socket.id);
-    });
+app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
+app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutAPI.logoutCustomChat);
+app.post('/api/logoutHarvardChat', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardChat);
 
-});
-
-//handling api
-app.post('/sendEmail', api.sendEmail);
-app.get('/api/getMyRoom', authenticate.ensureAuthenticated, api.getMyRoom);
-app.post('/api/ready', authenticate.ensureAuthenticated, api.ready);
-app.post('/api/getHistory', authenticate.ensureAuthenticated, api.getHistory);
-app.post('/api/getComments', authenticate.ensureAuthenticated, api.getComments);
-app.post('/api/newQuestion', authenticate.ensureAuthenticated, api.newQuestion);
-app.post('/api/newComment', authenticate.ensureAuthenticated, api.newComment);
-app.post('/api/newUpvote', authenticate.ensureAuthenticated, api.newUpvote);
-app.post('/api/newPromote', authenticate.ensureAuthenticated, api.newPromote);
-
-//handling logouts
-app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutApi.logoutHarvardLogin);
-app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutApi.logoutCustomChat);
-app.post('/api/logoutHarvardChat', authenticate.ensureAuthenticated, logoutApi.logoutHarvardChat);
-
-//start server
 server.listen(port);
-
 exports.io = io;

@@ -1,0 +1,75 @@
+/**
+ * Created by jovinbm on 1/18/15.
+ */
+angular.module('qaApp')
+    .controller('MainController', ['$window', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'logoutService', 'stateService',
+        function ($window, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, logoutService, stateService) {
+
+            $scope.customUsername = globals.customUsername();
+            $scope.questionReference = detailStorage.getReference();
+            $scope.questionOnView = stateService.questionOnView();
+            $scope.tab = stateService.tab();
+
+            $scope.changeTab = function (tab) {
+                $scope.tab = stateService.tab(tab);
+            };
+
+            $scope.upvote = function (index, $event) {
+                $scope.questionReference = detailStorage.disableButton(index);
+                questionService.postUpvote(parseInt(index))
+                    .success(function (resp) {
+                        globals.addUpvoted(index);
+                        $scope.questionReference = detailStorage.updateReferenceIndexes(true);
+                    })
+                    .error(function (errResponse) {
+                        $window.location.href = "/public/error/error500.html";
+                    });
+            };
+
+
+            //receives this client's upvoted questions indexes
+            socket.on('upvotedIndexes', function (indexesArray) {
+                console.log("'upvotedIndexes' event received");
+                if (indexesArray.length != 0) {
+                    globals.upvotedIndexes(indexesArray);
+                    $scope.questionReference = detailStorage.updateReferenceIndexes();
+                }
+            });
+
+            $scope.$on('questionReference', function (event, data) {
+                $scope.questionReference = data;
+            });
+
+
+            socketService.getSocketRoom()
+                .success(function (data) {
+                    globals.socketRoom(data.socketRoom);
+                    globals.customUsername(data.customUsername);
+                    socket.emit('joinRoom', {
+                        room: data.socketRoom,
+                        customUsername: data.customUsername
+                    });
+                })
+                .error(function (errResponse) {
+                    $window.location.href = "/public/error/error500.html";
+                });
+
+
+            socket.on('joined', function () {
+                socketService.startUp()
+                    .success(function (resp) {
+                        var questionArray = resp.questionsArray;
+
+                        globals.upvotedIndexes(resp.upvotedIndexes);
+                        globals.currentQuestionIndex(resp.currentQuestionIndex);
+                        $scope.questionReference = detailStorage.add(questionArray, true);
+                        globals.currentQuestions(questionArray, true);
+                        globals.currentTop(resp.topVotedArray, true);
+
+                    })
+                    .error(function (errResponse) {
+                        $window.location.href = "/public/error/error500.html";
+                    });
+            });
+
+        }]);

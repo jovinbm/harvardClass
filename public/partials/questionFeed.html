@@ -1,4 +1,4 @@
-<div ng-controller="QuestionFeedController"
+<div ng-controller="qFeedCtrl"
      ng-class="columnClass">
     <h5>
                 <span>
@@ -9,6 +9,7 @@
                         <a type="button"
                            class="btn btn-primary btn-xs pull-right"
                            href="#myModal"
+                           target="_self"
                            role="button"
                            data-toggle="modal">
                             <i class="fa fa-pencil"></i> New Question
@@ -20,7 +21,9 @@
     <ul class="media-list">
         <li class="media main-media" ng-repeat="eachQuestion in questions"
             ng-class="questionReference[eachQuestion.questionIndex].questionClass">
-            <a class="media-left media-top" href="#">
+            <a class="media-left media-top"
+               href="#"
+               target="_self">
                 <p class="userName">{{eachQuestion.senderName}}</p>
             </a>
 
@@ -32,10 +35,10 @@
                 <small class="questionTime">{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
 
                 <div class="pull-right">
-                    <a type="button"
-                       class="btn btn-default btn-xs"
-                       ng-click="fullQuestion(eachQuestion.questionIndex)">
-                        <i class="fa fa-plus"></i> Conversation
+                    <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}"
+                       type="button"
+                       class="btn btn-default btn-xs conv">
+                        <i class="fa fa-comments-o"></i>
                     </a>
                     <button type='button'
                             ng-class="questionReference[eachQuestion.questionIndex].buttonClass"

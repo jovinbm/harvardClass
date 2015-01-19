@@ -6,25 +6,27 @@
         <ul class="nav navbar-nav pull-right hidden-xs bottom-nav-pills">
             <li>
                 <a href="#myModal"
+                   target="_self"
                    data-toggle="modal">
                     <i class="fa fa-pencil"></i> New Question
                 </a>
             </li>
             <li ng-click="changeTab('trending')"
                 ng-show="tab == 'home'">
-                <a href="#">
+                <a href="#/trendingFull">
                     <i class="fa fa-line-chart"></i> Trending
                 </a>
             </li>
             <li ng-click="changeTab('home')"
                 ng-show="tab == 'trending'">
-                <a href="#">
+                <a href="#/">
                     <i class="fa fa-home"></i> Home
                 </a>
             </li>
             </li>
             <li>
-                <a href="#onlineUsers"><i class="fa fa-users"></i> Users
+                <a href="#onlineUsers"
+                   target="_self"><i class="fa fa-users"></i> Users
                 </a>
             </li>
         </ul>
@@ -33,24 +35,26 @@
             <ul class="nav nav-pills hidden-sm hidden-md hidden-lg bottom-nav-pills">
                 <li>
                     <a href="#myModal"
+                       target="_self"
                        data-toggle="modal">
                         <i class="fa fa-pencil"></i> New
                     </a>
                 </li>
                 <li ng-click="changeTab('trending')"
                     ng-show="tab == 'home'">
-                    <a href="#">
+                    <a href="#/trendingFull">
                         <i class="fa fa-line-chart"></i> Trending
                     </a>
                 </li>
                 <li ng-click="changeTab('home')"
                     ng-show="tab == 'trending'">
-                    <a href="#">
+                    <a href="#/">
                         <i class="fa fa-home"></i> Home
                     </a>
                 </li>
                 <li>
-                    <a href="#onlineUsers"><i class="fa fa-users"></i> Users
+                    <a href="#onlineUsers"
+                       target="_self"><i class="fa fa-users"></i> Users
                     </a>
                 </li>
             </ul>
