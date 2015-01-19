@@ -19,7 +19,10 @@ module.exports = {
                 function made(question) {
                     function saved(savedQuestion) {
                         function done(questionObject) {
-                            ioJs.emitToAll('newQuestion', questionObject);
+                            ioJs.emitToAll('newQuestion', {
+                                "question": questionObject,
+                                "index": 1
+                            });
                             res.status(200).send({msg: 'newQuestion success'});
                             basic.consoleLogger('newQuestion: Success');
                         }
@@ -124,7 +127,7 @@ module.exports = {
 
         function success(questionArray) {
             temp['questionArray'] = questionArray;
-            temp['currentQuestionIndex'] = currentQuestionIndex + limit;
+            temp['currentQuestionIndex'] = currentQuestionIndex + questionArray.length;
             res.status(200).send(temp);
         }
 

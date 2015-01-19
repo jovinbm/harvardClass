@@ -108,6 +108,7 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 app.post('/sendEmail', basicAPI.sendEmail);
 app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);
 app.post('/api/startUp', authenticate.ensureAuthenticated, basicAPI.startUp);
+app.post('/api/reconnect', authenticate.ensureAuthenticated, basicAPI.reconnect);
 
 app.post('/api/getQuestions', authenticate.ensureAuthenticated, questionAPI.getQuestions);
 app.post('/api/retrieveQuestion', authenticate.ensureAuthenticated, questionAPI.retrieveQuestion);

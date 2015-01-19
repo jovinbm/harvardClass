@@ -67,5 +67,26 @@ module.exports = {
         }
 
         userDB.findHarvardUser(req.user.id, error, error, success);
+    },
+
+
+    reconnect: function (req, res) {
+        basic.consoleLogger('RECONNECT event received');
+        var currentQuestionIndex = req.body.currentQuestionIndex;
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'reconnectPOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: reconnectPOST: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theHarvardUser) {
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                basic_handlers.reconnect(req, res, theHarvardUser, currentQuestionIndex);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findHarvardUser(req.user.id, error, error, success);
     }
 };

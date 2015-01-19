@@ -30,7 +30,7 @@ angular.module('qaApp')
     }])
 
 
-    .factory('socketService', ['$http', function ($http) {
+    .factory('socketService', ['$http', 'globals', function ($http, globals) {
         return {
             getSocketRoom: function () {
                 return $http.get('/api/getMyRoom');
@@ -40,8 +40,10 @@ angular.module('qaApp')
                 return $http.post('/api/startUp');
             },
 
-            ready: function () {
-                return $http.post('/api/ready');
+            reconnect: function () {
+                return $http.post('/api/reconnect', {
+                    "currentQuestionIndex": globals.currentQuestionIndex()
+                })
             }
         }
     }])

@@ -84,4 +84,24 @@ angular.module('qaApp')
                     });
             });
 
+            //receives an array containing the top voted questions
+            socket.on('reconnect', function () {
+                console.log("'reconnect' triggered");
+                socketService.reconnect()
+                    .success(function (resp) {
+                        var questionArray = resp.questionsArray;
+
+                        globals.upvotedIndexes(resp.upvotedIndexes);
+                        globals.currentQuestionIndex(resp.currentQuestionIndex);
+                        $scope.questionReference = detailStorage.add(questionArray, true);
+                        globals.currentQuestions(questionArray, true);
+                        globals.currentTop(resp.topVotedArray, true);
+                        $scope.questionReference = detailStorage.updateReferenceIndexes(true);
+
+                    })
+                    .error(function (errResponse) {
+                        $window.location.href = "/public/error/error500.html";
+                    });
+            });
+
         }]);

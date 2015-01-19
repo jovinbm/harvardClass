@@ -3,13 +3,14 @@
  */
 angular.module('qaApp')
 
-    .controller('TrendinglCtrl', ['$scope', 'socket', 'globals', 'stateService',
-        function ($scope, socket, globals) {
+    .controller('TrendingSummaryCtrl', ['$scope', 'socket', 'globals', 'stateService',
+        function ($scope, socket, globals, stateService) {
             $scope.$on("currentTop", function () {
                 $scope.topVotedQuestions = globals.currentTop();
             });
 
             $scope.changeState('qFeed');
+            $scope.changeTab('home');
 
             $scope.topVotedQuestions = globals.currentTop();
             $scope.columnClass = stateService.trClass();
@@ -22,6 +23,7 @@ angular.module('qaApp')
             });
 
             $scope.changeState('qFeed');
+            $scope.changeTab('trending');
 
             $scope.topVotedQuestions = globals.currentTop();
             $scope.columnClass = stateService.trClass();

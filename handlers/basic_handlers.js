@@ -50,15 +50,71 @@ module.exports = {
         }
 
         function getTop() {
-            questionDB.findTopVotedQuestions(-1, 7, getTopErr, getTopErr, done);
+            questionDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
         }
 
         function success(questionsArray) {
             temp['questionsArray'] = questionsArray;
-            temp['currentQuestionIndex'] = 30;
+            temp['currentQuestionIndex'] = questionsArray.length - 1
             getTop();
         }
 
         questionDB.getQuestions(-1, -1, limit, getQuestionsErr, getQuestionsErr, success)
+    },
+
+
+    reconnect: function (req, res, theHarvardUser, currentQuestionIndex) {
+        basic.consoleLogger('reconnect: RECONNECT handler called');
+        basic.consoleLogger(currentQuestionIndex)
+        var limit = 30;
+        ioJs.emitToOne(theHarvardUser.socketRoom, "usersOnline", online.getUsersOnline());
+
+        var temp = {};
+        temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
+        //get some Questions
+
+        function getQuestionsErr(status, err) {
+            if (status == -1) {
+                basic.consoleLogger("reconnect handler: getQuestions: Error while retrieving home details" + err);
+                res.status(500).send({msg: 'reconnect: getQuestions: Error while retrieving home details', err: err});
+                basic.consoleLogger('reconnect: failed!');
+            } else if (status == 0) {
+                temp['questionsArray'] = [];
+                basic.consoleLogger('reconnect: Did not find any questions, continuing');
+                getTop();
+            }
+        }
+
+        function getTopErr(status, err) {
+            if (status == -1) {
+                basic.consoleLogger("reconnect handler: GetTop: Error while retrieving home details" + err);
+                res.status(500).send({msg: 'reconnect: GetTop: Error while retrieving home details', err: err});
+                basic.consoleLogger('reconnect: failed!');
+            } else if (status == 0) {
+                temp['topVotedArray'] = [];
+                basic.consoleLogger('reconnect: success: Did not find any top voted');
+                done([]);
+            }
+        }
+
+        function done(topVotedArray) {
+            temp['topVotedArray'] = topVotedArray;
+            res.status(200).send(temp);
+            basic.consoleLogger("reconnect success");
+        }
+
+        function getTop() {
+            questionDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
+        }
+
+        function success(questionsArray) {
+            temp['questionsArray'] = questionsArray;
+            temp['currentQuestionIndex'] = questionsArray.length + currentQuestionIndex;
+            getTop();
+        }
+
+        questionDB.getQuestions(-1, currentQuestionIndex, limit, getQuestionsErr, getQuestionsErr, success)
     }
+
+
 };

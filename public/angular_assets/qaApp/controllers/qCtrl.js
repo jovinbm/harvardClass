@@ -23,7 +23,8 @@ angular.module('qaApp')
             socket.on('newQuestion', function (questionObject) {
                 console.log("'newQuestion' event received");
                 var tempQuestionArray = [];
-                tempQuestionArray.push(questionObject);
+                globals.currentQuestionIndex(questionObject.index);
+                tempQuestionArray.push(questionObject.question);
                 detailStorage.add(tempQuestionArray, true);
                 $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(tempQuestionArray));
             });
