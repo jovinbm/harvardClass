@@ -1,0 +1,53 @@
+<div ng-controller="TrendingCtrl"
+     ng-class="columnClass">
+    <h5 id="trending"><i class="fa fa-line-chart"></i> Trending</h5>
+    <ul class="list-group">
+        <li class="list-group-item ng-cloak"
+            ng-repeat="(key, eachTop) in topVotedQuestions"
+            ng-class="[
+                            questionReference[eachTop.questionIndex].questionClass
+                            ]"
+            ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
+                            <span class="badge voteNumber">
+                                {{eachTop.votes}}
+                            </span>
+            <h4>{{eachTop.heading}}</h4>
+
+            <div class="media"
+                 ng-class="questionReference[eachTop.questionIndex].questionClass">
+                <a class="media-left media-top"
+                   href="#"
+                   target="_self">
+                    <p class="userName">{{eachTop.senderName}}</p>
+                </a>
+
+                <div class="media-body">
+
+                    <p ta-bind ng-model="eachTop.question"></p>
+
+                    <small class="questionTime">
+                        {{questionReference[eachTop.questionIndex].questionTime}}
+                    </small>
+
+                    <div class="pull-right">
+                        <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}"
+                           type="button"
+                           class="btn btn-default btn-xs conv">
+                            <i class="fa fa-comments-o"></i>
+                        </a>
+                        <button type='button'
+                                ng-class="questionReference[eachTop.questionIndex].buttonClass"
+                                ng-disabled="questionReference[eachTop.questionIndex].ifDisabled"
+                                ng-click="upvote(eachTop.questionIndex, $event)">
+
+                            <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </li>
+    </ul>
+</div>

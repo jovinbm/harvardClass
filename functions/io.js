@@ -1,9 +1,6 @@
 /**
  * Created by jovinbm on 1/4/15.
  */
-
-/*Defines functions to deal with emitting
- * io events*/
 var app = require('../app.js');
 var basic = require('../functions/basic.js');
 

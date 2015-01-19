@@ -1,4 +1,5 @@
-<div class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-default navbar-fixed-top"
+     ng-controller="logInOutCtrl">
     <div class="container">
         <div class="navbar-header">
             <!--button to target the navbar-right which will appear on collapse of navbar items-->
@@ -17,18 +18,22 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#"
+                       target="_self"
+                       class="dropdown-toggle" data-toggle="dropdown">
                         {{customUsername}} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"
+                               target="_self"
                                class="logoutCustomChat"
                                ng-click="logoutCustomChat()">Logout from Session
                             </a>
                         </li>
                         <li>
                             <a href="#"
+                               target="_self"
                                class="logoutHarvardChat"
                                ng-click="logoutHarvardChat()">Logout from Harvard
                             </a>
@@ -39,6 +44,7 @@
             <a type="button"
                class="btn btn-primary navbar-btn pull-right"
                href="#myModal"
+               target="_self"
                role="button"
                data-toggle="modal">
                 <i class="fa fa-pencil"></i> New Question

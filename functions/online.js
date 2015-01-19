@@ -1,7 +1,6 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-var Question = require("../database/questions/question_model.js");
 var basic = require('../functions/basic.js');
 var ioJs = require('../functions/io.js');
 var usersOnline = {};
@@ -19,7 +18,7 @@ var socketIdIndex = {};
 
 module.exports = {
 
-    addUser: function (room, userObject) {
+    addUser: function (room, userObject, success) {
         var user = usersOnline[room];
         if (!user) {
             usersOnline[room] = userObject;
@@ -28,7 +27,7 @@ module.exports = {
         }
         //add them to the socketId index for faster searching later
         socketIdIndex[userObject.socketId[0]] = room;
-        ioJs.emitToAll("usersOnline", usersOnline);
+        ioJs.emitToAll("usersOnline", usersOnline, success);
     },
 
     removeUser: function (socketId, socketRoom, success) {

@@ -1,14 +1,8 @@
 /**
  * Created by jovinbm on 12/25/14.
  */
-var app = require('../app.js');
-var io = app.io;
-var path = require('path');
 var basic = require('../functions/basic.js');
-var dbJs = require('../functions/db.js');
-var Question = require("../database/questions/question_model.js");
-var Comment = require("../database/comments/comment_model.js");
-var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
+var userDB = require('../db/user_db.js');
 
 module.exports = {
     loginHtml: function (req, res) {
@@ -40,7 +34,7 @@ module.exports = {
             }
         }
 
-        dbJs.findHarvardUser(req.user.id, error, error, success);
+        userDB.findHarvardUser(req.user.id, error, error, success);
     },
 
 
@@ -67,11 +61,11 @@ module.exports = {
             if (req.user && theHarvardUser.customLoggedInStatus == 1) {
                 res.redirect('chat.html');
             } else {
-                dbJs.updateCuCls(req.user.id, req.body.customUsername, 1, error, error, successUpdate)
+                userDB.updateCuCls(req.user.id, req.body.customUsername, 1, error, error, successUpdate)
             }
         }
 
-        dbJs.findHarvardUser(req.user.id, error, error, success);
+        userDB.findHarvardUser(req.user.id, error, error, success);
     },
 
 
@@ -94,6 +88,6 @@ module.exports = {
             }
         }
 
-        dbJs.findHarvardUser(req.user.id, error, error, success);
+        userDB.findHarvardUser(req.user.id, error, error, success);
     }
 };

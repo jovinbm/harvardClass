@@ -1,50 +1,44 @@
-<div ng-controller="QuestionFeedController"
+<div ng-controller="qFullCtrl"
      ng-class="columnClass"
      class="ng-cloak">
-    <a type="button"
+    <a ng-href="#/"
+       type="button"
        class="btn btn-primary btn-xs"
-            ng-click="changeTab('home')">
+       ng-click="changeTab('home')">
         <i class="fa fa-arrow-left"></i> Question Feed
     </a>
     <h4>
         <span>
-            {{questions[questionOnView].heading}}
-        </span>
-        <span class="hidden-sm hidden-md hidden-lg">
-            <a type="button"
-               class="btn btn-primary btn-xs pull-right"
-               href="#myModal"
-               role="button"
-               data-toggle="modal">
-                <i class="fa fa-pencil"></i> New Question
-            </a>
+            {{question[0].heading}}
         </span>
     </h4>
 
 
     <ul class="media-list">
-        <li class="media main-media" ng-class="questionReference[questionOnView].questionClass">
-            <a class="media-left media-top" href="#">
-                <p class="userName">{{questions[questionOnView].senderName}}</p>
+        <li class="media main-media" ng-class="questionReference[currentQuestion].questionClass">
+            <a class="media-left media-top"
+               href="#"
+               target="_self">
+                <p class="userName">{{question[0].senderName}}</p>
             </a>
 
             <div class="media-body">
 
-                <p ta-bind ng-model="questions[questionOnView].question"></p>
+                <p ta-bind ng-model="question[0].question"></p>
 
-                <small class="questionTime">{{questionReference[questionOnView].questionTime}}</small>
+                <small class="questionTime">{{questionReference[currentQuestion].questionTime}}</small>
 
                 <div class="pull-right">
                     <a type="button"
-                       class="btn btn-primary btn-xs"
+                       class="btn btn-primary btn-xs add"
                        ng-click="isCollapsed = !isCollapsed">
-                        <i class="fa fa-plus"></i> Respond
+                        <i class="fa fa-plus"></i> Add
                     </a>
 
                     <button type='button'
-                            ng-class="questionReference[questionOnView].buttonClass"
-                            ng-disabled="questionReference[questionOnView].ifDisabled"
-                            ng-click="upvote(questionOnView, $event)">
+                            ng-class="questionReference[currentQuestion].buttonClass"
+                            ng-disabled="questionReference[currentQuestion].ifDisabled"
+                            ng-click="upvote(currentQuestion, $event)">
 
                         <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 
@@ -53,8 +47,8 @@
             </div>
         </li>
         <li>
-            <div collapse="isCollapsed"
-                 ng-controller="CommentController"
+            <div collapse="!isCollapsed"
+                 ng-controller="CommentCtrl"
                  class="comment_input">
                 <div text-angular
                      ta-toolbar="[['pre','h6','bold','italics','underline','quote','ul','ol','undo','redo','indent','outdent']]"
@@ -72,7 +66,7 @@
                     </a>
                     <a type="button"
                        class="btn btn-primary btn-xs"
-                       ng-click="newComment(questionOnView)">
+                       ng-click="newComment(currentQuestion)">
                         <i class="fa fa-paper-plane"></i> Post
                     </a>
                 </div>
