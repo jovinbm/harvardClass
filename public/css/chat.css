@@ -24,6 +24,10 @@ questions feed
     margin-bottom: 2px;
 }
 
+.conv {
+    width: 40px;
+}
+
 .userName {
     font-weight: bold;
     color: #0b97c4;
