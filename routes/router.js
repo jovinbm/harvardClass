@@ -13,6 +13,14 @@ module.exports = {
         }
     },
 
+    loginNewHtml: function (req, res) {
+        if (req.user) {
+            res.redirect("login1.html");
+        } else {
+            res.render('loginNew');
+        }
+    },
+
 
     login_1_Html: function (req, res) {
         function error(status, err) {

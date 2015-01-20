@@ -12,7 +12,7 @@ var basic = require('../functions/basic.js');
 var userDB = require('../db/user_db.js');
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
-module.exports = function (passport, OpenIDStrategy) {
+module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
     passport.use(new OpenIDStrategy({
             returnURL: returnURL,
             realm: realmURL,
@@ -58,6 +58,41 @@ module.exports = function (passport, OpenIDStrategy) {
             userDB.findHarvardUser(id, error, error, success);
 
         }
+    ));
+
+    passport.use(new LocalStrategy(
+        function (username, password, done) {
+            if (username == password) {
+                var id = cuid();
+                var socketRoom = cuid();
+                var displayName = username;
+                var email = 'user@example.com';
+
+                var user = new HarvardUser({
+                    id: id,
+                    socketRoom: socketRoom,
+                    displayName: displayName,
+                    email: email
+                });
+
+                function saveError(status, err) {
+                    if (status == -1) {
+                        basic.consoleLogger("**** Passport.use: saveError = " + err);
+                        done(new Error("ERROR: app.js: passport.use: Error saving/ retrieving info"));
+                    }
+                }
+
+                function saveSuccess(theSavedUser) {
+                    done(null, theSavedUser)
+                }
+
+                userDB.saveHarvardUser(user, saveError, saveError, saveSuccess);
+
+            }else{
+                done(new Error("ERROR: app.js: passport.use: Incorrect Password"));
+            }
+        }
+
     ));
 
     passport.serializeUser(function (user, done) {

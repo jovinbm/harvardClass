@@ -21,6 +21,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 var OpenIDStrategy = require('passport-openid').Strategy;
+LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 
 
@@ -61,7 +62,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //configure passport
-require('./passport/passport.js')(passport, OpenIDStrategy);
+require('./passport/passport.js')(passport, OpenIDStrategy, LocalStrategy);
 
 //insert any new client into a unique room = to his socketID
 io.on('connection', function (socket) {
@@ -89,6 +90,11 @@ io.on('connection', function (socket) {
 
 
 app.post('/harvardId/login', passport.authenticate('openid'));
+app.post('/loginNew',
+    passport.authenticate('local', {
+        successRedirect: '/login1.html',
+        failureRedirect: '/loginNew.html'
+    }));
 app.get('/harvardId',
     passport.authenticate('openid', {
         successRedirect: '/login1.html',
@@ -98,6 +104,7 @@ app.get('/harvardId',
 
 app.get('/', routes.loginHtml);
 app.get('/login.html', routes.loginHtml);
+app.get('/loginNew.html', routes.loginNewHtml);
 app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
 app.get('/chat.html', authenticate.ensureAuthenticated, routes.chatHtml);
 app.post('/studentLogin', routes.studentLogin);
