@@ -22,8 +22,9 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
         function (identifier, profile, done) {
             var id = identifier;
             var socketRoom = cuid();
-            var displayName = profile.displayName;
-            var email = profile.emails[0].value;
+            var displayName = profile.displayName || "Harvard Member";
+            var email = profile.emails[0].value || cuid() + "@harvardclass.com";
+            console.log(JSON.stringify(id));
 
             //defining all callbacks
             function error(status, err) {
@@ -66,7 +67,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var id = cuid();
                 var socketRoom = cuid();
                 var displayName = username;
-                var email = cuid() + '@example.com';
+                var email = cuid() + '@harvardclass.com';
 
                 var user = new HarvardUser({
                     id: id,

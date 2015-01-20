@@ -9,7 +9,7 @@ var harvardUsersSchema = new Schema({
     id: {type: String, required: true, unique: true, index: true},
     socketRoom: {type: String, required: true, unique: true, index: true},
     displayName: {type: String, default: "jHarvard", required: true, unique: false},
-    email: {type: String, default: "@college.harvard.edu", required: true, unique: true},
+    email: {type: String, default: "@college.harvard.edu", required: true, unique: false},
     customUsername: {type: String, required: false, unique: false, index: true},
     customCode: {type: String, default: "abcde", unique: false, index: true},
     customLoggedInStatus: {type: Number, default: 0, unique: false, index: true},
