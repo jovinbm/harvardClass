@@ -66,7 +66,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 var id = cuid();
                 var socketRoom = cuid();
                 var displayName = username;
-                var email = 'user@example.com';
+                var email = cuid() + '@example.com';
 
                 var user = new HarvardUser({
                     id: id,
@@ -88,11 +88,10 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
 
                 userDB.saveHarvardUser(user, saveError, saveError, saveSuccess);
 
-            }else{
+            } else {
                 done(new Error("ERROR: app.js: passport.use: Incorrect Password"));
             }
         }
-
     ));
 
     passport.serializeUser(function (user, done) {
