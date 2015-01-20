@@ -10,40 +10,35 @@
     <h4>
         <span>
             {{question[0].heading}}
+            <small class="senderName">by {{question[0].senderName}}</small>
         </span>
     </h4>
 
 
     <ul class="media-list">
         <li class="media main-media" ng-class="questionReference[currentQuestion].questionClass">
-            <a class="media-left media-top"
-               href="#"
-               target="_self">
-                <p class="userName">{{question[0].senderName}}</p>
-            </a>
-
             <div class="media-body">
 
                 <p ta-bind ng-model="question[0].question"></p>
+            </div>
 
-                <small class="questionTime">{{questionReference[currentQuestion].questionTime}}</small>
+            <small class="questionTime">{{questionReference[currentQuestion].questionTime}}</small>
 
-                <div class="pull-right">
-                    <a type="button"
-                       class="btn btn-primary btn-xs add"
-                       ng-click="isCollapsed = !isCollapsed">
-                        <i class="fa fa-plus"></i> Add
-                    </a>
+            <div class="pull-right">
+                <a type="button"
+                   class="btn btn-primary btn-xs add"
+                   ng-click="isCollapsed = !isCollapsed">
+                    <i class="fa fa-plus"></i> Add
+                </a>
 
-                    <button type='button'
-                            ng-class="questionReference[currentQuestion].buttonClass"
-                            ng-disabled="questionReference[currentQuestion].ifDisabled"
-                            ng-click="upvote(currentQuestion, $event)">
+                <button type='button'
+                        ng-class="questionReference[currentQuestion].buttonClass"
+                        ng-disabled="questionReference[currentQuestion].ifDisabled"
+                        ng-click="upvote(currentQuestion, $event)">
 
-                        <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 
-                    </button>
-                </div>
+                </button>
             </div>
         </li>
         <li>
