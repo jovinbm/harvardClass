@@ -24,7 +24,6 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
             var socketRoom = cuid();
             var displayName = profile.displayName || "Harvard Member";
             var email = profile.emails[0].value || cuid() + "@harvardclass.com";
-            console.log(JSON.stringify(id));
 
             //defining all callbacks
             function error(status, err) {
