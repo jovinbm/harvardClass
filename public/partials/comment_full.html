@@ -3,10 +3,12 @@
         ng-repeat="eachComment in comments"
         ng-class="cmntsReference[eachComment.commentIndex].commentClass">
 
-        <p ta-bind
-           ng-model="eachComment.comment"
-           class="text-outputs comment-p">
-        </p>
+        <div class="comment-p-div">
+            <p ta-bind
+               ng-model="eachComment.comment"
+               class="text-outputs comment-p">
+            </p>
+        </div>
         <small class="comment-name">{{eachComment.senderName}}</small>
 
         <small class="commentTime">{{cmntsReference[eachComment.commentIndex].commentTime}}</small>
