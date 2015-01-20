@@ -6,9 +6,15 @@ angular.module('qaApp')
         return function (obj) {
             var result = [];
             var keys = Object.keys(obj);
-            keys.sort().reverse();
+            var parsedKeys = keys.map(function (x) {
+                return parseInt(x);
+            });
+            parsedKeys.sort(function (a, b) {
+                return a - b;
+            }).reverse();
+            console.log(parsedKeys);
             for (var i = 0, len = keys.length; i < len; i++) {
-                result.push(obj[keys[i]]);
+                result.push(obj[parsedKeys[i]]);
             }
             return result;
         };
