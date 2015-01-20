@@ -21,34 +21,35 @@
     <ul class="media-list">
         <li class="media main-media" ng-repeat="eachQuestion in questions"
             ng-class="questionReference[eachQuestion.questionIndex].questionClass">
-            <a class="media-left media-top"
-               href="#"
-               target="_self">
-                <p class="userName">{{eachQuestion.senderName}}</p>
-            </a>
 
             <div class="media-body">
-                <h4 class="media-heading">{{eachQuestion.heading}}</h4>
+
+                <h4 class="media-heading">
+                    <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}">
+                        {{eachQuestion.heading}}
+                    </a>
+                    <small class="senderName">by {{eachQuestion.senderName}}</small>
+                </h4>
 
                 <p ta-bind ng-model="eachQuestion.question"></p>
+            </div>
 
-                <small class="questionTime">{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
+            <small class="questionTime">{{questionReference[eachQuestion.questionIndex].questionTime}}</small>
 
-                <div class="pull-right">
-                    <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}"
-                       type="button"
-                       class="btn btn-default btn-xs conv">
-                        <i class="fa fa-comments-o"></i>
-                    </a>
-                    <button type='button'
-                            ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
-                            ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
-                            ng-click="upvote(eachQuestion.questionIndex, $event)">
+            <div class="pull-right question-buttons">
+                <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}"
+                   type="button"
+                   class="btn btn-default btn-xs conv">
+                    <i class="fa fa-comments-o"></i>
+                </a>
+                <button type='button'
+                        ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
+                        ng-disabled="questionReference[eachQuestion.questionIndex].ifDisabled"
+                        ng-click="upvote(eachQuestion.questionIndex, $event)">
 
-                        <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 
-                    </button>
-                </div>
+                </button>
             </div>
         </li>
     </ul>
