@@ -1,7 +1,7 @@
 /**
  * Created by jovinbm on 1/12/15.
  */
-angular.module('qaApp', ['textAngular', 'ngSanitize', 'ui.bootstrap', 'ngRoute'])
+angular.module('qaApp', ['ngAnimate','textAngular', 'ngSanitize', 'ui.bootstrap', 'ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/', {
