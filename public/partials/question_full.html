@@ -7,20 +7,17 @@
        ng-click="changeTab('home')">
         <i class="fa fa-arrow-left"></i> Question Feed
     </a>
-    <h4>
-        <span>
-            {{question[0].heading}}
-            <small class="senderName">by {{question[0].senderName}}</small>
-        </span>
+
+    <h4 class="text-outputs">
+        {{question[0].heading}}
+        <small class="senderName">by {{question[0].senderName}}</small>
     </h4>
 
 
-    <ul class="media-list">
-        <li class="media main-media" ng-class="questionReference[currentQuestion].questionClass">
-            <div class="media-body">
-
-                <p ta-bind ng-model="question[0].question"></p>
-            </div>
+    <ul class="list-unstyled">
+        <li class="list-unstyled question-full-li"
+            ng-class="questionReference[currentQuestion].questionClass">
+            <p ta-bind ng-model="question[0].question" class="text-outputs"></p>
 
             <small class="questionTime">{{questionReference[currentQuestion].questionTime}}</small>
 
@@ -30,23 +27,21 @@
                    ng-click="isCollapsed = !isCollapsed">
                     <i class="fa fa-plus"></i> Add
                 </a>
-
                 <button type='button'
                         ng-class="questionReference[currentQuestion].buttonClass"
                         ng-disabled="questionReference[currentQuestion].ifDisabled"
                         ng-click="upvote(currentQuestion, $event)">
-
                     <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-
                 </button>
             </div>
         </li>
+
         <li>
             <div collapse="!isCollapsed"
                  ng-controller="CommentCtrl"
                  class="comment_input">
                 <div text-angular
-                     ta-toolbar="[['pre','h6','bold','italics','underline','quote','ul','ol','undo','redo','indent','outdent']]"
+                     ta-toolbar="[['pre','h6','bold','italics','underline','insertLink','quote','ul','ol','undo','redo','indent','outdent']]"
                      ng-model="theComment"
                      required
                      placeholder="Your comment here">
@@ -67,6 +62,7 @@
                 </div>
             </div>
         </li>
+
         <li>
             <ul>
                 <div comment-full></div>

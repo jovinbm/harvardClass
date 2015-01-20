@@ -1,37 +1,36 @@
 <div ng-controller="qFeedCtrl"
      ng-class="columnClass">
     <h5>
-                <span>
-                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                    Question Feed
-                </span>
-                <span class="hidden-sm hidden-md hidden-lg">
-                        <a type="button"
-                           class="btn btn-primary btn-xs pull-right"
-                           href="#myModal"
-                           target="_self"
-                           role="button"
-                           data-toggle="modal">
-                            <i class="fa fa-pencil"></i> New Question
-                        </a>
-                </span>
+        <span>
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            Question Feed
+        </span>
+        <span class="hidden-sm hidden-md hidden-lg">
+            <a type="button"
+               class="btn btn-primary btn-xs pull-right"
+               href="#myModal"
+               target="_self"
+               role="button"
+               data-toggle="modal">
+                <i class="fa fa-pencil"></i> New Question
+            </a>
+        </span>
     </h5>
 
-
-    <ul class="media-list">
-        <li class="media main-media" ng-repeat="eachQuestion in questions"
+    <ul class="list-unstyled">
+        <li class="list-unstyled question-feed-li"
+            ng-repeat="eachQuestion in questions"
             ng-class="questionReference[eachQuestion.questionIndex].questionClass">
 
-            <div class="media-body">
+            <h4 class="text-outputs">
+                <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}">
+                    {{eachQuestion.heading}}
+                </a>
+                <small class="senderName">by {{eachQuestion.senderName}}</small>
+            </h4>
 
-                <h4 class="media-heading">
-                    <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}">
-                        {{eachQuestion.heading}}
-                    </a>
-                    <small class="senderName">by {{eachQuestion.senderName}}</small>
-                </h4>
-
-                <p ta-bind ng-model="eachQuestion.question"></p>
+            <div ta-bind ng-model="eachQuestion.question"
+                 class="text-outputs">
             </div>
 
             <small class="questionTime">{{questionReference[eachQuestion.questionIndex].questionTime}}</small>

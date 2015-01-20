@@ -3,7 +3,7 @@
     display: none !important;
 }
 
-/*body*/
+/*defaults*/
 body {
     padding-top: 70px;
     padding-bottom: 70px;
@@ -14,40 +14,55 @@ body {
     font-size: 10px;
 }
 
-.userName {
-    font-size: 12px;
-}
-
-/*
-questions feed
-*/
-.main-media {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    width: 100%;
-}
-
-.media-body, .media-list {
-    width: 100%;
-}
-
-div.media-body > p > p {
-    margin-bottom: 5px;
-}
-
 .conv {
     width: 40px;
-}
-
-.userName {
-    font-weight: bold;
-    color: #0b97c4;
 }
 
 .questionTime, .commentTime, .senderName {
     color: darkgray;
     font-size: 10px;
+}
+
+.userName {
+    font-weight: bold;
+    color: #0b97c4;
+    font-size: 12px;
+}
+
+.comment-full-li {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.comment-name {
+    color: #0b97c4;
+}
+
+.comment-p > p {
+    margin-bottom: 5px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.text-outputs {
+    word-wrap: break-word;
+}
+
+/*
+questions feed
+*/
+.question-feed-li {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.question-full-li {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 /*question input field/modal*/
@@ -63,11 +78,6 @@ div.media-body > p > p {
 /*comment input rich text editor*/
 .comment_input {
     margin: 10px 0 40px 0;
-}
-
-/*trending*/
-body > div.container > div > div > div.ng-scope > div > ul > li.list-group-item {
-    padding: 7px;
 }
 
 /*bottom nav bar
@@ -86,8 +96,4 @@ span.hidden-sm.hidden-md.hidden-lg > a:focus {
 ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a,
 #trending {
     color: #0b97c4;
-}
-
-a:hover {
-    text-decoration: none;
 }
