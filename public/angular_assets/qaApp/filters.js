@@ -12,7 +12,6 @@ angular.module('qaApp')
             parsedKeys.sort(function (a, b) {
                 return a - b;
             }).reverse();
-            console.log(parsedKeys);
             for (var i = 0, len = keys.length; i < len; i++) {
                 result.push(obj[parsedKeys[i]]);
             }

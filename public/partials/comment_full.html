@@ -18,7 +18,7 @@
                 <a type="button"
                    ng-class="cmntsReference[eachComment.commentIndex].buttonClass"
                    ng-disabled="cmntsReference[eachComment.commentIndex].ifDisabled"
-                   ng-click="promote(questionOnView, eachComment.commentIndex, eachComment.uniqueId, $event)">
+                   ng-click="promote(currentQuestion, eachComment.commentIndex, eachComment.uniqueId, $event)">
                     <i class="fa fa-angle-up"></i>
                 </a>
             </div>
