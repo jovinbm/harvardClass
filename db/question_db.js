@@ -41,7 +41,10 @@ module.exports = {
             if (err) {
                 error_neg_1(-1, err);
             } else {
-                success(savedQuestion);
+                //this returns an object. Make an array out of it
+                var temp = [];
+                temp.push(savedQuestion);
+                success(temp);
             }
         });
     },

@@ -96,7 +96,9 @@ angular.module('qaApp')
             currentQuestionIndex: function (newCurrentQuestionIndex) {
                 if (newCurrentQuestionIndex) {
                     currentQuestionIndex = currentQuestionIndex + newCurrentQuestionIndex;
+                    console.log(currentQuestionIndex);
                 } else {
+                    console.log(currentQuestionIndex);
                     return currentQuestionIndex;
                 }
             }
