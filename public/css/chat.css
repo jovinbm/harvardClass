@@ -41,6 +41,14 @@ body {
     font-size: 12px;
 }
 
+.edit-input-div {
+    padding-top: 10px;
+}
+
+div > div > div > li > div {
+    padding-top: 10px;
+}
+
 .comment-full-li {
     border-bottom: 1px solid #ccc;
     padding-bottom: 5px;

@@ -1,5 +1,5 @@
 <li>
-    <div class="edit_input">
+    <div class="edit-input-div">
         <form name="editForm"
               id="edit_input"
               novalidate="novalidate">
@@ -10,7 +10,7 @@
                          editForm.qheading.$error.maxlength,
                          'has-success': !editForm.qheading.$invalid
                          }">
-                <label for="heading" class="hidden-xs">Heading</label>
+                <label for="heading">Heading</label>
                 <input class="form-control input-sm"
                        id="heading"
                        name="qheading"
@@ -33,16 +33,16 @@
             </div>
             <div class="form-group"
                  ng-class="{
-                 'has-error': editForm.qQuestion.$error.required,
-                 'has-success': !editForm.qQuestion.$invalid
+                 'has-error': editForm.qQuestionEdit.$error.required,
+                 'has-success': !editForm.qQuestionEdit.$invalid
                  }">
                 <div text-angular
                      ta-toolbar="[['pre','h6','bold','italics','underline','insertLink','quote','ul','ol','undo','redo','indent','outdent']]"
-                     name="qQuestion"
+                     name="qQuestionEdit"
                      ng-model="theEditedQuestion"
                      required>
                 </div>
-                <p ng-show="editForm.qQuestion.$error.required && editForm.qQuestion.$dirty"
+                <p ng-show="editForm.qQuestionEdit.$error.required && editForm.qQuestionEdit.$dirty"
                    class="form-error-notice">This field is required</p>
             </div>
 
