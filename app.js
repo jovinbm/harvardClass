@@ -119,6 +119,7 @@ app.post('/api/reconnect', authenticate.ensureAuthenticated, basicAPI.reconnect)
 app.post('/api/getQuestions', authenticate.ensureAuthenticated, questionAPI.getQuestions);
 app.post('/api/retrieveQuestion', authenticate.ensureAuthenticated, questionAPI.retrieveQuestion);
 app.post('/api/newQuestion', authenticate.ensureAuthenticated, questionAPI.newQuestion);
+app.post('/api/updateQuestion', authenticate.ensureAuthenticated, questionAPI.updateQuestion);
 app.post('/api/newUpvote', authenticate.ensureAuthenticated, questionAPI.newUpvote);
 
 app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);

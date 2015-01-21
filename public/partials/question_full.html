@@ -8,31 +8,52 @@
         <i class="fa fa-arrow-left"></i> Question Feed
     </a>
 
-    <h4 class="text-outputs">
-        {{question[0].heading}}
-        <small class="senderName">by {{question[0].senderName}}</small>
-    </h4>
-
 
     <ul class="list-unstyled">
         <li class="list-unstyled question-full-li"
             ng-class="questionReference[currentQuestion].questionClass">
-            <p ta-bind ng-model="question[0].question" class="text-outputs"></p>
 
-            <small class="questionTime">{{questionReference[currentQuestion].questionTime}}</small>
+            <div ng-switch on="viewMode">
 
-            <div class="pull-right">
-                <a type="button"
-                   class="btn btn-primary btn-xs add"
-                   ng-click="isCollapsed = !isCollapsed">
-                    <i class="fa fa-plus"></i> Add
-                </a>
-                <button type='button'
-                        ng-class="questionReference[currentQuestion].buttonClass"
-                        ng-disabled="questionReference[currentQuestion].ifDisabled"
-                        ng-click="upvote(currentQuestion, $event)">
-                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-                </button>
+                <!--full question view-->
+                <div ng-switch-when="full">
+                    <h4 class="text-outputs">
+                        {{question[0].heading}}
+                        <small class="senderName">by {{question[0].senderName}}</small>
+                    </h4>
+
+                    <p ta-bind ng-model="question[0].question" class="text-outputs"></p>
+
+                    <small class="questionTime">{{questionReference[currentQuestion].questionTime}}</small>
+
+                    <div class="pull-right">
+
+                        <a ng-click="changeViewMode('edit')"
+                           type="button"
+                           class="btn btn-default btn-xs conv"
+                           ng-show="question[0].senderCuid == uniqueCuid">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
+
+                        <a type="button"
+                           class="btn btn-primary btn-xs add"
+                           ng-click="changeCollapse()">
+                            <i class="fa fa-plus"></i> Add
+                        </a>
+                        <button type='button'
+                                ng-class="questionReference[currentQuestion].buttonClass"
+                                ng-disabled="questionReference[currentQuestion].ifDisabled"
+                                ng-click="upvote(currentQuestion, $event)">
+                            <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!--edit question view-->
+                <div ng-switch-when="edit">
+                    <div question-edit></div>
+                </div>
+
             </div>
         </li>
 

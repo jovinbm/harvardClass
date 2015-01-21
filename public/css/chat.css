@@ -14,6 +14,10 @@ body {
     font-size: 10px;
 }
 
+.btn.pull-right {
+    margin-right: 3px;
+}
+
 .conv {
     width: 40px;
 }

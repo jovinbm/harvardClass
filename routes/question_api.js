@@ -75,6 +75,28 @@ module.exports = {
     },
 
 
+    updateQuestion: function (req, res) {
+        basic.consoleLogger('UPDATE_QUESTION event received');
+        var theQuestion = req.body;
+
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'ERROR: updateQuestionPOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: updateQuestionPOST: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theHarvardUser) {
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                question_handler.updateQuestion(req, res, theHarvardUser, theQuestion);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findHarvardUser(req.user.id, error, error, success);
+    },
+
+
     newUpvote: function (req, res) {
         basic.consoleLogger('NEW_UPVOTE event received');
         var upvotedIndex = req.body.upvoteIndex;

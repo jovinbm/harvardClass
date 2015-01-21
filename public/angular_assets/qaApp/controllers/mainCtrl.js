@@ -6,6 +6,8 @@ angular.module('qaApp')
         function ($window, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, logoutService, stateService) {
 
             $scope.customUsername = globals.customUsername();
+            $scope.uniqueCuid = globals.uniqueCuid();
+            $scope.uniqueCuid = globals.uniqueCuid();
             $scope.questionReference = detailStorage.getReference();
             $scope.questionOnView = stateService.questionOnView();
             $scope.tab = stateService.tab();
@@ -56,7 +58,8 @@ angular.module('qaApp')
             socketService.getSocketRoom()
                 .success(function (data) {
                     globals.socketRoom(data.socketRoom);
-                    globals.customUsername(data.customUsername);
+                    $scope.customUsername = globals.customUsername(data.customUsername);
+                    $scope.uniqueCuid = globals.uniqueCuid(data["uniqueCuid"]);
                     socket.emit('joinRoom', {
                         room: data.socketRoom,
                         customUsername: data.customUsername
@@ -72,6 +75,7 @@ angular.module('qaApp')
                     .success(function (resp) {
                         var questionArray = resp.questionsArray;
 
+                        $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);
                         globals.upvotedIndexes(resp.upvotedIndexes);
                         globals.currentQuestionIndex(resp.currentQuestionIndex);
                         $scope.questionReference = detailStorage.add(questionArray, true);
@@ -91,6 +95,7 @@ angular.module('qaApp')
                     .success(function (resp) {
                         var questionArray = resp.questionsArray;
 
+                        $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);
                         globals.upvotedIndexes(resp.upvotedIndexes);
                         globals.currentQuestionIndex(resp.currentQuestionIndex);
                         $scope.questionReference = detailStorage.add(questionArray, true);

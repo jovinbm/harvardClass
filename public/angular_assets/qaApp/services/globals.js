@@ -6,6 +6,7 @@ angular.module('qaApp')
 
     .factory('globals', ['$rootScope', function ($rootScope) {
         var myCustomUsername;
+        var myUniqueCuid;
         var mySocketRoom;
         var usersOnline = {};
         var currentQuestions = {};
@@ -20,6 +21,15 @@ angular.module('qaApp')
                     return myCustomUsername;
                 } else {
                     return myCustomUsername;
+                }
+            },
+
+            uniqueCuid: function (newUniqueCuid) {
+                if (newUniqueCuid) {
+                    myUniqueCuid = newUniqueCuid;
+                    return myUniqueCuid;
+                } else {
+                    return myUniqueCuid;
                 }
             },
 
@@ -85,7 +95,7 @@ angular.module('qaApp')
 
             currentQuestionIndex: function (newCurrentQuestionIndex) {
                 if (newCurrentQuestionIndex) {
-                    currentQuestionIndex = newCurrentQuestionIndex;
+                    currentQuestionIndex = currentQuestionIndex + newCurrentQuestionIndex;
                 } else {
                     return currentQuestionIndex;
                 }

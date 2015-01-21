@@ -22,24 +22,43 @@ angular.module('qaApp')
 
             socket.on('newQuestion', function (questionObject) {
                 console.log("'newQuestion' event received");
-                var tempQuestionArray = [];
                 globals.currentQuestionIndex(questionObject.index);
-                tempQuestionArray.push(questionObject.question);
-                detailStorage.add(tempQuestionArray, true);
-                $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(tempQuestionArray));
+                detailStorage.add(questionObject["question"], true);
+                $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(questionObject["question"]));
             });
         }])
 
 
-    .controller('qFullCtrl', ['$window', '$scope', '$routeParams', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'questionService',
-        function ($window, $scope, $routeParams, globals, detailStorage, sortObjectToArrayFilter, stateService, questionService) {
+    .controller('qFullCtrl', ['$window', '$scope', 'socket', '$routeParams', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'questionService',
+        function ($window, $scope, socket, $routeParams, globals, detailStorage, sortObjectToArrayFilter, stateService, questionService) {
             $scope.currentQuestion = stateService.questionOnView($routeParams.index);
+            $scope.question = [];
+
             $scope.changeTab('home');
             $scope.changeState('qFull');
+
+            //2 view modes, edit and full
+            $scope.viewMode = 'full';
+            $scope.changeViewMode = function (newViewMode) {
+                $scope.viewMode = newViewMode;
+            };
+
+            $scope.saveEditedPost = function (finalHeading, finalQuestion) {
+                var temp = {};
+                temp["heading"] = finalHeading;
+                temp["question"] = finalQuestion;
+                temp["questionIndex"] = $scope.currentQuestion;
+                questionService.postEditedQuestion(temp)
+                    .success(function (resp) {
+                        $scope.changeViewMode('full');
+                    });
+            };
 
             questionService.retrieveQuestion($scope.currentQuestion)
                 .success(function (resp) {
                     $scope.question = resp.question;
+                    $scope.theEditedHeading = $scope.question[0].heading;
+                    $scope.theEditedQuestion = $scope.question[0]["question"];
                     globals.upvotedIndexes(resp.upvotedIndexes);
                     $scope.questionReference = detailStorage.add(resp.question, true)
                 })
@@ -53,6 +72,14 @@ angular.module('qaApp')
             $scope.changeCollapse = function () {
                 $scope.isCollapsed = !$scope.isCollapsed;
             };
+
+            socket.on('newQuestion', function (questionObject) {
+                console.log("'newQuestion' event received");
+                globals.currentQuestionIndex(questionObject.index);
+                detailStorage.add(questionObject["question"], true);
+                globals.currentQuestions(questionObject["question"], true);
+                $scope.question = questionObject["question"];
+            });
 
         }])
 

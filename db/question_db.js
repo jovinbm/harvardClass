@@ -17,12 +17,21 @@ module.exports = {
             senderName: theHarvardUser.customUsername,
             senderDisplayName: theHarvardUser.displayName,
             senderEmail: theHarvardUser.email,
-            senderOpenId: theHarvardUser.id,
+            senderCuid: theHarvardUser.uniqueCuid,
             heading: questionObject.heading,
             question: questionObject.question,
             shortQuestion: questionObject.shortQuestion,
             votes: 0
         });
+        success(question);
+    },
+
+    makeQuestionUpdate: function (questionObject, theHarvardUser, success) {
+        var question = {
+            "heading": questionObject.heading,
+            "question": questionObject.question,
+            "shortQuestion": questionObject.shortQuestion
+        };
         success(question);
     },
 
@@ -35,6 +44,24 @@ module.exports = {
                 success(savedQuestion);
             }
         });
+    },
+
+
+    updateQuestion: function (questionObject, questionIndex, error_neg_1, error_0, success) {
+        Question.update({questionIndex: questionIndex},
+            {
+                $set: {
+                    question: questionObject["question"],
+                    heading: questionObject["heading"],
+                    shortQuestion: questionObject["shortQuestion"]
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            })
     },
 
 

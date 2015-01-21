@@ -31,6 +31,21 @@ angular.module('qaApp')
                 return $http.post('/api/newQuestion', questionToDatabase);
             },
 
+            postEditedQuestion: function (questionObject) {
+                var shortQuestion = "";
+                //trim 130 characters to be used for top voted
+                if (questionObject["question"].length > 130) {
+                    for (var i = 0; i < 130; i++) {
+                        shortQuestion = shortQuestion + questionObject["question"][i];
+                    }
+                    shortQuestion = shortQuestion + "...";
+                } else {
+                    shortQuestion = questionObject["question"];
+                }
+                questionObject["shortQuestion"] = shortQuestion;
+                return $http.post('/api/updateQuestion', questionObject);
+            },
+
             postUpvote: function (upvoteIndex) {
                 var upvoteToDatabase = {
                     "upvoteIndex": upvoteIndex

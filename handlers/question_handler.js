@@ -63,6 +63,46 @@ module.exports = {
         }
     },
 
+    updateQuestion: function (req, res, theHarvardUser, theQuestion) {
+        basic.consoleLogger('updateQuestion: UPDATE_QUESTION event handler called');
+        var thisQuestionIndex = theQuestion.questionIndex;
+        //query the recent question's index
+        if (!(/^\s+$/.test(theQuestion.heading)) &&
+            theQuestion.heading.length != 0 && !(/^\s+$/.test(theQuestion.question)) &&
+            theQuestion.question.length != 0) {
+
+            function error(status, err) {
+                basic.consoleLogger("ERROR: updateQuestion event_Handler: " + err);
+                res.status(500).send({msg: 'ERROR: updateQuestion Event Handler: ', err: err});
+                basic.consoleLogger("updateQuestion failed!")
+            }
+
+            function made(question) {
+                function updated() {
+                    function done(questionObject) {
+                        ioJs.emitToAll('newQuestion', {
+                            "question": questionObject,
+                            "index": 1
+                        });
+                        res.status(200).send({msg: 'updateQuestion success'});
+                        basic.consoleLogger('updateQuestion: Success');
+                    }
+
+                    questionDB.getOneQuestion(thisQuestionIndex, error, error, done);
+                }
+
+                questionDB.updateQuestion(question, thisQuestionIndex, error, error, updated);
+            }
+
+            questionDB.makeQuestionUpdate(theQuestion, theHarvardUser, made);
+
+        } else {
+            //the question does not pass the checks
+            res.status(500).send({msg: 'newQuestion did not pass checks'});
+            basic.consoleLogger('newQuestion: Not executed: Did not pass checks');
+        }
+    },
+
 
     newUpvote: function (req, res, theHarvardUser, upvotedIndex) {
         basic.consoleLogger("newUpvote: newUpvote event handler called");
@@ -119,7 +159,7 @@ module.exports = {
                 basic.consoleLogger('getQuestions: failed!');
             } else if (status == 0) {
                 temp['questionsArray'] = [];
-                temp['currentQuestionIndex'] = currentQuestionIndex;
+                temp['currentQuestionIndex'] = 0;
                 basic.consoleLogger('getQuestions: Did not find any questions');
             }
         }
@@ -127,7 +167,7 @@ module.exports = {
 
         function success(questionArray) {
             temp['questionArray'] = questionArray;
-            temp['currentQuestionIndex'] = currentQuestionIndex + questionArray.length;
+            temp['currentQuestionIndex'] = questionArray.length;
             res.status(200).send(temp);
         }
 

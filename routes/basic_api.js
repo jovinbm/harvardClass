@@ -40,7 +40,8 @@ module.exports = {
             if (theHarvardUser.customLoggedInStatus == 1) {
                 res.send({
                     socketRoom: theHarvardUser.socketRoom,
-                    customUsername: theHarvardUser.customUsername
+                    customUsername: theHarvardUser.customUsername,
+                    uniqueCuid: theHarvardUser.uniqueCuid
                 });
             }
             //TODO -- redirect to custom login

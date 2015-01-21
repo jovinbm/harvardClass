@@ -31,7 +31,7 @@ module.exports = {
             senderName: theHarvardUser.customUsername,
             senderDisplayName: theHarvardUser.displayName,
             senderEmail: theHarvardUser.email,
-            senderOpenId: theHarvardUser.id,
+            senderCuid: theHarvardUser.uniqueCuid,
             comment: commentObject.comment,
             shortComment: commentObject.shortComment,
             votes: 0

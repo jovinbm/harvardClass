@@ -21,6 +21,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
         },
         function (identifier, profile, done) {
             var id = identifier;
+            var uniqueCuid = cuid();
             var socketRoom = cuid();
             var displayName = profile.displayName || "Harvard Member";
             var email = profile.emails[0].value || cuid() + "@harvardclass.com";
@@ -31,6 +32,7 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
                 if (status == -1 || status == 0) {
                     var user = new HarvardUser({
                         id: id,
+                        uniqueCuid: uniqueCuid,
                         socketRoom: socketRoom,
                         displayName: displayName,
                         email: email
@@ -64,12 +66,14 @@ module.exports = function (passport, OpenIDStrategy, LocalStrategy) {
         function (username, password, done) {
             if (username == password) {
                 var id = cuid();
+                var uniqueCuid = cuid();
                 var socketRoom = cuid();
                 var displayName = username;
                 var email = cuid() + '@harvardclass.com';
 
                 var user = new HarvardUser({
                     id: id,
+                    uniqueCuid: uniqueCuid,
                     socketRoom: socketRoom,
                     displayName: displayName,
                     email: email

@@ -47,6 +47,13 @@ angular.module('qaApp')
             }
         }
     }])
+    .directive('questionEdit', [function () {
+        return {
+            templateUrl: 'public/partials/modals/question_edit.html',
+            link: function ($scope, $element, $attrs) {
+            }
+        }
+    }])
     .directive('commentFull', ['socket', 'socketService', 'commentService', function (socket, socketService, commentService) {
         return {
             templateUrl: 'public/partials/comment_full.html',

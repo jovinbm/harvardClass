@@ -17,6 +17,7 @@ module.exports = {
 
         var temp = {};
         temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
+        temp['uniqueCuid'] = theHarvardUser.uniqueCuid;
         //get some Questions
 
         function getQuestionsErr(status, err) {
@@ -55,7 +56,7 @@ module.exports = {
 
         function success(questionsArray) {
             temp['questionsArray'] = questionsArray;
-            temp['currentQuestionIndex'] = questionsArray.length - 1
+            temp['currentQuestionIndex'] = questionsArray.length;
             getTop();
         }
 
@@ -65,11 +66,11 @@ module.exports = {
 
     reconnect: function (req, res, theHarvardUser, currentQuestionIndex) {
         basic.consoleLogger('reconnect: RECONNECT handler called');
-        basic.consoleLogger(currentQuestionIndex)
         var limit = 30;
         ioJs.emitToOne(theHarvardUser.socketRoom, "usersOnline", online.getUsersOnline());
 
         var temp = {};
+        temp['uniqueCuid'] = theHarvardUser.uniqueCuid;
         temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
         //get some Questions
 
@@ -109,7 +110,7 @@ module.exports = {
 
         function success(questionsArray) {
             temp['questionsArray'] = questionsArray;
-            temp['currentQuestionIndex'] = questionsArray.length + currentQuestionIndex;
+            temp['currentQuestionIndex'] = questionsArray.length;
             getTop();
         }
 
