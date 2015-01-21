@@ -10,6 +10,14 @@ body {
     font-size: 12px;
 }
 
+.form-error-notice {
+    color: rgb(169, 68, 66);
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
 .btn {
     font-size: 10px;
 }
@@ -82,6 +90,10 @@ questions feed
     font-family: inherit;
     font-size: 100%;
     margin: 10px 0 10px 0;
+}
+
+.question-modal-notice {
+    color: rgb(138, 109, 59);
 }
 
 /*comment input rich text editor*/
