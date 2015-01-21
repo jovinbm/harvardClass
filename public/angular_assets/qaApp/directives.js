@@ -16,6 +16,16 @@ angular.module('qaApp')
             }
         }
     }])
+    .directive('modalQuestionInput', function () {
+        return {
+            restrict: 'A',
+            link: function ($scope, $element, attr) {
+                $scope.dismiss = function () {
+                    $element.modal('hide');
+                };
+            }
+        }
+    })
     .directive('questionModal', [function () {
         return {
             templateUrl: 'public/partials/modals/question_input.html',

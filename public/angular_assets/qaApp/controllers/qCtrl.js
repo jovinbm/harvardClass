@@ -71,6 +71,7 @@ angular.module('qaApp')
                 }
                 $scope.theQuestion = '';
                 $scope.theHeading = '';
+                $scope.dismiss();
             };
 
         }]);

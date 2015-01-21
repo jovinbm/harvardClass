@@ -4,7 +4,12 @@
 angular.module('qaApp')
 
     .factory('socket', ['$location', '$rootScope', function ($location, $rootScope) {
-        var socket = io.connect($location.host());
+        if($location.port()){
+            var url = $location.host() + ":" + $location.port();
+        }else{
+            var url = $location.host();
+        }
+        var socket = io.connect(url);
         //return socket;
         return {
             on: function (eventName, callback) {

@@ -43,6 +43,11 @@ body {
     margin-bottom: 5px;
 }
 
+/*p tags inside comments rich text*/
+.comment-p-div > p > p {
+    margin-bottom: 5px;
+}
+
 a:hover {
     text-decoration: none;
 }

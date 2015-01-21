@@ -1,5 +1,6 @@
 <div id="myModal"
      class="modal fade"
+     modal-question-input
      tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel"
      aria-hidden="true"
@@ -48,17 +49,12 @@
                     </div>
                 </form>
 
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn" ng-click="dismiss()">Close</button>
                 <button type="submit"
                         class="btn btn-warning pull-right"
                         ng-click="ask()"
                         ng-disabled="askForm.$invalid"
                         data-dismiss="modal">ASK
-                </button>
-                <button type="submit"
-                        class="btn btn-info pull-right"
-                        ng-disabled="askForm.$invalid"
-                        data-dismiss="modal">clarify?
                 </button>
             </div>
         </div>
