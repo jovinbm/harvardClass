@@ -82,7 +82,7 @@ module.exports = {
                     function done(questionObject) {
                         ioJs.emitToAll('newQuestion', {
                             "question": questionObject,
-                            "index": 1
+                            "index": 0
                         });
                         res.status(200).send({msg: 'updateQuestion success'});
                         basic.consoleLogger('updateQuestion: Success');

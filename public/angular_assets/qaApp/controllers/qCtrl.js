@@ -91,14 +91,15 @@ angular.module('qaApp')
                     questionService.postQuestion({
                         "theQuestion": $scope.theQuestion,
                         "theHeading": $scope.theHeading
+                    }).success(function (resp) {
+                        $scope.theQuestion = '';
+                        $scope.theHeading = '';
+                        $scope.dismiss();
                     })
                         .error(function (errorResponse) {
                             $window.location.href = "/error/error500.html";
                         });
                 }
-                $scope.theQuestion = '';
-                $scope.theHeading = '';
-                $scope.dismiss();
             };
 
         }]);

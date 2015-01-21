@@ -27,6 +27,7 @@ module.exports = {
                 basic.consoleLogger('startUp: failed!');
             } else if (status == 0) {
                 temp['questionsArray'] = [];
+                temp['currentQuestionIndex'] = 0;
                 basic.consoleLogger('startUp: Did not find any questions, continuing');
                 getTop();
             }
