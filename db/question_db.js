@@ -30,8 +30,10 @@ module.exports = {
         var question = {
             "heading": questionObject.heading,
             "question": questionObject.question,
-            "shortQuestion": questionObject.shortQuestion
+            "shortQuestion": questionObject.shortQuestion,
+            "lastActivity": new Date()
         };
+        question.markModified('lastActivity');
         success(question);
     },
 
@@ -56,7 +58,8 @@ module.exports = {
                 $set: {
                     question: questionObject["question"],
                     heading: questionObject["heading"],
-                    shortQuestion: questionObject["shortQuestion"]
+                    shortQuestion: questionObject["shortQuestion"],
+                    lastActivity: questionObject["lastActivity"]
                 }
             }, function (err) {
                 if (err) {
@@ -94,6 +97,46 @@ module.exports = {
                 } else {
                     success(questionsArray);
                 }
+            });
+    },
+
+
+    getQuestionsRange: function (sort, currentQuestionIndex, limit, lastQuestionActivity, error_neg_1, error_0, success) {
+        var indexAddition = 0;
+        Question.find({questionIndex: {$gt: currentQuestionIndex}})
+            .sort({questionIndex: sort})
+            .limit(limit)
+            .exec(function (err, questionsArray) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    if (questionsArray == null || questionsArray == undefined || questionsArray.length == 0) {
+                        questionsArray = [];
+                    } else {
+                        indexAddition = questionsArray.length;
+                    }
+
+                    Question.find({
+                        lastActivity: {$gt: lastQuestionActivity},
+                        questionIndex: {$lte: currentQuestionIndex}
+                    })
+                        .sort({questionIndex: sort})
+                        .exec(function (err, questionsArray_byTime) {
+                            if (err) {
+                                error_neg_1(-1, err);
+                            } else if (questionsArray_byTime == null || questionsArray_byTime == undefined || questionsArray_byTime.length == 0) {
+                                if (questionsArray == []) {
+                                    error_0(0);
+                                } else {
+                                    success(questionsArray, indexAddition);
+                                }
+                            } else {
+                                questionsArray_byTime = questionsArray_byTime.concat(questionsArray);
+                                success(questionsArray_byTime, indexAddition);
+                            }
+                        })
+                }
+
             });
     },
 

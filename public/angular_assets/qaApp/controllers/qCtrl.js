@@ -7,6 +7,7 @@ angular.module('qaApp')
         function ($scope, socket, socketService, globals, detailStorage, sortObjectToArrayFilter, stateService) {
             $scope.$on("currentQuestions", function () {
                 $scope.questions = sortObjectToArrayFilter(globals.currentQuestions());
+                globals.questionActivity(true);
             });
 
             $scope.changeTab('home');
@@ -22,6 +23,7 @@ angular.module('qaApp')
 
             socket.on('newQuestion', function (questionObject) {
                 console.log("'newQuestion' event received");
+                globals.questionActivity(true);
                 globals.currentQuestionIndex(questionObject.index);
                 detailStorage.add(questionObject["question"], true);
                 $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(questionObject["question"]));
@@ -75,10 +77,13 @@ angular.module('qaApp')
 
             socket.on('newQuestion', function (questionObject) {
                 console.log("'newQuestion' event received");
+                globals.questionActivity(true);
                 globals.currentQuestionIndex(questionObject.index);
                 detailStorage.add(questionObject["question"], true);
                 globals.currentQuestions(questionObject["question"], true);
-                $scope.question = questionObject["question"];
+                if (questionObject["question"][0]["questionIndex"] == $scope.currentQuestion) {
+                    $scope.question = questionObject["question"];
+                }
             });
 
         }])

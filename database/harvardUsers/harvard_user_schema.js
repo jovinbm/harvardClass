@@ -18,7 +18,8 @@ var harvardUsersSchema = new Schema({
     postedCommentUniqueIds: {type: Array, "default": [], unique: false, index: true},
     votedQuestionIndexes: {type: Array, "default": [], unique: false, index: true},
     promotedCommentsUniqueIds: {type: Array, "default": [], unique: false, index: true},
-    time: {type: Date, default: Date.now, unique: false, index: true}
+    joinDate: {type: Date, default: Date.now, unique: false, index: true},
+    lastActivity: {type: Date, default: Date.now, index: true}
 });
 
 module.exports = harvardUsersSchema;

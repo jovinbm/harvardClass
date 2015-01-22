@@ -16,7 +16,8 @@ var questionSchema = new Schema({
     question: {type: String, required: true},
     shortQuestion: {type: String, required: true},
     votes: {type: Number, default: 0, index: true},
-    timeAsked: {type: Date, default: Date.now, index: true}
+    timeAsked: {type: Date, default: Date.now, index: true},
+    lastActivity: {type: Date, default: Date.now, index: true}
 });
 
 module.exports = questionSchema;

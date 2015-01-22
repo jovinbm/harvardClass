@@ -76,6 +76,7 @@ angular.module('qaApp')
                         var questionArray = resp.questionsArray;
 
                         $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);
+                        globals.questionActivity(true);
                         globals.upvotedIndexes(resp.upvotedIndexes);
                         globals.currentQuestionIndex(resp.currentQuestionIndex);
                         $scope.questionReference = detailStorage.add(questionArray, true);
@@ -93,6 +94,7 @@ angular.module('qaApp')
                 console.log("'reconnect' triggered");
                 socketService.reconnect()
                     .success(function (resp) {
+                        console.log(JSON.stringify(resp));
                         var questionArray = resp.questionsArray;
 
                         $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);

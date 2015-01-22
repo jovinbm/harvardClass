@@ -12,7 +12,7 @@ module.exports = {
 
     startUp: function (req, res, theHarvardUser) {
         basic.consoleLogger('startUp: STARTUP handler called');
-        var limit = 30;
+        var limit = 40;
         ioJs.emitToAll("usersOnline", online.getUsersOnline());
 
         var temp = {};
@@ -65,7 +65,7 @@ module.exports = {
     },
 
 
-    reconnect: function (req, res, theHarvardUser, currentQuestionIndex) {
+    reconnect: function (req, res, theHarvardUser, currentQuestionIndex, lastQuestionActivity) {
         basic.consoleLogger('reconnect: RECONNECT handler called');
         var limit = 30;
         ioJs.emitToOne(theHarvardUser.socketRoom, "usersOnline", online.getUsersOnline());
@@ -109,13 +109,13 @@ module.exports = {
             questionDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
         }
 
-        function success(questionsArray) {
+        function success(questionsArray, indexAddition) {
             temp['questionsArray'] = questionsArray;
-            temp['currentQuestionIndex'] = questionsArray.length;
+            temp['currentQuestionIndex'] = indexAddition;
             getTop();
         }
 
-        questionDB.getQuestions(-1, currentQuestionIndex, limit, getQuestionsErr, getQuestionsErr, success)
+        questionDB.getQuestionsRange(-1, currentQuestionIndex, limit, lastQuestionActivity, getQuestionsErr, getQuestionsErr, success)
     }
 
 

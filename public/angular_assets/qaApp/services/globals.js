@@ -13,6 +13,7 @@ angular.module('qaApp')
         var currentTop = [];
         var upvotedIndexes = [];
         var currentQuestionIndex = -1;
+        var lastQuestionActivity = new Date().toISOString();
 
         return {
             customUsername: function (newCustomUsername) {
@@ -39,6 +40,14 @@ angular.module('qaApp')
                 } else {
                     return mySocketRoom;
                 }
+            },
+
+            questionActivity: function (bool) {
+                if (bool) {
+                    lastQuestionActivity =  new Date();
+                    return lastQuestionActivity;
+                }
+                return lastQuestionActivity
             },
 
             currentQuestions: function (questionArray, broadcast) {

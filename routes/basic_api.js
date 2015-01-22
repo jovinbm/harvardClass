@@ -73,7 +73,9 @@ module.exports = {
 
     reconnect: function (req, res) {
         basic.consoleLogger('RECONNECT event received');
-        var currentQuestionIndex = req.body.currentQuestionIndex;
+        var currentQuestionIndex = req.body["currentQuestionIndex"];
+        var lastQuestionActivity = req.body["lastQuestionActivity"];
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({msg: 'reconnectPOST: Could not retrieve user', err: err});
@@ -83,7 +85,7 @@ module.exports = {
 
         function success(theHarvardUser) {
             if (theHarvardUser.customLoggedInStatus == 1) {
-                basic_handlers.reconnect(req, res, theHarvardUser, currentQuestionIndex);
+                basic_handlers.reconnect(req, res, theHarvardUser, currentQuestionIndex, lastQuestionActivity);
             }
             //TODO -- redirect to custom login
         }

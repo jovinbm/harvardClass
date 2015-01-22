@@ -3,8 +3,8 @@
  */
 angular.module('qaApp')
 
-    .controller('CommentCtrl', ['$scope', '$rootScope', 'globals', 'sortObjectToArrayFilter', 'commentService',
-        function ($scope, $rootScope, globals, sortObjectToArrayFilter, commentService) {
+    .controller('CommentCtrl', ['$window', '$scope', '$rootScope', 'globals', 'sortObjectToArrayFilter', 'commentService',
+        function ($window, $scope, $rootScope, globals, sortObjectToArrayFilter, commentService) {
 
             $scope.newComment = function (questionIndex) {
                 if ($scope.theComment.length != 0) {

@@ -4,9 +4,9 @@
 angular.module('qaApp')
 
     .factory('socket', ['$location', '$rootScope', function ($location, $rootScope) {
-        if($location.port()){
+        if ($location.port()) {
             var url = $location.host() + ":" + $location.port();
-        }else{
+        } else {
             var url = $location.host();
         }
         var socket = io.connect(url);
@@ -46,8 +46,10 @@ angular.module('qaApp')
             },
 
             reconnect: function () {
+                console.log(globals.questionActivity().getTime());
                 return $http.post('/api/reconnect', {
-                    "currentQuestionIndex": globals.currentQuestionIndex()
+                    "currentQuestionIndex": globals.currentQuestionIndex(),
+                    "lastQuestionActivity": globals.questionActivity().getTime()
                 })
             }
         }

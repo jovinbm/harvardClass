@@ -16,7 +16,8 @@ var commentSchema = new Schema({
     comment: {type: String, required: true},
     shortComment: {type: String, required: true},
     promotes: {type: Number, default: 0, index: true},
-    timePosted: {type: Date, default: Date.now, index: true}
+    timePosted: {type: Date, default: Date.now, index: true},
+    lastActivity: {type: Date, default: Date.now, index: true}
 });
 
 module.exports = commentSchema;
