@@ -33,7 +33,6 @@ module.exports = {
             "shortQuestion": questionObject.shortQuestion,
             "lastActivity": new Date()
         };
-        question.markModified('lastActivity');
         success(question);
     },
 
