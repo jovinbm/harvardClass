@@ -36,8 +36,12 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 
-    <!--normalize.css-->
-    <link rel="stylesheet" href="/bower_components/normalize.css/normalize.css"/>
+    <style>
+        body {
+            padding-top: 70px;
+            padding-bottom: 140px;
+        }
+    </style>
 
     <title>HarvardClass - Maintenance</title>
 </head>
@@ -80,8 +84,15 @@
 
         <h1>HARVARD CLASS</h1>
 
-        <p>"We have enriched the way people ask questions in class. Harvard Class was built with one goal only: To
-            bring a more dynamic Q/A classroom environment between the professor and students"</p>
+        <p class="hidden-xs">"We have enriched the way people ask questions in class. Harvard Class was built with one
+            goal
+            only: To
+            bring a more dynamic Q/A classroom environment between the professor and students"
+        </p>
+
+        <p class="hidden-sm hidden-md hidden-lg">The site is currently
+            under maintenance. It will be back shortly.
+        </p>
 
     </div>
 
@@ -91,11 +102,8 @@
 <!--start of login error message-->
 
 <!--to hide use:  style="display: none"-->
-<div class="container text-center">
-    <form id="harvardIdLoginForm">
-
-        <input type="hidden" name="openid_identifier" value="https://id.cs50.net/"/>
-
+<div class="container text-center hidden-xs">
+    <form>
         <button type="submit" class="btn btn-default btn-danger btn-lg btn-block" id="harvardID">The site is currently
             under maintenance. It will be back shortly
         </button>
