@@ -22,14 +22,17 @@
 
                 <p ng-show="editForm.qheading.$error.required && askForm.qheading.$dirty"
                    class="form-error-notice">This field is
-                    required</p>
+                    required
+                </p>
 
                 <p ng-show="editForm.qheading.$error.minlength && askForm.qheading.$dirty"
                    class="form-error-notice">At least 10
-                    characters</p>
+                    characters
+                </p>
 
                 <p ng-show="editForm.qheading.$error.maxlength"
-                   class="form-error-notice">At most 100 characters</p>
+                   class="form-error-notice">At most 100 characters
+               </p>
             </div>
             <div class="form-group"
                  ng-class="{
@@ -43,7 +46,8 @@
                      required>
                 </div>
                 <p ng-show="editForm.qQuestionEdit.$error.required && editForm.qQuestionEdit.$dirty"
-                   class="form-error-notice">This field is required</p>
+                   class="form-error-notice">This field is required
+               </p>
             </div>
 
             <div class="form-group clearfix">
