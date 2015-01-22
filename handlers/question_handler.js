@@ -106,6 +106,8 @@ module.exports = {
 
     newUpvote: function (req, res, theHarvardUser, upvotedIndex) {
         basic.consoleLogger("newUpvote: newUpvote event handler called");
+        var newUpvotedArray = theHarvardUser.votedQuestionIndexes;
+        newUpvotedArray.push(upvotedIndex);
         //push the new upvote's index to the respective upvoter
 
         function error(status, err) {
@@ -128,6 +130,7 @@ module.exports = {
                 function found(topVotedArrayOfObjects) {
 
                     ioJs.emitToAll('topVoted', topVotedArrayOfObjects);
+                    ioJs.emitToOne(theHarvardUser.socketRoom, 'upvotedIndexes', newUpvotedArray);
                     res.status(200).send({msg: 'newUpvote success'});
                     basic.consoleLogger('upvote: Success');
                 }
