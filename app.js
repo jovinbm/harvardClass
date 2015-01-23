@@ -111,6 +111,9 @@ app.post('/studentLogin', routes.studentLogin);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
+app.get('/error500.html', function (req, res) {
+    res.sendfile("public/error/error500.html");
+});
 
 app.post('/sendEmail', basicAPI.sendEmail);
 app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);

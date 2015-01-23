@@ -16,7 +16,7 @@ angular.module('qaApp')
                         $scope.changeCollapse();
                     })
                         .error(function (errorResponse) {
-                            $window.location.href = "/error/error500.html";
+                            $window.location.href = "/error500.html";
                         });
                 }
             };

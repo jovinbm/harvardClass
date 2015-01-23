@@ -11,7 +11,7 @@ angular.module('qaApp')
                         $window.location.href = "/login1.html";
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/public/error/error500.html";
+                        $window.location.href = "/error500.html";
                     });
             };
 
@@ -21,7 +21,7 @@ angular.module('qaApp')
                         $window.location.href = "/login.html";
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/public/error/error500.html";
+                        $window.location.href = "/error500.html";
                     });
             };
 

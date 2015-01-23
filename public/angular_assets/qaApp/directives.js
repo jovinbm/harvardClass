@@ -85,7 +85,7 @@ angular.module('qaApp')
                                 $scope.cmntsReference[commentIndex].ifDisabled = true;
                             })
                             .error(function (errResponse) {
-                                $window.location.href = "/public/error/error500.html";
+                                $window.location.href = "/error500.html";
                             });
                     };
 
@@ -130,7 +130,7 @@ angular.module('qaApp')
                             $scope.comments = sortObjectToArrayFilter(globals.currentComments(comments));
                         })
                         .error(function (errorResponse) {
-                            $window.location.href = "/error/error500.html";
+                            $window.location.href = "/error500.html";
                         });
                 }
             }

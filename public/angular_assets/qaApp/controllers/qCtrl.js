@@ -65,7 +65,7 @@ angular.module('qaApp')
                     $scope.questionReference = detailStorage.add(resp.question, true)
                 })
                 .error(function (errResponse) {
-                    $window.location.href = "/public/error/error500.html";
+                    $window.location.href = "/error500.html";
                 });
 
             $scope.columnClass = stateService.qClass();
@@ -102,7 +102,7 @@ angular.module('qaApp')
                         $scope.dismiss();
                     })
                         .error(function (errorResponse) {
-                            $window.location.href = "/error/error500.html";
+                            $window.location.href = "/error500.html";
                         });
                 }
             };

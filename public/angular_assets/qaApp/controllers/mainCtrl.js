@@ -29,7 +29,7 @@ angular.module('qaApp')
                         $scope.questionReference = detailStorage.updateReferenceIndexes(true);
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/public/error/error500.html";
+                        $window.location.href = "/error500.html";
                     });
             };
 
@@ -66,7 +66,7 @@ angular.module('qaApp')
                     });
                 })
                 .error(function (errResponse) {
-                    $window.location.href = "/public/error/error500.html";
+                    $window.location.href = "/error500.html";
                 });
 
 
@@ -85,7 +85,7 @@ angular.module('qaApp')
 
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/public/error/error500.html";
+                        $window.location.href = "/public/error500.html";
                     });
             });
 
@@ -106,7 +106,7 @@ angular.module('qaApp')
 
                     })
                     .error(function (errResponse) {
-                        $window.location.href = "/public/error/error500.html";
+                        $window.location.href = "/error500.html";
                     });
             });
 
