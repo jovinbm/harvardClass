@@ -34,7 +34,17 @@ module.exports = {
             senderCuid: theHarvardUser.uniqueCuid,
             comment: commentObject.comment,
             shortComment: commentObject.shortComment,
-            votes: 0
+            promotes: 0
+        });
+        success(comment);
+    },
+
+
+    makeCommentUpdate: function (commentObject, success) {
+        var comment = new Comment({
+            comment: commentObject.comment,
+            shortComment: commentObject.shortComment,
+            "lastActivity": new Date()
         });
         success(comment);
     },
@@ -45,9 +55,29 @@ module.exports = {
             if (err) {
                 error_neg_1(-1, err);
             } else {
-                success(savedComment);
+                //this returns an object. Make an array out of it
+                var temp = [];
+                temp.push(savedComment);
+                success(temp);
             }
         });
+    },
+
+    updateComment: function (commentObject, commentUniqueId, error_neg_1, error_0, success) {
+        Comment.update({uniqueId: commentUniqueId},
+            {
+                $set: {
+                    comment: commentObject["comment"],
+                    shortComment: commentObject["shortComment"],
+                    lastActivity: commentObject["lastActivity"]
+                }
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            })
     },
 
 
@@ -107,9 +137,27 @@ module.exports = {
     },
 
 
+    getOneComment: function (commentUniqueId, error_neg_1, error_0, success) {
+        Comment
+            .find({uniqueId: commentUniqueId})
+            .limit(1)
+            .exec(function (err, comment) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else if (comment == null || comment == undefined || comment.length == 0) {
+                    error_0(0);
+                } else {
+                    success(comment);
+                }
+            });
+    },
+
 
     findTopPromotedComments: function (sort, limit, questionIndex, error_neg_1, error_0, success) {
-        Comment.find({questionIndex: questionIndex, promotes: {$gt: 0}}).sort({votes: sort}).limit(limit).exec(function (err, topPromotedArrayOfObjects) {
+        Comment.find({
+            questionIndex: questionIndex,
+            promotes: {$gt: 0}
+        }).sort({votes: sort}).limit(limit).exec(function (err, topPromotedArrayOfObjects) {
             if (err) {
                 error_neg_1(-1, err);
             } else if (topPromotedArrayOfObjects.length == 0) {

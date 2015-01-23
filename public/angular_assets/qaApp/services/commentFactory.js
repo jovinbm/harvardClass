@@ -22,6 +22,7 @@ angular.module('qaApp')
                     //change time-string from mongodb to actual time
                     var mongoDate = new Date(commentObject.timePosted);
                     temp.commentTime = mongoDate.toDateString() + " " + mongoDate.toLocaleTimeString();
+                    temp.viewMode = 'viewMode';
 
                     var questionIndex = commentObject.questionIndex;
                     var commentIndex = commentObject.commentIndex;
@@ -47,6 +48,28 @@ angular.module('qaApp')
                 });
 
                 return commentsReference;
+            },
+
+            getCachedComment: function (index) {
+                var currentComment = globals.currentComments();
+                return currentComment[index];
+            },
+
+
+            postEditedComment: function (commentObject) {
+                commentObject["commentUniqueId"] = commentObject.commentUniqueId;
+                var shortComment = "";
+                //trim 130 characters
+                if (commentObject["comment"].length > 130) {
+                    for (var i = 0; i < 130; i++) {
+                        shortComment = shortComment + commentObject["comment"][i];
+                    }
+                    shortComment = shortComment + "...";
+                } else {
+                    shortComment = commentObject["comment"];
+                }
+                commentObject["shortComment"] = shortComment;
+                return $http.post('/api/updateComment', commentObject);
             },
 
 

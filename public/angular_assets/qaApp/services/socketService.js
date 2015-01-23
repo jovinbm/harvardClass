@@ -46,7 +46,6 @@ angular.module('qaApp')
             },
 
             reconnect: function () {
-                console.log(globals.questionActivity().getTime());
                 return $http.post('/api/reconnect', {
                     "currentQuestionIndex": globals.currentQuestionIndex(),
                     "lastQuestionActivity": globals.questionActivity().getTime()

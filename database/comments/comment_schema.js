@@ -12,7 +12,7 @@ var commentSchema = new Schema({
     senderName: {type: String, required: true, unique: false, index: true},
     senderDisplayName: {type: String, required: true, unique: false, index: true},
     senderEmail: {type: String, required: true, unique: false, index: true},
-    senderCuid: {type: String, required: true, unique: true, index: true},
+    senderCuid: {type: String, required: true, unique: false, index: true},
     comment: {type: String, required: true},
     shortComment: {type: String, required: true},
     promotes: {type: Number, default: 0, index: true},

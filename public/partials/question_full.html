@@ -61,26 +61,40 @@
             <div collapse="!isCollapsed"
                  ng-controller="CommentCtrl"
                  class="comment_input">
-                <div text-angular
-                     ta-toolbar="[['pre','h6','bold','italics','underline','insertLink','quote','ul','ol','undo','redo','indent','outdent']]"
-                     ng-model="theComment"
-                     required
-                     placeholder="Your comment here">
-                </div>
-                <br/>
+                <form name="commentForm"
+                      id="comment_input"
+                      novalidate="novalidate">
+                    <div class="form-group"
+                         ng-class="{
+                            'has-error': commentForm.commentHere.$error.required,
+                            'has-success': !commentForm.commentHere.$invalid
+                            }">
+                        <div text-angular
+                             ta-toolbar="[['pre','h6','bold','italics','underline','insertLink','quote','ul','ol','undo','redo','indent','outdent']]"
+                             ng-model="theComment"
+                             name="commentHere"
+                             required
+                             placeholder="Your comment here">
+                        </div>
+                        <p ng-show="commentForm.commentHere.$error.required && commentForm.commentHere.$dirty"
+                           class="form-error-notice">This field is required
+                        </p>
+                    </div>
+                    <br/>
 
-                <div class="pull-right">
-                    <a type="button"
-                       class="btn btn-default btn-xs"
-                       ng-click="changeCollapse()">
-                        <i class="fa fa-minus"></i> Collapse
-                    </a>
-                    <a type="button"
-                       class="btn btn-primary btn-xs"
-                       ng-click="newComment(currentQuestion)">
-                        <i class="fa fa-paper-plane"></i> Post
-                    </a>
-                </div>
+                    <div class="clearfix">
+                        <a type="button"
+                           class="btn btn-default btn-xs pull-right"
+                           ng-click="changeCollapse()">
+                            <i class="fa fa-minus"></i> Collapse
+                        </a>
+                        <a type="button"
+                           class="btn btn-primary btn-xs pull-right"
+                           ng-click="newComment(currentQuestion)">
+                            <i class="fa fa-paper-plane"></i> Post
+                        </a>
+                    </div>
+                </form>
             </div>
         </li>
 

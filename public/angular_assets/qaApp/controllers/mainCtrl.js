@@ -94,7 +94,6 @@ angular.module('qaApp')
                 console.log("'reconnect' triggered");
                 socketService.reconnect()
                     .success(function (resp) {
-                        console.log(JSON.stringify(resp));
                         var questionArray = resp.questionsArray;
 
                         $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);

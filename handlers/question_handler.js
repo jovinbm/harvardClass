@@ -66,7 +66,6 @@ module.exports = {
     updateQuestion: function (req, res, theHarvardUser, theQuestion) {
         basic.consoleLogger('updateQuestion: UPDATE_QUESTION event handler called');
         var thisQuestionIndex = theQuestion.questionIndex;
-        //query the recent question's index
         if (!(/^\s+$/.test(theQuestion.heading)) &&
             theQuestion.heading.length != 0 && !(/^\s+$/.test(theQuestion.question)) &&
             theQuestion.question.length != 0) {
@@ -98,8 +97,8 @@ module.exports = {
 
         } else {
             //the question does not pass the checks
-            res.status(500).send({msg: 'newQuestion did not pass checks'});
-            basic.consoleLogger('newQuestion: Not executed: Did not pass checks');
+            res.status(500).send({msg: 'updateQuestion did not pass checks'});
+            basic.consoleLogger('updateQuestion: Not executed: Did not pass checks');
         }
     },
 

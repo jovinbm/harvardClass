@@ -23,7 +23,8 @@ module.exports = {
                     function saved(savedComment) {
                         function done(commentObject) {
                             ioJs.emitToAll('newComment', {
-                                "comment": commentObject
+                                "comment": commentObject,
+                                "index": 1
                             });
                             res.status(200).send({msg: 'newComment success'});
                             basic.consoleLogger('newComment: Success');
@@ -60,9 +61,48 @@ module.exports = {
 
         } else {
             //the comment does not pass the checks
-            //respond to avoid further newComment posts
             res.status(200).send({msg: 'newComment did not pass checks'});
             basic.consoleLogger('newComment: Not executed: Did not pass checks');
+        }
+    },
+
+
+    updateComment: function (req, res, theHarvardUser, theComment) {
+        basic.consoleLogger('updateComment: UPDATE_COMMENT event handler called');
+        var commentUniqueId = theComment.commentUniqueId;
+        //query the recent question's index
+        if (!(/^\s+$/.test(theComment.comment)) &&
+            theComment.comment.length != 0) {
+
+            function error(status, err) {
+                basic.consoleLogger("ERROR: updateComment event_Handler: " + err);
+                res.status(500).send({msg: 'ERROR: updateComment Event Handler: ', err: err});
+                basic.consoleLogger("updateComment failed!");
+            }
+
+            function made(comment) {
+                function updated() {
+                    function done(commentObject) {
+                        ioJs.emitToAll('newComment', {
+                            "comment": commentObject,
+                            "index": 0
+                        });
+                        res.status(200).send({msg: 'updateComment success'});
+                        basic.consoleLogger('updateComment: Success');
+                    }
+
+                    commentDB.getOneComment(commentUniqueId, error, error, done);
+                }
+
+                commentDB.updateComment(comment, commentUniqueId, error, error, updated);
+            }
+
+            commentDB.makeCommentUpdate(theComment, made);
+
+        } else {
+            //the comment does not pass the checks
+            res.status(500).send({msg: 'updateComment did not pass checks'});
+            basic.consoleLogger('updateComment: Not executed: Did not pass checks');
         }
     },
 

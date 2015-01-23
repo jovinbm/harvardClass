@@ -68,7 +68,8 @@ require('./passport/passport.js')(passport, OpenIDStrategy, LocalStrategy);
 io.on('connection', function (socket) {
     socket.on('joinRoom', function (data) {
         var room = data.room;
-        function success(){
+
+        function success() {
             //emit event to continue execution on client
             socket.emit('joined');
         }
@@ -122,9 +123,10 @@ app.post('/api/newQuestion', authenticate.ensureAuthenticated, questionAPI.newQu
 app.post('/api/updateQuestion', authenticate.ensureAuthenticated, questionAPI.updateQuestion);
 app.post('/api/newUpvote', authenticate.ensureAuthenticated, questionAPI.newUpvote);
 
-app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);
-app.post('/api/newPromote', authenticate.ensureAuthenticated, commentAPI.newPromote);
 app.post('/api/getComments', authenticate.ensureAuthenticated, commentAPI.getComments);
+app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);
+app.post('/api/updateComment', authenticate.ensureAuthenticated, commentAPI.updateComment);
+app.post('/api/newPromote', authenticate.ensureAuthenticated, commentAPI.newPromote);
 
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
 app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutAPI.logoutCustomChat);

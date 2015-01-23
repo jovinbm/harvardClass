@@ -1,25 +1,36 @@
 <ul class="list-unstyled">
     <li class="list-unstyled comment-full-li clearfix"
-        ng-repeat="eachComment in comments"
+        ng-repeat="eachComment in comments | orderBy:eachComment.commentIndex:reverse"
         ng-class="cmntsReference[eachComment.commentIndex].commentClass">
 
-        <div class="comment-p-div">
-            <p ta-bind
-               ng-model="eachComment.comment"
-               class="text-outputs comment-p">
-            </p>
+        <div ng-if="cmntsReference[eachComment.commentIndex].viewMode == 'viewMode'">
+            <div class="comment-p-div">
+                <p ta-bind
+                   ng-model="eachComment.comment"
+                   class="text-outputs comment-p">
+                </p>
+            </div>
+            <small class="comment-name">{{eachComment.senderName}}</small>
+
+            <small class="commentTime">{{cmntsReference[eachComment.commentIndex].commentTime}}</small>
+
+            <div class="pull-right">
+                <a ng-click="cmntsReference[eachComment.commentIndex].viewMode = 'editMode'"
+                   type="button"
+                   class="btn btn-default btn-xs conv"
+                   ng-show="eachComment.senderCuid == uniqueCuid && !is_editing">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
+                <a type="button"
+                   ng-class="cmntsReference[eachComment.commentIndex].buttonClass"
+                   ng-disabled="cmntsReference[eachComment.commentIndex].ifDisabled"
+                   ng-click="promote(currentQuestion, eachComment.commentIndex, eachComment.uniqueId, $event)">
+                    <i class="fa fa-angle-up"></i>
+                </a>
+            </div>
         </div>
-        <small class="comment-name">{{eachComment.senderName}}</small>
-
-        <small class="commentTime">{{cmntsReference[eachComment.commentIndex].commentTime}}</small>
-
-        <div class="pull-right">
-            <a type="button"
-               ng-class="cmntsReference[eachComment.commentIndex].buttonClass"
-               ng-disabled="cmntsReference[eachComment.commentIndex].ifDisabled"
-               ng-click="promote(currentQuestion, eachComment.commentIndex, eachComment.uniqueId, $event)">
-                <i class="fa fa-angle-up"></i>
-            </a>
+        <div ng-if="cmntsReference[eachComment.commentIndex].viewMode == 'editMode'">
+            <div comment-edit></div>
         </div>
     </li>
 </ul>

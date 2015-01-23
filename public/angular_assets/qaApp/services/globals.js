@@ -10,6 +10,7 @@ angular.module('qaApp')
         var mySocketRoom;
         var usersOnline = {};
         var currentQuestions = {};
+        var currentComments = {};
         var currentTop = [];
         var upvotedIndexes = [];
         var currentQuestionIndex = -1;
@@ -44,7 +45,7 @@ angular.module('qaApp')
 
             questionActivity: function (bool) {
                 if (bool) {
-                    lastQuestionActivity =  new Date();
+                    lastQuestionActivity = new Date();
                     return lastQuestionActivity;
                 }
                 return lastQuestionActivity
@@ -61,6 +62,20 @@ angular.module('qaApp')
                     return currentQuestions;
                 } else {
                     return currentQuestions;
+                }
+            },
+
+            currentComments: function (commentArray, broadcast) {
+                if (commentArray) {
+                    commentArray.forEach(function (commentObject) {
+                        currentComments[commentObject.commentIndex] = commentObject;
+                    });
+                    if (broadcast) {
+                        $rootScope.$broadcast('currentComments', currentComments);
+                    }
+                    return currentComments;
+                } else {
+                    return currentComments;
                 }
             },
 

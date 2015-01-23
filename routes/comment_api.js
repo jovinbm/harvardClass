@@ -12,7 +12,7 @@ module.exports = {
         basic.consoleLogger('GET_COMMENTS event received');
         var questionIndex = req.body.questionIndex;
         var lastCommentIndex = req.body.lastCommentIndex;
-        //retrieve the user
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({msg: 'getCommentsPOST: Could not retrieve user', err: err});
@@ -34,7 +34,7 @@ module.exports = {
     newComment: function (req, res) {
         basic.consoleLogger('NEW_COMMENT event received');
         var theComment = req.body;
-        //get the Harvard User
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({msg: 'ERROR: newCommentPOST: Could not retrieve user', err: err});
@@ -53,12 +53,34 @@ module.exports = {
     },
 
 
+    updateComment: function (req, res) {
+        basic.consoleLogger('UPDATE_COMMENT event received');
+        var theComment = req.body;
+
+        function error(status, err) {
+            if (status == -1 || status == 0) {
+                res.status(500).send({msg: 'ERROR: updateCommentPOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: updateCommentPOST: Could not retrieve user: " + err);
+            }
+        }
+
+        function success(theHarvardUser) {
+            if (theHarvardUser.customLoggedInStatus == 1) {
+                comment_handler.updateComment(req, res, theHarvardUser, theComment);
+            }
+            //TODO -- redirect to custom login
+        }
+
+        userDB.findHarvardUser(req.user.id, error, error, success);
+    },
+
+
     newPromote: function (req, res) {
         basic.consoleLogger('NEW_PROMOTE event received');
         var questionIndex = req.body.questionIndex;
         var promoteIndex = req.body.commentIndex;
         var uniqueId = req.body.uniqueId;
-        //retrieve the user
+
         function error(status, err) {
             if (status == -1 || status == 0) {
                 res.status(500).send({msg: 'ERROR: newPromotePOST: Could not retrieve user', err: err});

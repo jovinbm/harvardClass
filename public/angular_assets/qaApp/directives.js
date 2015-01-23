@@ -54,63 +54,91 @@ angular.module('qaApp')
             }
         }
     }])
-    .directive('commentFull', ['socket', 'socketService', 'commentService', function (socket, socketService, commentService) {
-        return {
-            templateUrl: 'public/partials/comment_full.html',
-            link: function ($scope, $element, $attrs) {
-                $scope.questionIndex = $scope.currentQuestion;
-                $scope.cmntsReference = {};
-                $scope.myPromotes = [];
-                $scope.lastCommentIndex = -1;
-                $scope.comments = [];
-
-                $scope.increaseIndex = function (index, num) {
-                    if (index) {
-                        $scope.lastCommentIndex = index;
-                    } else if (num) {
-                        $scope.lastCommentIndex++;
-                    }
-                };
-
-                $scope.promote = function (questionIndex, commentIndex, uniqueId, $event) {
-                    commentService.postPromote(questionIndex, commentIndex, uniqueId)
-                        .success(function (resp) {
-                            $scope.myPromotes.push("q" + questionIndex + "c" + commentIndex);
-                            $scope.cmntsReference[commentIndex].ifDisabled = true;
-                        })
-                        .error(function (errResponse) {
-                            $window.location.href = "/public/error/error500.html";
-                        });
-                };
+    .directive('commentFull', ['socket', 'socketService', 'globals', 'sortObjectToArrayFilter', 'commentService',
+        function (socket, socketService, globals, sortObjectToArrayFilter, commentService) {
+            return {
+                templateUrl: 'public/partials/comment_full.html',
+                link: function ($scope, $element, $attrs) {
+                    $scope.questionIndex = $scope.currentQuestion;
+                    $scope.cmntsReference = {};
+                    $scope.myPromotes = [];
+                    $scope.lastCommentIndex = -1;
+                    $scope.comments = [];
+                    $scope.is_editing = false;
+                    $scope.changeEditing = function () {
+                        $scope.is_editing = !$scope.is_editing;
+                    };
 
 
-                socket.on('newComment', function (commentObject) {
-                    console.log("'newComment' event received");
-                    $scope.increaseIndex(null, "1");
-                    var temp = [];
-                    var newComment = commentObject.comment;
-                    temp.push(newComment);
-                    $scope.cmntsReference = commentService.commentsReference(
-                        temp,
-                        $scope.myPromotes,
-                        $scope.cmntsReference);
+                    $scope.increaseIndex = function (index, num) {
+                        if (index) {
+                            $scope.lastCommentIndex = index;
+                        } else if (num) {
+                            $scope.lastCommentIndex++;
+                        }
+                    };
 
-                    $scope.comments.unshift(newComment);
-                });
+                    $scope.promote = function (questionIndex, commentIndex, uniqueId, $event) {
+                        commentService.postPromote(questionIndex, commentIndex, uniqueId)
+                            .success(function (resp) {
+                                $scope.myPromotes.push("q" + questionIndex + "c" + commentIndex);
+                                $scope.cmntsReference[commentIndex].ifDisabled = true;
+                            })
+                            .error(function (errResponse) {
+                                $window.location.href = "/public/error/error500.html";
+                            });
+                    };
 
-                commentService.getComments($scope.questionIndex, $scope.lastCommentIndex)
-                    .success(function (resp) {
-                        $scope.myPromotes = resp.myPromotes;
-                        $scope.increaseIndex(resp.index);
+                    $scope.getCommentToEdit = function (index) {
+                        var commentObject = commentService.getCachedComment(index);
+                        $scope.changeEditing();
+                        return commentObject.comment;
+                    };
+
+                    $scope.saveEditedComment = function (uniqueId, commentIndex, finalComment) {
+                        var temp = {};
+                        temp["commentUniqueId"] = uniqueId;
+                        temp["comment"] = finalComment;
+                        commentService.postEditedComment(temp)
+                            .success(function (resp) {
+                                $scope.cmntsReference[commentIndex].viewMode = 'viewMode'
+                                $scope.changeEditing();
+                            });
+                    };
+
+
+                    socket.on('newComment', function (commentObject) {
+                        console.log("'newComment' event received");
+                        $scope.increaseIndex(null, commentObject.index);
                         $scope.cmntsReference = commentService.commentsReference(
-                            resp.comments,
+                            commentObject.comment,
                             $scope.myPromotes,
                             $scope.cmntsReference);
-                        $scope.comments = resp.comments;
-                    })
-                    .error(function (errorResponse) {
-                        $window.location.href = "/error/error500.html";
+
+                        $scope.comments = sortObjectToArrayFilter(globals.currentComments(commentObject.comment));
                     });
+
+                    commentService.getComments($scope.questionIndex, $scope.lastCommentIndex)
+                        .success(function (resp) {
+                            $scope.myPromotes = resp.myPromotes;
+                            $scope.increaseIndex(resp.index);
+                            var comments = resp.comments;
+                            $scope.cmntsReference = commentService.commentsReference(
+                                comments,
+                                $scope.myPromotes,
+                                $scope.cmntsReference);
+                            $scope.comments = sortObjectToArrayFilter(globals.currentComments(comments));
+                        })
+                        .error(function (errorResponse) {
+                            $window.location.href = "/error/error500.html";
+                        });
+                }
+            }
+        }])
+    .directive('commentEdit', ['commentService', function (commentService) {
+        return {
+            templateUrl: 'public/partials/modals/comment_edit.html',
+            link: function ($scope, $element, $attrs) {
             }
         }
     }])
