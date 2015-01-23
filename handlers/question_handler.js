@@ -103,44 +103,69 @@ module.exports = {
     },
 
 
-    newUpvote: function (req, res, theHarvardUser, upvotedIndex) {
-        basic.consoleLogger("newUpvote: newUpvote event handler called");
-        var newUpvotedArray = theHarvardUser.votedQuestionIndexes;
-        newUpvotedArray.push(upvotedIndex);
-        //push the new upvote's index to the respective upvoter
+    upvote: function (req, res, theHarvardUser, upvotedIndex, inc) {
+        basic.consoleLogger("upvote: upvote event handler called");
+        var upvotedArray = theHarvardUser.votedQuestionIndexes;
+        var errorCounter = 0;
+        switch (inc) {
+            case 1:
+                upvotedArray.push(upvotedIndex);
+                break;
+            case -1:
+                if (upvotedArray.indexOf(upvotedIndex) != -1) {
+                    upvotedArray.splice(upvotedArray.indexOf(upvotedIndex), 1);
+                }
+                break;
+            default:
+                errorCounter++;
+                basic.consoleLogger("ERROR: upvote event handler: switch statement got unexpected value");
+                res.status(500).send({
+                    msg: 'ERROR: upvote event handler: switch statement got unexpected value'
+                });
+                basic.consoleLogger('upvote: failed!');
+        }
 
         function error(status, err) {
             if (status == -1) {
-                basic.consoleLogger("ERROR: newUpvote event handler: Error while executing db operations" + err);
+                basic.consoleLogger("ERROR: upvote event handler: Error while executing db operations" + err);
                 res.status(500).send({
-                    msg: 'ERROR: newUpvote event handler: Error while executing db operations',
+                    msg: 'ERROR: upvote event handler: Error while executing db operations',
                     err: err
                 });
-                basic.consoleLogger('newUpvote: failed!');
+                basic.consoleLogger('upvote: failed!');
             } else if (status == 0) {
                 ioJs.emitToOne(theHarvardUser.socketRoom, "upvotedIndexes", []);
-                res.status(200).send({msg: "newUpvote: partial ERROR: query returned null/undefined"});
-                basic.consoleLogger('**partial ERROR!: newUpvote event handler: failure: query returned NULL/UNDEFINED');
+                res.status(200).send({msg: "upvote: partial ERROR: query returned null/undefined"});
+                basic.consoleLogger('**partial ERROR!: upvote event handler: failure: query returned NULL/UNDEFINED');
             }
         }
 
         function success() {
-            function incremented() {
+            function done() {
                 function found(topVotedArrayOfObjects) {
 
                     ioJs.emitToAll('topVoted', topVotedArrayOfObjects);
-                    ioJs.emitToOne(theHarvardUser.socketRoom, 'upvotedIndexes', newUpvotedArray);
-                    res.status(200).send({msg: 'newUpvote success'});
+                    ioJs.emitToOne(theHarvardUser.socketRoom, 'upvotedIndexes', upvotedArray);
+                    res.status(200).send({msg: 'upvote success'});
                     basic.consoleLogger('upvote: Success');
                 }
 
                 questionDB.findTopVotedQuestions(-1, 10, error, error, found);
             }
 
-            questionDB.incrementQuestionVotes(upvotedIndex, error, error, incremented);
+            questionDB.changeQuestionVotes(upvotedIndex, inc, error, error, done);
         }
 
-        questionDB.pushUpvoteToUpvoter(req.user.id, upvotedIndex, error, error, success);
+        if (errorCounter == 0) {
+            switch (inc) {
+                case 1:
+                    questionDB.pushUpvoteToUpvoter(req.user.id, upvotedIndex, error, error, success);
+                    break;
+                case -1:
+                    questionDB.pullUpvoteFromUpvoter(req.user.id, upvotedIndex, error, error, success);
+                    break;
+            }
+        }
     }
 
     ,

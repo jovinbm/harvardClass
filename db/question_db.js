@@ -186,8 +186,22 @@ module.exports = {
     },
 
 
-    incrementQuestionVotes: function (upvotedIndex, error_neg_1, error_0, success) {
-        Question.update({questionIndex: upvotedIndex}, {$inc: {votes: 1}}, function (err) {
+    pullUpvoteFromUpvoter: function (openId, upvotedIndex, error_neg_1, error_0, success) {
+        HarvardUser.update({id: openId}, {
+                $pull: {votedQuestionIndexes: upvotedIndex}
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
+
+    changeQuestionVotes: function (upvotedIndex, inc, error_neg_1, error_0, success) {
+        Question.update({questionIndex: upvotedIndex}, {$inc: {votes: inc}}, function (err) {
             if (err) {
                 error_neg_1(-1, err);
             } else {

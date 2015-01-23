@@ -124,7 +124,7 @@ app.post('/api/getQuestions', authenticate.ensureAuthenticated, questionAPI.getQ
 app.post('/api/retrieveQuestion', authenticate.ensureAuthenticated, questionAPI.retrieveQuestion);
 app.post('/api/newQuestion', authenticate.ensureAuthenticated, questionAPI.newQuestion);
 app.post('/api/updateQuestion', authenticate.ensureAuthenticated, questionAPI.updateQuestion);
-app.post('/api/newUpvote', authenticate.ensureAuthenticated, questionAPI.newUpvote);
+app.post('/api/upvote', authenticate.ensureAuthenticated, questionAPI.upvote);
 
 app.post('/api/getComments', authenticate.ensureAuthenticated, commentAPI.getComments);
 app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);

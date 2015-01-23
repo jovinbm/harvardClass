@@ -21,12 +21,24 @@ angular.module('qaApp')
                 $scope.tab = stateService.tab(tab);
             };
 
-            $scope.upvote = function (index, $event) {
+            $scope.upVote = function (index, $event) {
                 $scope.questionReference = detailStorage.disableButton(index);
-                questionService.postUpvote(parseInt(index))
+                questionService.postQuestionVote(parseInt(index), 1)
                     .success(function (resp) {
                         globals.addUpvoted(index);
                         $scope.questionReference = detailStorage.updateReferenceIndexes(true);
+                    })
+                    .error(function (errResponse) {
+                        $window.location.href = "/error500.html";
+                    });
+            };
+
+            $scope.downVote = function (index, $event) {
+                $scope.questionReference = detailStorage.enableButton(index);
+                questionService.postQuestionVote(parseInt(index), -1)
+                    .success(function (resp) {
+                        globals.removeUpvoted(index);
+                        $scope.questionReference = detailStorage.updateReferenceIndexes(true, index);
                     })
                     .error(function (errResponse) {
                         $window.location.href = "/error500.html";

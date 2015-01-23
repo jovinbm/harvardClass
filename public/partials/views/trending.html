@@ -12,7 +12,11 @@
                 <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}">
                     {{eachTop.heading}}
                 </a>
-                <small class="senderName">by {{eachTop.senderName}}</small>
+                <small class="by">by</small>
+                <small class="by sender-name"> {{eachTop.senderName}}</small>
+                <small class="questionTime">on
+                    {{questionReference[eachTop.questionIndex].questionTime}}
+                </small>
             </h4>
 
             <p ta-bind
@@ -20,23 +24,28 @@
                class="text-outputs">
             </p>
 
-            <small class="questionTime">
-                {{questionReference[eachTop.questionIndex].questionTime}}
-            </small>
-
-            <div class="pull-right">
-                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}"
-                   type="button"
-                   class="btn btn-default btn-xs conv">
-                    <i class="fa fa-comments-o"></i>
-                </a>
+            <div class="clearfix">
                 <button type='button'
+                        ng-if="questionReference[eachTop.questionIndex].upvoted == false"
+                        class="pull-right"
                         ng-class="questionReference[eachTop.questionIndex].buttonClass"
-                        ng-disabled="questionReference[eachTop.questionIndex].ifDisabled"
-                        ng-click="upvote(eachTop.questionIndex, $event)">
+                        ng-click="upVote(eachTop.questionIndex, $event)">
 
                     <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
                 </button>
+                <button type='button'
+                        class="pull-right"
+                        ng-if="questionReference[eachTop.questionIndex].upvoted == true"
+                        ng-class="questionReference[eachTop.questionIndex].buttonClass"
+                        ng-click="downVote(eachTop.questionIndex, $event)">
+
+                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
+                </button>
+                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}"
+                   type="button"
+                   class="btn btn-default btn-xs pull-right conv">
+                    <i class="fa fa-comments-o"></i>
+                </a>
             </div>
         </li>
     </ul>

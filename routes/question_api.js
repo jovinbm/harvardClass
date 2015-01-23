@@ -97,24 +97,24 @@ module.exports = {
     },
 
 
-    newUpvote: function (req, res) {
-        basic.consoleLogger('NEW_UPVOTE event received');
+    upvote: function (req, res) {
+        basic.consoleLogger('UPVOTE event received');
         var upvotedIndex = req.body.upvoteIndex;
+        var inc = req.body.inc;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                res.status(500).send({msg: 'ERROR: newUpvotePOST: Could not retrieve user', err: err});
-                basic.consoleLogger("ERROR: newUpvotePOST: Could not retrieve user: " + err);
+                res.status(500).send({msg: 'ERROR: upvotePOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: upvotePOST: Could not retrieve user: " + err);
             }
         }
 
         function success(theHarvardUser) {
             if (theHarvardUser.customLoggedInStatus == 1) {
-                if (theHarvardUser.votedQuestionIndexes.indexOf(upvotedIndex) == -1) {
-                    question_handler.newUpvote(req, res, theHarvardUser, upvotedIndex);
+                if (inc == -1 || theHarvardUser.votedQuestionIndexes.indexOf(upvotedIndex) == -1) {
+                    question_handler.upvote(req, res, theHarvardUser, upvotedIndex, inc);
                 } else {
                     //upvote process did not pass checks
-                    //respond to avoid further upvote posts
                     res.status(200).send({msg: 'upvote did not pass checks'});
                     basic.consoleLogger('upvote: Not executed: Did not pass checks');
                 }

@@ -30,7 +30,7 @@ body {
     width: 40px;
 }
 
-.questionTime, .commentTime, .senderName {
+.questionTime, .commentTime, .by {
     color: darkgray;
     font-size: 10px;
 }
@@ -55,7 +55,7 @@ div > div > div > li > div {
     margin-bottom: 5px;
 }
 
-.comment-name {
+.comment-name, .sender-name {
     color: #0b97c4;
 }
 

@@ -97,6 +97,15 @@ angular.module('qaApp')
             },
 
 
+            removeUpvoted: function (index, broadcast) {
+                upvotedIndexes.splice(upvotedIndexes.indexOf(index), 1);
+                if (broadcast) {
+                    $rootScope.$broadcast('upvotedIndexes', upvotedIndexes);
+                }
+                return upvotedIndexes;
+            },
+
+
             currentTop: function (topArray, broadcast) {
                 if (topArray) {
                     currentTop = topArray;

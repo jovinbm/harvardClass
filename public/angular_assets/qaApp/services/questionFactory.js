@@ -46,11 +46,12 @@ angular.module('qaApp')
                 return $http.post('/api/updateQuestion', questionObject);
             },
 
-            postUpvote: function (upvoteIndex) {
+            postQuestionVote: function (upvoteIndex, inc) {
                 var upvoteToDatabase = {
-                    "upvoteIndex": upvoteIndex
+                    "upvoteIndex": upvoteIndex,
+                    "inc": inc
                 };
-                return $http.post('/api/newUpvote', upvoteToDatabase);
+                return $http.post('/api/upvote', upvoteToDatabase);
             }
         }
     }]);

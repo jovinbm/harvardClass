@@ -77,11 +77,11 @@ angular.module('qaApp')
                     if (searchArrayIfExists(questionIndex, upvotedIndexes)) {
                         temp.buttonClass = questionClass + "b" + " btn btn-warning btn-xs upvote";
                         temp.listGroupClass = "list-group-item-warning";
-                        temp.ifDisabled = true;
+                        temp.upvoted = true;
                     } else {
                         temp.buttonClass = questionClass + "b" + " btn btn-info btn-xs upvote";
                         temp.listGroupClass = "list-group-item-info";
-                        temp.ifDisabled = false;
+                        temp.upvoted = false;
                     }
 
                     detailPrototype[questionIndex] = temp;
@@ -93,15 +93,20 @@ angular.module('qaApp')
                 return detailPrototype;
             },
 
-            updateReferenceIndexes: function (broadcast) {
+            updateReferenceIndexes: function (broadcast, indexToRemove) {
                 //check first that the detailPrototype is not empty
                 if (Object.keys(detailPrototype).length !== 0) {
                     var currentIndexes = globals.upvotedIndexes();
                     currentIndexes.forEach(function (index) {
                         detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-warning btn-xs upvote";
                         detailPrototype[index].listGroupClass = "list-group-item-warning";
-                        detailPrototype[index].ifDisabled = true;
+                        detailPrototype[index].upvoted = true;
                     });
+                }
+                if (indexToRemove) {
+                    detailPrototype[indexToRemove].buttonClass = "a" + indexToRemove + "b" + " btn btn-info btn-xs upvote";
+                    detailPrototype[indexToRemove].listGroupClass = "list-group-item-info";
+                    detailPrototype[indexToRemove].upvoted = false;
                 }
                 if (broadcast) {
                     $rootScope.$broadcast('questionReference', detailPrototype);
@@ -116,8 +121,12 @@ angular.module('qaApp')
 
 
             disableButton: function (index) {
-                detailPrototype[index].ifDisabled = true;
                 detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-warning btn-xs upvote";
+                return detailPrototype;
+            },
+
+            enableButton: function (index) {
+                detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-info btn-xs upvote";
                 return detailPrototype;
             }
         }
