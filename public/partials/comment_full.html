@@ -1,6 +1,6 @@
 <ul class="list-unstyled">
     <li class="list-unstyled comment-full-li clearfix"
-        ng-repeat="eachComment in comments | orderBy:eachComment.commentIndex:reverse"
+        ng-repeat="eachComment in comments"
         ng-class="cmntsReference[eachComment.commentIndex].commentClass">
 
         <div ng-if="cmntsReference[eachComment.commentIndex].viewMode == 'viewMode'">
