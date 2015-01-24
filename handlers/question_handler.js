@@ -124,6 +124,7 @@ module.exports = {
                 });
                 basic.consoleLogger('upvote: failed!');
         }
+        basic.consoleLogger(upvotedArray);
 
         function error(status, err) {
             if (status == -1) {
@@ -134,9 +135,11 @@ module.exports = {
                 });
                 basic.consoleLogger('upvote: failed!');
             } else if (status == 0) {
-                ioJs.emitToOne(theHarvardUser.socketRoom, "upvotedIndexes", []);
-                res.status(200).send({msg: "upvote: partial ERROR: Status:200: query returned null/undefined: There might also be not top voted object"});
-                basic.consoleLogger('**partial ERROR!: Status:200 upvote event handler: failure: query returned NULL/UNDEFINED: There might be not top voted object');
+                //this will mostly be returned be the findTopVotedQuestions query
+                ioJs.emitToOne(theHarvardUser.socketRoom, "upvotedIndexes", upvotedArray);
+                ioJs.emitToAll('topVoted', []);
+                res.status(200).send({msg: "upvote: partial ERROR: Status:200: query returned null/undefined: There might also be no top voted object"});
+                basic.consoleLogger('**partial ERROR!: Status:200 upvote event handler: failure: query returned NULL/UNDEFINED: There might be no top voted object');
             }
         }
 
@@ -163,6 +166,7 @@ module.exports = {
                     break;
                 case -1:
                     questionDB.pullUpvoteFromUpvoter(req.user.id, upvotedIndex, error, error, success);
+                    basic.consoleLogger("-----1")
                     break;
             }
         }

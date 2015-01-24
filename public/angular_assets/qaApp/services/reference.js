@@ -103,7 +103,7 @@ angular.module('qaApp')
                         detailPrototype[index].upvoted = true;
                     });
                 }
-                if (indexToRemove) {
+                if (indexToRemove || indexToRemove == 0) {
                     detailPrototype[indexToRemove].buttonClass = "a" + indexToRemove + "b" + " btn btn-info btn-xs upvote";
                     detailPrototype[indexToRemove].listGroupClass = "list-group-item-info";
                     detailPrototype[indexToRemove].upvoted = false;

@@ -2,8 +2,8 @@
  * Created by jovinbm on 1/18/15.
  */
 angular.module('qaApp')
-    .controller('MainController', ['$window', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'logoutService', 'stateService',
-        function ($window, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, logoutService, stateService) {
+    .controller('MainController', ['$window', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'stateService', 'mainService',
+        function ($window, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, stateService, mainService) {
 
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
@@ -11,6 +11,7 @@ angular.module('qaApp')
             $scope.questionReference = detailStorage.getReference();
             $scope.questionOnView = stateService.questionOnView();
             $scope.tab = stateService.tab();
+            $scope.alerts = questionService.alertStorage();
 
             $scope.appState = "home";
             $scope.changeState = function (newState) {
@@ -19,6 +20,21 @@ angular.module('qaApp')
 
             $scope.changeTab = function (tab) {
                 $scope.tab = stateService.tab(tab);
+            };
+
+            $scope.$on('alertStorage', function (event, data) {
+                $scope.alerts = data;
+            });
+
+            $scope.closeAlert = function (whatAlert) {
+                switch (whatAlert) {
+                    case 'newQuestionAlert':
+                        $scope.alerts.newQuestionAlert.num = 0;
+                        $scope.alerts.newQuestionAlert.display = false;
+                        $scope.alerts.newQuestionAlert = questionService.alertStorage('newQuestionAlert', $scope.alerts.newQuestionAlert);
+                        $rootScope.$broadcast('newQAlertClosed');
+                        break;
+                }
             };
 
             $scope.upVote = function (index, $event) {
@@ -38,32 +54,20 @@ angular.module('qaApp')
                 questionService.postQuestionVote(parseInt(index), -1)
                     .success(function (resp) {
                         globals.removeUpvoted(index);
-                        $scope.questionReference = detailStorage.updateReferenceIndexes(true, index);
+                        $scope.questionReference = detailStorage.updateReferenceIndexes(true, parseInt(index));
                     })
                     .error(function (errResponse) {
                         $window.location.href = "/error500.html";
                     });
             };
 
-
-            //receives this client's upvoted questions indexes
-            socket.on('upvotedIndexes', function (indexesArray) {
-                console.log("'upvotedIndexes' event received");
-                if (indexesArray.length != 0) {
-                    globals.upvotedIndexes(indexesArray);
-                    $scope.questionReference = detailStorage.updateReferenceIndexes(true);
-                }
-            });
-
-            //receives an array containing the top voted questions
-            socket.on('topVoted', function (topVotedArrayOfObjects) {
-                console.log("'topVoted' event received");
-                $scope.topVotedQuestions = globals.currentTop(topVotedArrayOfObjects, true);
+            $scope.$on('currentTop', function (event, topVotedArrayOfObjects) {
+                $scope.topVotedQuestions = topVotedArrayOfObjects;
             });
 
 
-            $scope.$on('questionReference', function (event, data) {
-                $scope.questionReference = data;
+            $scope.$on('questionReference', function (event, reference) {
+                $scope.questionReference = reference;
             });
 
 
@@ -82,44 +86,15 @@ angular.module('qaApp')
                 });
 
 
-            socket.on('joined', function () {
-                socketService.startUp()
-                    .success(function (resp) {
-                        var questionArray = resp.questionsArray;
-
-                        $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);
-                        globals.questionActivity(true);
-                        globals.upvotedIndexes(resp.upvotedIndexes);
-                        globals.currentQuestionIndex(resp.currentQuestionIndex);
-                        $scope.questionReference = detailStorage.add(questionArray, true);
-                        globals.currentQuestions(questionArray, true);
-                        globals.currentTop(resp.topVotedArray, true);
-
-                    })
-                    .error(function (errResponse) {
-                        $window.location.href = "/public/error500.html";
-                    });
+            $scope.$on('startUpSuccess', function (event, data) {
+                $scope.uniqueCuid = data.uniqueCuid;
+                $scope.questionReference = data.questionReference;
             });
 
-            //receives an array containing the top voted questions
-            socket.on('reconnect', function () {
-                console.log("'reconnect' triggered");
-                socketService.reconnect()
-                    .success(function (resp) {
-                        var questionArray = resp.questionsArray;
 
-                        $scope.uniqueCuid = globals.uniqueCuid(resp["uniqueCuid"]);
-                        globals.upvotedIndexes(resp.upvotedIndexes);
-                        globals.currentQuestionIndex(resp.currentQuestionIndex);
-                        $scope.questionReference = detailStorage.add(questionArray, true);
-                        globals.currentQuestions(questionArray, true);
-                        globals.currentTop(resp.topVotedArray, true);
-                        $scope.questionReference = detailStorage.updateReferenceIndexes(true);
-
-                    })
-                    .error(function (errResponse) {
-                        $window.location.href = "/error500.html";
-                    });
+            $scope.$on('startUpSuccess', function (event, data) {
+                $scope.uniqueCuid = data.uniqueCuid;
+                $scope.questionReference = data.questionReference;
             });
 
         }]);

@@ -2,8 +2,40 @@
  * Created by jovinbm on 1/19/15.
  */
 angular.module('qaApp')
-    .factory('questionService', ['$http', function ($http) {
+    .factory('questionService', ['$http', '$rootScope', 'socket', 'socketService', 'globals', 'detailStorage', function ($http, $rootScope, socket, socketService, globals, detailStorage) {
+        var alerts = {
+            newQuestionAlert: {
+                type: 'info',
+                num: 0,
+                display: false
+            }
+        };
+
+        socket.on('newQuestion', function (questionObject) {
+            console.log("'newQuestion' event received factory");
+            globals.questionActivity(true);
+            globals.currentQuestionIndex(questionObject.index);
+            detailStorage.add(questionObject["question"], true);
+            globals.currentQuestions(questionObject["question"]);
+            alerts.newQuestionAlert.num++;
+            alerts.newQuestionAlert.display = true;
+            $rootScope.$broadcast('alertStorage', alerts);
+            $rootScope.$broadcast('currentQuestions', globals.currentQuestions());
+        });
+
         return {
+
+            alertStorage: function (key, newAlert) {
+                if (key && newAlert) {
+                    alerts[key] = newAlert;
+                    return alerts[key];
+                } else if (key) {
+                    return alerts[key];
+                } else {
+                    return alerts;
+                }
+            },
+
             getQuestions: function (currentQuestionIndexObject) {
                 return $http.post('/api/getQuestions', currentQuestionIndexObject);
             },

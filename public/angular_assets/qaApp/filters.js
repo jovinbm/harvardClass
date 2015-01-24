@@ -3,7 +3,13 @@
  */
 angular.module('qaApp')
     .filter("sortObjectToArray", [function () {
-        return function (obj) {
+        return function (obj, spliceToEndPosition) {
+            var pos;
+            if (spliceToEndPosition) {
+                pos = spliceToEndPosition;
+            } else {
+                pos = 0;
+            }
             var result = [];
             var keys = Object.keys(obj);
             var parsedKeys = keys.map(function (x) {
@@ -12,7 +18,7 @@ angular.module('qaApp')
             parsedKeys.sort(function (a, b) {
                 return a - b;
             }).reverse();
-            for (var i = 0, len = keys.length; i < len; i++) {
+            for (var i = pos, len = keys.length; i < len; i++) {
                 result.push(obj[parsedKeys[i]]);
             }
             return result;

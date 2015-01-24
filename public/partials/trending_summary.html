@@ -2,7 +2,7 @@
      ng-class="columnClass">
     <h5 id="trending"
         ng-click="changeTab('trending')">
-        <a href="#/trendingFull">
+        <a href="#/trendingFull/">
             <i class="fa fa-line-chart"></i> Trending
         </a>
     </h5>
@@ -10,14 +10,13 @@
         <li class="list-group-item ng-cloak"
             ng-repeat="eachTop in topVotedQuestions"
             ng-class="[
-                            questionReference[eachTop.questionIndex].questionClass,
-                            questionReference[eachTop.questionIndex].listGroupClass
-                            ]"
-            ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
-                            <span class="badge voteNumber">
-                                {{eachTop.votes}}
-                            </span>
-            <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}">
+            questionReference[eachTop.questionIndex].questionClass,
+            questionReference[eachTop.questionIndex].listGroupClass
+            ]">
+            <span class="badge voteNumber">
+                {{eachTop.votes}}
+            </span>
+            <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/">
                 <strong class="text-outputs">{{eachTop.heading}}</strong>
                 <small class="senderName">by {{eachTop.senderName}}</small>
             </a>

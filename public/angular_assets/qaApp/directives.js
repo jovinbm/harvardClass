@@ -54,8 +54,8 @@ angular.module('qaApp')
             }
         }
     }])
-    .directive('commentFull', ['socket', 'socketService', 'globals', 'sortObjectToArrayFilter', 'commentService',
-        function (socket, socketService, globals, sortObjectToArrayFilter, commentService) {
+    .directive('commentFull', ['$window', 'socket', 'socketService', 'globals', 'sortObjectToArrayFilter', 'commentService',
+        function ($window, socket, socketService, globals, sortObjectToArrayFilter, commentService) {
             return {
                 templateUrl: 'public/partials/comment_full.html',
                 link: function ($scope, $element, $attrs) {
@@ -118,9 +118,7 @@ angular.module('qaApp')
                             });
                     };
 
-
-                    socket.on('newComment', function (commentObject) {
-                        console.log("'newComment' event received");
+                    $scope.$on('newComment', function (event, commentObject) {
                         $scope.increaseIndex(null, commentObject.index);
                         $scope.cmntsReference = commentService.commentsReference(
                             commentObject.comment,
@@ -139,7 +137,6 @@ angular.module('qaApp')
                                 comments,
                                 $scope.myPromotes,
                                 $scope.cmntsReference);
-                            console.log(JSON.stringify($scope.cmntsReference));
                             $scope.comments = sortObjectToArrayFilter(globals.currentComments(comments));
                         })
                         .error(function (errorResponse) {

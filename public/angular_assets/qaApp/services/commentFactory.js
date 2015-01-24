@@ -6,7 +6,12 @@
  */
 angular.module('qaApp')
 
-    .factory('commentService', ['$http', 'globals', function ($http, globals) {
+    .factory('commentService', ['$http', '$rootScope', 'socket', 'globals', function ($http, $rootScope, socket, globals) {
+        socket.on('newComment', function (commentObject) {
+            console.log("'newComment' event received");
+            $rootScope.$broadcast('newComment', commentObject);
+        });
+
         return {
             getComments: function (questionIndex, lastCommentIndex) {
                 return $http.post('/api/getComments', {

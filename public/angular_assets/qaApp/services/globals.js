@@ -117,11 +117,17 @@ angular.module('qaApp')
             },
 
 
-            usersOnline: function (newUsersOnline) {
+            usersOnline: function (newUsersOnline, broacast) {
                 if (newUsersOnline) {
                     usersOnline = newUsersOnline;
+                    if (broacast) {
+                        $rootScope.$broadcast('onlineUsers', usersOnline);
+                    }
                     return usersOnline;
                 } else {
+                    if (broacast) {
+                        $rootScope.$broadcast('onlineUsers', usersOnline);
+                    }
                     return usersOnline;
                 }
             },

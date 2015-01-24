@@ -1,5 +1,23 @@
 <div ng-controller="TrendingCtrl"
      ng-class="columnClass">
+
+    <div ng-if="alerts.newQuestionAlert.display == true">
+        <a ng-href="#/"
+           ng-click="closeAlert('newQuestionAlert')">
+            <alert ng-model="alerts.newQuestionAlert"
+                   type="{{alerts.newQuestionAlert.type}}">
+                {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
+            </alert>
+        </a>
+    </div>
+
+    <a ng-href="#/"
+       type="button"
+       class="btn btn-primary btn-xs"
+       ng-click="changeTab('home')">
+        <i class="fa fa-arrow-left"></i> Question Feed
+    </a>
+
     <h5 id="trending"><i class="fa fa-line-chart"></i> Trending</h5>
 
     <ul class="list-group">
@@ -9,7 +27,7 @@
             ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
             <span class="badge voteNumber">{{eachTop.votes}}</span>
             <h4 class="text-outputs">
-                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}">
+                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/">
                     {{eachTop.heading}}
                 </a>
                 <small class="by">by</small>
@@ -41,7 +59,7 @@
 
                     <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
                 </button>
-                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}"
+                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/"
                    type="button"
                    class="btn btn-default btn-xs pull-right conv">
                     <i class="fa fa-comments-o"></i>

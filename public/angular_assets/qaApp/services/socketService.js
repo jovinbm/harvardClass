@@ -4,10 +4,11 @@
 angular.module('qaApp')
 
     .factory('socket', ['$location', '$rootScope', function ($location, $rootScope) {
+        var url;
         if ($location.port()) {
-            var url = $location.host() + ":" + $location.port();
+            url = $location.host() + ":" + $location.port();
         } else {
-            var url = $location.host();
+            url = $location.host();
         }
         var socket = io.connect(url);
         //return socket;
@@ -30,6 +31,15 @@ angular.module('qaApp')
                         }
                     });
                 })
+            },
+
+            removeAllListeners: function (eventName, callback) {
+                socket.removeAllListeners(eventName, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        callback.apply(socket, args);
+                    });
+                });
             }
         }
     }])
@@ -52,6 +62,23 @@ angular.module('qaApp')
                 })
             }
         }
+    }])
+
+
+    .factory('onlineService', ['socket', 'globals', function (socket, globals) {
+
+        socket.on('usersOnline', function (onlineUsers) {
+            console.log("'usersOnline' event received");
+            var temp = {};
+            temp["onlineUsers"] = globals.usersOnline(onlineUsers, true);
+        });
+
+        return {
+            done: function () {
+                return 1;
+            }
+        }
+
     }])
 
 

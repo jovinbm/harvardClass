@@ -1,6 +1,15 @@
 <div ng-controller="qFullCtrl"
      ng-class="columnClass"
      class="ng-cloak">
+    <div ng-if="alerts.newQuestionAlert.display == true">
+        <a ng-href="#/"
+           ng-click="closeAlert('newQuestionAlert')">
+            <alert ng-model="alerts.newQuestionAlert"
+                   type="{{alerts.newQuestionAlert.type}}">
+                {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
+            </alert>
+        </a>
+    </div>
     <a ng-href="#/"
        type="button"
        class="btn btn-primary btn-xs"
@@ -18,14 +27,14 @@
                 <!--full question view-->
                 <div ng-switch-when="full">
                     <h4 class="text-outputs">
-                        {{question[0].heading}}
+                        {{question.heading}}
                         <small class="by">by</small>
-                        <small class="by sender-name"> {{question[0].senderName}}</small>
+                        <small class="by sender-name"> {{question.senderName}}</small>
                         <small class="questionTime">on {{questionReference[currentQuestion].questionTime}}
                         </small>
                     </h4>
 
-                    <p ta-bind ng-model="question[0].question" class="text-outputs"></p>
+                    <p ta-bind ng-model="question.question" class="text-outputs"></p>
 
                     <div class="clearfix">
                         <button type='button'
@@ -54,7 +63,7 @@
                         <a ng-click="changeViewMode('edit')"
                            type="button"
                            class="btn btn-default btn-xs pull-right conv"
-                           ng-show="question[0].senderCuid == uniqueCuid">
+                           ng-show="question.senderCuid == uniqueCuid">
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
                     </div>
