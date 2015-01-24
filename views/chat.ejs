@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="qaApp">
+<html ng-app="qaApp" ng-controller="HeadCtrl">
 <head>
 
     <meta charset="utf-8">
@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
     <meta name="description" content="Harvard Website to ask questions in class"/>
     <meta name="author" content="Jovin Mwilanga"/>
-
-    <title>HarvardClass</title>
 
     <!--google analytics-->
     <script>
@@ -43,6 +41,8 @@
 
     <!-- loads custom css file -->
     <link rel="stylesheet" href="/public/css/chat.css">
+
+    <title ng-cloak>{{title}}</title>
 
 </head>
 <body ng-controller="MainController">

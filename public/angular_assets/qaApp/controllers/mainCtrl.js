@@ -2,6 +2,18 @@
  * Created by jovinbm on 1/18/15.
  */
 angular.module('qaApp')
+    .controller('HeadCtrl', ['$scope', function ($scope) {
+        $scope.title = 'Harvard Class';
+        $scope.changeTitle = function (activity) {
+            if (activity > 0) {
+                $scope.title = "(" + activity + ") HarvardClass";
+            } else {
+                $scope.title = "HarvardClass";
+            }
+        }
+
+
+    }])
     .controller('MainController', ['$window', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'stateService', 'mainService',
         function ($window, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, stateService, mainService) {
 
@@ -24,12 +36,14 @@ angular.module('qaApp')
 
             $scope.$on('alertStorage', function (event, data) {
                 $scope.alerts = data;
+                $scope.changeTitle(data.newQuestionAlert.num);
             });
 
             $scope.closeAlert = function (whatAlert) {
                 switch (whatAlert) {
                     case 'newQuestionAlert':
                         $scope.alerts.newQuestionAlert.num = 0;
+                        $scope.changeTitle($scope.alerts.newQuestionAlert.num);
                         $scope.alerts.newQuestionAlert.display = false;
                         $scope.alerts.newQuestionAlert = questionService.alertStorage('newQuestionAlert', $scope.alerts.newQuestionAlert);
                         $rootScope.$broadcast('newQAlertClosed');
