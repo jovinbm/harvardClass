@@ -75,24 +75,29 @@ module.exports = {
     },
 
 
-    newPromote: function (req, res) {
-        basic.consoleLogger('NEW_PROMOTE event received');
+    promote: function (req, res) {
+        basic.consoleLogger('PROMOTE event received');
         var questionIndex = req.body.questionIndex;
         var promoteIndex = req.body.commentIndex;
+        var inc = req.body.inc;
         var uniqueId = req.body.uniqueId;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
-                res.status(500).send({msg: 'ERROR: newPromotePOST: Could not retrieve user', err: err});
-                basic.consoleLogger("ERROR: newPromotePOST: Could not retrieve user: " + err);
+                res.status(500).send({msg: 'ERROR: promotePOST: Could not retrieve user', err: err});
+                basic.consoleLogger("ERROR: promotePOST: Could not retrieve user: " + err);
             }
         }
 
-        //only execute promote if the user has not voted on the question
         function success(theHarvardUser) {
             if (theHarvardUser.customLoggedInStatus == 1) {
-                comment_handler.newPromote(req, res, theHarvardUser, questionIndex, promoteIndex, uniqueId);
-
+                if (inc == -1 || theHarvardUser.promotedCommentsUniqueIds.indexOf(uniqueId) == -1) {
+                    comment_handler.promote(req, res, theHarvardUser, questionIndex, promoteIndex, inc, uniqueId);
+                } else {
+                    //promote process did not pass checks
+                    res.status(200).send({msg: 'promote did not pass checks'});
+                    basic.consoleLogger('promote: Not executed: Did not pass checks');
+                }
             } else {
                 //TODO -- redirect to login
             }

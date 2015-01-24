@@ -109,8 +109,22 @@ module.exports = {
     },
 
 
-    incrementCommentPromotes: function (uniqueId, error_neg_1, error_0, success) {
-        Comment.update({uniqueId: uniqueId}, {$inc: {promotes: 1}}, function (err) {
+    pullPromoteFromUser: function (openId, questionIndex, uniqueId, error_neg_1, error_0, success) {
+        HarvardUser.update({id: openId}, {
+                $pull: {promotedCommentsUniqueIds: uniqueId}
+            }, function (err) {
+                if (err) {
+                    error_neg_1(-1, err);
+                } else {
+                    success();
+                }
+            }
+        )
+    },
+
+
+    changeCommentPromotes: function (uniqueId, inc, error_neg_1, error_0, success) {
+        Comment.update({uniqueId: uniqueId}, {$inc: {promotes: inc}}, function (err) {
             if (err) {
                 error_neg_1(-1, err);
             } else {

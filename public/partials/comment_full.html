@@ -24,9 +24,15 @@
                 </a>
                 <a type="button"
                    ng-class="cmntsReference[eachComment.commentIndex].buttonClass"
-                   ng-disabled="cmntsReference[eachComment.commentIndex].ifDisabled"
+                   ng-if="cmntsReference[eachComment.commentIndex].ifPromoted == false"
                    ng-click="promote(currentQuestion, eachComment.commentIndex, eachComment.uniqueId, $event)">
-                    <i class="fa fa-angle-up"></i>
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a type="button"
+                   ng-class="cmntsReference[eachComment.commentIndex].buttonClass"
+                   ng-if="cmntsReference[eachComment.commentIndex].ifPromoted == true"
+                   ng-click="removePromote(currentQuestion, eachComment.commentIndex, eachComment.uniqueId, $event)">
+                    <i class="fa fa-chevron-down"></i>
                 </a>
             </div>
         </div>

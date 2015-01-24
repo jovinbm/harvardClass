@@ -135,8 +135,8 @@ module.exports = {
                 basic.consoleLogger('upvote: failed!');
             } else if (status == 0) {
                 ioJs.emitToOne(theHarvardUser.socketRoom, "upvotedIndexes", []);
-                res.status(200).send({msg: "upvote: partial ERROR: query returned null/undefined"});
-                basic.consoleLogger('**partial ERROR!: upvote event handler: failure: query returned NULL/UNDEFINED');
+                res.status(200).send({msg: "upvote: partial ERROR: Status:200: query returned null/undefined: There might also be not top voted object"});
+                basic.consoleLogger('**partial ERROR!: Status:200 upvote event handler: failure: query returned NULL/UNDEFINED: There might be not top voted object');
             }
         }
 

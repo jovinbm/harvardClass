@@ -79,10 +79,22 @@ angular.module('qaApp')
                     };
 
                     $scope.promote = function (questionIndex, commentIndex, uniqueId, $event) {
-                        commentService.postPromote(questionIndex, commentIndex, uniqueId)
+                        commentService.postPromote(questionIndex, commentIndex, 1, uniqueId)
                             .success(function (resp) {
                                 $scope.myPromotes.push("q" + questionIndex + "c" + commentIndex);
-                                $scope.cmntsReference[commentIndex].ifDisabled = true;
+                                $scope.cmntsReference[commentIndex].ifPromoted = true;
+                            })
+                            .error(function (errResponse) {
+                                $window.location.href = "/error500.html";
+                            });
+                    };
+
+                    $scope.removePromote = function (questionIndex, commentIndex, uniqueId, $event) {
+                        commentService.postPromote(questionIndex, commentIndex, -1, uniqueId)
+                            .success(function (resp) {
+                                var temp = "q" + questionIndex + "c" + commentIndex;
+                                $scope.myPromotes.splice($scope.myPromotes.indexOf(temp), 1);
+                                $scope.cmntsReference[commentIndex].ifPromoted = false;
                             })
                             .error(function (errResponse) {
                                 $window.location.href = "/error500.html";
@@ -127,6 +139,7 @@ angular.module('qaApp')
                                 comments,
                                 $scope.myPromotes,
                                 $scope.cmntsReference);
+                            console.log(JSON.stringify($scope.cmntsReference));
                             $scope.comments = sortObjectToArrayFilter(globals.currentComments(comments));
                         })
                         .error(function (errorResponse) {

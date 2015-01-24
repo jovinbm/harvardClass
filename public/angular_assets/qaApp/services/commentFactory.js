@@ -38,10 +38,10 @@ angular.module('qaApp')
                     /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
                     if (searchArrayIfExists(commentObject.uniqueId, myPromotes)) {
                         temp.buttonClass = commentClass + "b" + " btn btn-default btn-xs promote";
-                        temp.ifDisabled = true;
+                        temp.ifPromoted = true;
                     } else {
                         temp.buttonClass = commentClass + "b" + " btn btn-default btn-xs promote";
-                        temp.ifDisabled = false;
+                        temp.ifPromoted = false;
                     }
 
                     commentsReference[commentIndex] = temp;
@@ -93,14 +93,15 @@ angular.module('qaApp')
                 return $http.post('/api/newComment', commentToDatabase);
             },
 
-            postPromote: function (questionIndex, commentIndex, uniqueId) {
+            postPromote: function (questionIndex, commentIndex, inc, uniqueId) {
                 var promote = {
                     "questionIndex": questionIndex,
                     "commentIndex": commentIndex,
+                    "inc": inc,
                     "uniqueId": uniqueId
                 };
 
-                return $http.post('/api/newPromote', promote);
+                return $http.post('/api/promote', promote);
             }
         }
     }]);

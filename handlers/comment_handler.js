@@ -107,40 +107,72 @@ module.exports = {
     },
 
 
-    newPromote: function (req, res, theHarvardUser, questionIndex, promoteIndex, uniqueId) {
-        basic.consoleLogger("newPromote: newPromote event handler called");
-        //push the new promote index to the respective upvoter
+    promote: function (req, res, theHarvardUser, questionIndex, promoteIndex, inc, uniqueId) {
+        basic.consoleLogger("promote: promote event handler called");
+        var promotedArray = theHarvardUser.postedCommentUniqueIds;
+        var errorCounter = 0;
+        switch (inc) {
+            case 1:
+                promotedArray.push(uniqueId);
+                break;
+            case -1:
+                if (promotedArray.indexOf(uniqueId) != -1) {
+                    promotedArray.splice(promotedArray.indexOf(uniqueId), 1);
+                }
+                break;
+            default:
+                errorCounter++;
+                basic.consoleLogger("ERROR: promote event handler: switch statement got unexpected value");
+                res.status(500).send({
+                    msg: 'ERROR: promote event handler: switch statement got unexpected value'
+                });
+                basic.consoleLogger('upvote: failed!');
+        }
+
         function error(status, err) {
             if (status == -1) {
-                basic.consoleLogger("ERROR: newPromote event handler: Error while executing db operations" + err);
+                basic.consoleLogger("ERROR: promote event handler: Error while executing db operations" + err);
                 /*complete the request by sending the client the internal server error*/
                 res.status(500).send({
-                    msg: 'ERROR: newPromote event handler: Error while executing db operations',
+                    msg: 'ERROR: promote event handler: Error while executing db operations',
                     err: err
                 });
-                basic.consoleLogger('newPromote: failed!');
+                basic.consoleLogger('promote: failed!');
             } else if (status == 0) {
-                res.status(200).send({msg: "newPromote: partial ERROR: query returned null/undefined"});
-                basic.consoleLogger('**partial ERROR!: newPromote event handler: failure: query returned NULL/UNDEFINED');
+                res.status(200).send({msg: "promote:Status:200 partial ERROR: query returned null/undefined"});
+                basic.consoleLogger('**partial ERROR!:Status:200 promote event handler: failure: query returned NULL/UNDEFINED: There also might be no promoted comments');
             }
         }
 
         function success() {
-            function broadcastTop() {
+            function done() {
 
-                function done(topPromotedArrayOfObjects) {
+                function found(topPromotedArrayOfObjects) {
+
+                    //++++++++++++++++++++++++++++++++++
+                    //TODO -implement on client side the receive of promoted (to up or down icon)
+                    ioJs.emitToOne(theHarvardUser.socketRoom, 'promotesUniqueIds', promotedArray);
+                    //+++++++++++++++++++++++++++++++++
+
                     ioJs.emitToAll('topPromoted', topPromotedArrayOfObjects);
-                    res.status(200).send({msg: 'newPromote success'});
-                    basic.consoleLogger('newPromote: Success');
+                    res.status(200).send({msg: 'promote success'});
+                    basic.consoleLogger('promote: Success');
                 }
 
-                commentDB.findTopPromotedComments(-1, 10, questionIndex, error, error, done);
+                commentDB.findTopPromotedComments(-1, 3, questionIndex, error, error, found);
             }
 
-            commentDB.incrementCommentPromotes(uniqueId, error, error, broadcastTop);
+            commentDB.changeCommentPromotes(uniqueId, inc, error, error, done);
         }
 
-        commentDB.pushPromoteToUser(req.user.id, questionIndex, uniqueId, error, error, success);
+        switch (inc) {
+            case 1:
+                commentDB.pushPromoteToUser(req.user.id, questionIndex, uniqueId, error, error, success);
+                break;
+            case -1:
+                commentDB.pullPromoteFromUser(req.user.id, questionIndex, uniqueId, error, error, success);
+                break;
+        }
     },
 
 

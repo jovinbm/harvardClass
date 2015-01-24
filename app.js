@@ -129,7 +129,7 @@ app.post('/api/upvote', authenticate.ensureAuthenticated, questionAPI.upvote);
 app.post('/api/getComments', authenticate.ensureAuthenticated, commentAPI.getComments);
 app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);
 app.post('/api/updateComment', authenticate.ensureAuthenticated, commentAPI.updateComment);
-app.post('/api/newPromote', authenticate.ensureAuthenticated, commentAPI.newPromote);
+app.post('/api/promote', authenticate.ensureAuthenticated, commentAPI.promote);
 
 app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
 app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutAPI.logoutCustomChat);
