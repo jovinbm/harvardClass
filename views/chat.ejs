@@ -32,12 +32,18 @@
     <link rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
+    <!--animate.css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"/>
+
     <!--loads font awesome-->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 
     <!--normalize.css-->
     <link rel="stylesheet" href="/bower_components/normalize.css/normalize.css"/>
+
+    <!--toastr-->
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
 
     <!-- loads custom css file -->
     <link rel="stylesheet" href="/public/css/chat.css">
@@ -46,18 +52,12 @@
 
 </head>
 <body ng-controller="MainController">
-
+<toast></toast>
 <!--start of nav-->
 <div class="ng-cloak">
     <div top-qa-nav></div>
 </div>
 <!--end of nav-->
-<!--start of bottom nav-->
-<div class="ng-cloak">
-    <div bottom-qa-nav></div>
-</div>
-<!--end of bottom nav-->
-
 
 <!--middle container-->
 <div class="container">
@@ -127,6 +127,8 @@
 <script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
 <script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
 
+<!--toastr js-->
+<script src="/bower_components/toastr/toastr.min.js"></script>
 
 <script type="text/javascript" src="/public/js/chat.js"></script>
 <script type="text/javascript" src="/public/angular_assets/qaApp/mainApp.js"></script>

@@ -1,7 +1,9 @@
 <div ng-controller="TrendingCtrl"
-     ng-class="columnClass">
+     ng-class="columnClass"
+     class="animated fadeIn">
 
-    <div ng-if="alerts.newQuestionAlert.display == true">
+    <div ng-if="alerts.newQuestionAlert.display == true"
+         class="animated fadeIn">
         <a ng-href="#/"
            ng-click="closeAlert('newQuestionAlert')">
             <alert ng-model="alerts.newQuestionAlert"

@@ -8,6 +8,10 @@ angular.module('qaApp')
                 type: 'info',
                 num: 0,
                 display: false
+            },
+            saved: {
+                type: 'info',
+                msg: "Saved!"
             }
         };
 
@@ -17,8 +21,10 @@ angular.module('qaApp')
             globals.currentQuestionIndex(questionObject.index);
             detailStorage.add(questionObject["question"], true);
             globals.currentQuestions(questionObject["question"]);
-            alerts.newQuestionAlert.num++;
-            alerts.newQuestionAlert.display = true;
+            if (questionObject.update == false) {
+                alerts.newQuestionAlert.num++;
+                alerts.newQuestionAlert.display = true;
+            }
             $rootScope.$broadcast('alertStorage', alerts);
             $rootScope.$broadcast('currentQuestions', globals.currentQuestions());
         });

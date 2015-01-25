@@ -1,5 +1,6 @@
 <div ng-controller="qFeedCtrl"
-     ng-class="columnClass">
+     ng-class="columnClass"
+     class="animated fadeIn">
     <h5>
         <span>
             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -17,8 +18,8 @@
         </span>
     </h5>
 
-    <div>
-        <alert ng-if="alerts.newQuestionAlert.display == true"
+    <div ng-if="alerts.newQuestionAlert.display == true">
+        <alert class="animated fadeIn"
                ng-model="alerts.newQuestionAlert"
                type="{{alerts.newQuestionAlert.type}}"
                ng-click="closeAlert('newQuestionAlert')">

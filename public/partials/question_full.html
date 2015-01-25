@@ -1,7 +1,8 @@
 <div ng-controller="qFullCtrl"
      ng-class="columnClass"
-     class="ng-cloak">
-    <div ng-if="alerts.newQuestionAlert.display == true">
+     class="ng-cloak animated fadeIn">
+    <div ng-if="alerts.newQuestionAlert.display == true"
+         class="animated fadeIn">
         <a ng-href="#/"
            ng-click="closeAlert('newQuestionAlert')">
             <alert ng-model="alerts.newQuestionAlert"
@@ -34,7 +35,7 @@
                         </small>
                     </h4>
 
-                    <p ta-bind ng-model="question.question" class="text-outputs"></p>
+                    <p ta-bind ng-model="question.question" class="text-outputs animated fadeIn"></p>
 
                     <div class="clearfix">
                         <button type='button'

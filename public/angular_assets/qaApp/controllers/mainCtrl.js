@@ -24,6 +24,7 @@ angular.module('qaApp')
             $scope.questionOnView = stateService.questionOnView();
             $scope.tab = stateService.tab();
             $scope.alerts = questionService.alertStorage();
+            $scope.loading = false;
 
             $scope.appState = "home";
             $scope.changeState = function (newState) {
@@ -38,6 +39,15 @@ angular.module('qaApp')
                 $scope.alerts = data;
                 $scope.changeTitle(data.newQuestionAlert.num);
             });
+
+            $scope.showAlert = function (whatAlert, text) {
+                switch (whatAlert) {
+                    case 'success':
+                        $scope.alerts = questionService.alertStorage();
+                        toastr.success(text);
+                        break;
+                }
+            };
 
             $scope.closeAlert = function (whatAlert) {
                 switch (whatAlert) {

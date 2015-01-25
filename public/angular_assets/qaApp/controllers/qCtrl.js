@@ -51,6 +51,7 @@ angular.module('qaApp')
                 questionService.postEditedQuestion(temp)
                     .success(function (resp) {
                         $scope.changeViewMode('full');
+                        $scope.showAlert('success', 'Saved!');
                     });
             };
 

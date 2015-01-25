@@ -113,8 +113,9 @@ angular.module('qaApp')
                         temp["comment"] = finalComment;
                         commentService.postEditedComment(temp)
                             .success(function (resp) {
-                                $scope.cmntsReference[commentIndex].viewMode = 'viewMode'
+                                $scope.cmntsReference[commentIndex].viewMode = 'viewMode';
                                 $scope.changeEditing();
+                                $scope.showAlert('success', 'Saved!');
                             });
                     };
 

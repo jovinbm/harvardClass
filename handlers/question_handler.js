@@ -21,7 +21,8 @@ module.exports = {
                         function done(questionObject) {
                             ioJs.emitToAll('newQuestion', {
                                 "question": questionObject,
-                                "index": 1
+                                "index": 1,
+                                "update": false
                             });
                             res.status(200).send({msg: 'newQuestion success'});
                             basic.consoleLogger('newQuestion: Success');
@@ -81,7 +82,8 @@ module.exports = {
                     function done(questionObject) {
                         ioJs.emitToAll('newQuestion', {
                             "question": questionObject,
-                            "index": 0
+                            "index": 0,
+                            "update": true
                         });
                         res.status(200).send({msg: 'updateQuestion success'});
                         basic.consoleLogger('updateQuestion: Success');
