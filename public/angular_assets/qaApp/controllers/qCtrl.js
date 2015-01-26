@@ -50,6 +50,9 @@ angular.module('qaApp')
             if (stateService.tab() != 'home') {
                 $scope.changeTab('home');
             }
+            if ($scope.qColumnState != 'qFeed') {
+                $scope.changeQColumnState('qFeed');
+            }
 
             $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(), $scope.alerts.newQuestionAlert.num);
             $scope.columnClass = stateService.qClass();
@@ -68,6 +71,10 @@ angular.module('qaApp')
 
             if ($scope.tab != 'home') {
                 $scope.changeTab('home');
+            }
+
+            if ($scope.qColumnState != 'qFull') {
+                $scope.changeQColumnState('qFull');
             }
 
             //2 view modes, edit and full

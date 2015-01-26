@@ -18,11 +18,6 @@ body {
     font-size: 12px;
 }
 
-ul > li > a.nav-tab-a {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 .btn {
     font-size: 10px;
 }
@@ -73,8 +68,8 @@ div > div > div > li > div {
     margin-bottom: 5px;
 }
 
-a:hover {
-    text-decoration: none;
+a:focus {
+    outline: 0;
 }
 
 .text-outputs {
@@ -121,6 +116,9 @@ questions feed
 }
 
 /*disabling focus effects*/
+div > a.btn.btn-default.btn-lg.navbar-btn.pull-right:focus,
+body > div > div > div.navbar.navbar-default.navbar-fixed-top.visible-xs > ul > li.dropdown > a:focus,
+ul > li.dropdown.open > a:focus,
 ul > li > a:focus,
 div.collapse.navbar-collapse.navHeaderCollapse > a:focus,
 span.hidden-sm.hidden-md.hidden-lg > a:focus {

@@ -24,6 +24,11 @@ angular.module('qaApp')
             $scope.tab = stateService.tab();
             $scope.alerts = questionService.alertStorage();
 
+            $scope.qColumnState = 'qFeed';
+            $scope.changeQColumnState = function (newState) {
+                $scope.qColumnState = newState;
+            };
+
             $scope.changeTab = function (tab) {
                 $scope.tab = stateService.tab(tab);
             };

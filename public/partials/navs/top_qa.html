@@ -1,13 +1,15 @@
-<div class="navbar navbar-default navbar-fixed-top"
+<div class="navbar navbar-default navbar-fixed-top hidden-xs"
      role="navigation"
      ng-controller="logInOutCtrl">
     <div class="container">
-        <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+        <a href="/"
+           class="navbar-brand">
+            <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
             HarvardClass
         </a>
 
         <ul class="nav navbar-nav navbar-right">
-            <li ng-class="{'active': tab == 'home'}">
+            <li ng-class="{'active': tab == 'home' && qColumnState == 'qFeed'}">
                 <a ng-href="#/1"
                    ng-click="changeTab('home')"
                    class="nav-tab-a">Home
@@ -58,4 +60,54 @@
             <i class="fa fa-pencil"></i> New Question
         </a>
     </div>
+</div>
+
+
+<div class="navbar navbar-default navbar-fixed-top visible-xs"
+     role="navigation"
+     ng-controller="logInOutCtrl">
+    <ul class="nav nav-tabs visible-xs"
+        ng-controller="logInOutCtrl">
+        <li ng-class="{'active': tab == 'home' && qColumnState == 'qFeed'}">
+            <a ng-href="#/1"
+               ng-click="changeTab('home')"
+               class="nav-tab-a">Home
+            </a>
+        </li>
+        <li ng-class="{'active': tab == 'trending'}">
+            <a ng-href="#/trending/full/"
+               ng-click="changeTab('trending')"
+               class="nav-tab-a">Trending
+            </a>
+        </li>
+        <li>
+            <a href="#"
+               target="_self"
+               class="nav-tab-a">Users
+            </a>
+        </li>
+        <li class="dropdown">
+            <a href="#"
+               target="_self"
+               class="dropdown-toggle" data-toggle="dropdown">
+                {{customUsername}} <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <!--<li>-->
+                <!--<a href="#"-->
+                <!--target="_self"-->
+                <!--class="logoutCustomChat"-->
+                <!--ng-click="logoutCustomChat()">Logout-->
+                <!--</a>-->
+                <!--</li>-->
+                <li>
+                    <a href="#"
+                       target="_self"
+                       class="logoutHarvardChat"
+                       ng-click="logoutHarvardChat()">Logout
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </div>
