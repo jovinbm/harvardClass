@@ -56,7 +56,8 @@ module.exports = {
                 logout_handler.logoutHarvardChat(req, res, theHarvardUser);
             }
 
-            userDB.toggleCls(req.user.id, 0, error, error, toggled);
+            //userDB.toggleCls(req.user.id, 0, error, error, toggled);
+            toggled();
         }
 
         userDB.findHarvardUser(req.user.id, error, error, success);
