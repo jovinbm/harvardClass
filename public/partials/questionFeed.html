@@ -1,12 +1,19 @@
 <div ng-controller="qFeedCtrl"
      ng-class="columnClass"
      class="animated fadeIn">
-    <h5 class="hidden-xs">
+    <h5 class="hidden-xs text-primary">
         <span>
             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
             Question Feed
         </span>
     </h5>
+
+    <form id="feed-search-form">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" aria-describedby="search-addon">
+            <span class="input-group-addon" id="search-addon"><i class="fa fa-search"></i></span>
+        </div>
+    </form>
 
     <div ng-if="alerts.newQuestionAlert.display == true">
         <a ng-if="pagination.currentPage == 1">
@@ -74,7 +81,8 @@
         </li>
     </ul>
 
-    <div ng-if="pagination['totalItems'] > 20">
+    <div ng-if="pagination['totalItems'] > 20"
+         id="bottom-pagination">
         <pagination total-items="pagination['totalItems']"
                     items-per-page="pagination['items-per-page']"
                     ng-model="currPage"

@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "normalize.css": "~3.0.2",
-    "toastr": "~2.1.0"
+    "toastr": "~2.1.0",
+    "bootstrap": "~3.3.2"
   }
 }

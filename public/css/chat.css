@@ -5,9 +5,40 @@
 
 /*defaults*/
 body {
-    padding-top: 70px;
+    padding-top: 50px;
     padding-bottom: 70px;
     font-size: 12px;
+}
+
+/*nav*/
+#mobile-nav-header {
+    height: 30px;
+    margin-bottom: 0;
+}
+
+ul > li.col-xs-3 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+ul > li.col-xs-3 > a {
+    text-align: center;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: 700;
+}
+
+#desk-nav-header {
+    height: 30px;
+    margin-bottom: 0;
+}
+
+#bottom-pagination {
+    text-align: center;
+}
+
+#feed-search-form {
+    margin-top: 10px;
 }
 
 .form-error-notice {
@@ -107,12 +138,6 @@ questions feed
 /*comment input rich text editor*/
 .comment_input {
     margin: 10px 0 40px 0;
-}
-
-/*bottom nav bar
-*/
-.bottom-nav-pills {
-    display: inline-block;
 }
 
 /*disabling focus effects*/
