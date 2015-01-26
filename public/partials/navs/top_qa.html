@@ -1,56 +1,12 @@
 <div class="navbar navbar-default navbar-fixed-top"
+     role="navigation"
      ng-controller="logInOutCtrl">
     <div class="container">
-        <div class="navbar-header">
-            <!--button to target the navbar-right which will appear on collapse of navbar items-->
-            <button type="button" class='navbar-toggle collapsed' data-toggle="collapse"
-                    data-target=".navHeaderCollapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                HarvardClass
-            </a>
-        </div>
+        <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+            HarvardClass
+        </a>
 
-        <!--this navbar will be collapsed on mobile-->
-        <div class="collapse navbar-collapse navHeaderCollapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#"
-                       target="_self"
-                       class="dropdown-toggle" data-toggle="dropdown">
-                        {{customUsername}} <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#"
-                               target="_self"
-                               class="logoutCustomChat"
-                               ng-click="logoutCustomChat()">Logout from Session
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                               target="_self"
-                               class="logoutHarvardChat"
-                               ng-click="logoutHarvardChat()">Logout from Harvard
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <a type="button"
-               class="btn btn-primary navbar-btn pull-right"
-               href="#myModal"
-               target="_self"
-               role="button"
-               data-toggle="modal">
-                <i class="fa fa-pencil"></i> New Question
-            </a>
-        </div>
-        <ul class="nav nav-tabs">
+        <ul class="nav navbar-nav navbar-right">
             <li ng-class="{'active': tab == 'home'}">
                 <a ng-href="#/1"
                    ng-click="changeTab('home')"
@@ -69,12 +25,37 @@
                    class="nav-tab-a">Users
                 </a>
             </li>
-            <li>
+            <li class="dropdown">
                 <a href="#"
                    target="_self"
-                   class="nav-tab-a">Profile
+                   class="dropdown-toggle" data-toggle="dropdown">
+                    {{customUsername}} <b class="caret"></b>
                 </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#"
+                           target="_self"
+                           class="logoutCustomChat"
+                           ng-click="logoutCustomChat()">Logout from Session
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           target="_self"
+                           class="logoutHarvardChat"
+                           ng-click="logoutHarvardChat()">Logout from Harvard
+                        </a>
+                    </li>
+                </ul>
             </li>
         </ul>
+        <a type="button"
+           class="btn btn-default btn-lg navbar-btn pull-right"
+           href="#myModal"
+           target="_self"
+           role="button"
+           data-toggle="modal">
+            <i class="fa fa-pencil"></i> New Question
+        </a>
     </div>
 </div>
