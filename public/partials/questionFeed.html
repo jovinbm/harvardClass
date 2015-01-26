@@ -74,7 +74,7 @@
         </li>
     </ul>
 
-    <div>
+    <div ng-if="pagination['totalItems'] > 20">
         <pagination total-items="pagination['totalItems']"
                     items-per-page="pagination['items-per-page']"
                     ng-model="currPage"
