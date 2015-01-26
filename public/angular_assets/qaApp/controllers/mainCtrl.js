@@ -14,8 +14,8 @@ angular.module('qaApp')
 
 
     }])
-    .controller('MainController', ['$window', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'stateService', 'mainService',
-        function ($window, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, stateService, mainService) {
+    .controller('MainController', ['$window', '$location', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'stateService', 'mainService',
+        function ($window, $location, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, stateService, mainService) {
 
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
@@ -23,6 +23,17 @@ angular.module('qaApp')
             $scope.questionOnView = stateService.questionOnView();
             $scope.tab = stateService.tab();
             $scope.alerts = questionService.alertStorage();
+
+            //back functionality
+            var history = [];
+            $rootScope.$on('$routeChangeSuccess', function () {
+                history.push($location.$$path);
+            });
+            $rootScope.back = function () {
+                var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
+                $location.path(prevUrl);
+            };
+
 
             $scope.qColumnState = 'qFeed';
             $scope.changeQColumnState = function (newState) {

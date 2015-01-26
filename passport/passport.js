@@ -2,10 +2,10 @@
  * Created by jovinbm on 1/12/15.
  */
 //harvard openId config
-var returnURL = "https://harvardclass.herokuapp.com/harvardId";
-var realmURL = "https://harvardclass.herokuapp.com";
-//var returnURL = "http://localhost:3000/harvardId";
-//var realmURL = "http://localhost:3000/";
+//var returnURL = "https://harvardclass.herokuapp.com/harvardId";
+//var realmURL = "https://harvardclass.herokuapp.com";
+var returnURL = "http://localhost:3000/harvardId";
+var realmURL = "http://localhost:3000/";
 
 var cuid = require('cuid');
 var basic = require('../functions/basic.js');
