@@ -19,17 +19,10 @@ angular.module('qaApp')
 
             $scope.customUsername = globals.customUsername();
             $scope.uniqueCuid = globals.uniqueCuid();
-            $scope.uniqueCuid = globals.uniqueCuid();
             $scope.questionReference = detailStorage.getReference();
             $scope.questionOnView = stateService.questionOnView();
             $scope.tab = stateService.tab();
             $scope.alerts = questionService.alertStorage();
-            $scope.loading = false;
-
-            $scope.appState = "home";
-            $scope.changeState = function (newState) {
-                $scope.appState = newState;
-            };
 
             $scope.changeTab = function (tab) {
                 $scope.tab = stateService.tab(tab);
@@ -108,12 +101,6 @@ angular.module('qaApp')
                 .error(function (errResponse) {
                     $window.location.href = "/error500.html";
                 });
-
-
-            $scope.$on('startUpSuccess', function (event, data) {
-                $scope.uniqueCuid = data.uniqueCuid;
-                $scope.questionReference = data.questionReference;
-            });
 
 
             $scope.$on('startUpSuccess', function (event, data) {

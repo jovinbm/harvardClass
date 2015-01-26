@@ -3,7 +3,7 @@
      class="ng-cloak animated fadeIn">
     <div ng-if="alerts.newQuestionAlert.display == true"
          class="animated fadeIn">
-        <a ng-href="#/"
+        <a ng-href="#/1"
            ng-click="closeAlert('newQuestionAlert')">
             <alert ng-model="alerts.newQuestionAlert"
                    type="{{alerts.newQuestionAlert.type}}">
@@ -11,13 +11,6 @@
             </alert>
         </a>
     </div>
-    <a ng-href="#/"
-       type="button"
-       class="btn btn-primary btn-xs"
-       ng-click="changeTab('home')">
-        <i class="fa fa-arrow-left"></i> Question Feed
-    </a>
-
 
     <ul class="list-unstyled">
         <li class="list-unstyled question-full-li"

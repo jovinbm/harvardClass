@@ -1,35 +1,35 @@
 <div ng-controller="qFeedCtrl"
      ng-class="columnClass"
      class="animated fadeIn">
-    <h5>
+    <h5 class="hidden-xs">
         <span>
             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
             Question Feed
         </span>
-        <span class="hidden-sm hidden-md hidden-lg">
-            <a type="button"
-               class="btn btn-primary btn-xs pull-right"
-               href="#myModal"
-               target="_self"
-               role="button"
-               data-toggle="modal">
-                <i class="fa fa-pencil"></i> New Question
-            </a>
-        </span>
     </h5>
 
     <div ng-if="alerts.newQuestionAlert.display == true">
-        <alert class="animated fadeIn"
-               ng-model="alerts.newQuestionAlert"
-               type="{{alerts.newQuestionAlert.type}}"
-               ng-click="closeAlert('newQuestionAlert')">
-            {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
-        </alert>
+        <a ng-if="pagination.currentPage == 1">
+            <alert class="animated fadeIn"
+                   ng-model="alerts.newQuestionAlert"
+                   type="{{alerts.newQuestionAlert.type}}"
+                   ng-click="closeAlert('newQuestionAlert')">
+                {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
+            </alert>
+        </a>
+        <a ng-if="pagination.currentPage != 1">
+            <alert class="animated fadeIn"
+                   ng-model="alerts.newQuestionAlert"
+                   type="{{alerts.newQuestionAlert.type}}"
+                   ng-click="showNew()">
+                {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
+            </alert>
+        </a>
     </div>
 
-    <ul class="list-unstyled">
+    <ul class="list-unstyled animated fadeIn">
         <li class="list-unstyled clearfix question-feed-li"
-            ng-repeat="eachQuestion in questions"
+            ng-repeat="eachQuestion in questions | limitTo : 20"
             ng-class="questionReference[eachQuestion.questionIndex].questionClass">
 
             <h4 class="text-outputs">
@@ -74,4 +74,13 @@
         </li>
     </ul>
 
+    <div>
+        <pagination total-items="pagination['totalItems']"
+                    items-per-page="pagination['items-per-page']"
+                    ng-model="currPage"
+                    max-size="5" class="pagination-sm"
+                    boundary-links="true" rotate="false"
+                    ng-change="navigate()">
+        </pagination>
+    </div>
 </div>

@@ -11,7 +11,7 @@ module.exports = {
 
     getQuestions: function (req, res) {
         basic.consoleLogger('GET_QUESTIONS event received');
-        var currentQuestionIndex = req.body.currentQuestionIndex;
+        var page = req.body.page;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
@@ -22,7 +22,7 @@ module.exports = {
 
         function success(theHarvardUser) {
             if (theHarvardUser.customLoggedInStatus == 1) {
-                question_handler.getQuestions(req, res, theHarvardUser, currentQuestionIndex);
+                question_handler.getQuestions(req, res, theHarvardUser, page);
             }
             //TODO -- redirect to custom login
         }

@@ -9,8 +9,9 @@ angular.module('qaApp')
                 $scope.topVotedQuestions = globals.currentTop();
             });
 
-            $scope.changeState('qFeed');
-            $scope.changeTab('home');
+            if ($scope.tab != 'home') {
+                $scope.changeTab('home');
+            }
 
             $scope.topVotedQuestions = globals.currentTop();
             $scope.columnClass = stateService.trClass();
@@ -22,8 +23,9 @@ angular.module('qaApp')
                 $scope.topVotedQuestions = globals.currentTop();
             });
 
-            $scope.changeState('qFeed');
-            $scope.changeTab('trending');
+            if ($scope.tab != 'trending') {
+                $scope.changeTab('trending');
+            }
 
             $scope.topVotedQuestions = globals.currentTop();
             $scope.columnClass = stateService.trClass();

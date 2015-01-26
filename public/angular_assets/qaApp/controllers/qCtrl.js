@@ -3,12 +3,43 @@
  */
 angular.module('qaApp')
 
-    .controller('qFeedCtrl', ['$scope', 'socket', 'socketService', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'questionService',
-        function ($scope, socket, socketService, globals, detailStorage, sortObjectToArrayFilter, stateService, questionService) {
+    .controller('qFeedCtrl', ['$location', '$routeParams', '$scope', 'socket', 'socketService', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'questionService',
+        function ($location, $routeParams, $scope, socket, socketService, globals, detailStorage, sortObjectToArrayFilter, stateService, questionService) {
+            $scope.questions = [];
+            $scope.pagination = questionService.getPagination();
+
+            var newPage = function () {
+                $scope.questions = globals.currentQuestions(null, null, true);
+                return questionService.loadChange(questionService.getCurrPage());
+            };
+
+            $scope.currPage = newPage();
+
+            $scope.navigate = function (newPage) {
+                if (newPage) {
+                    questionService.navigate(newPage);
+                } else {
+                    questionService.navigate($scope.currPage);
+                }
+            };
+
+            $scope.showNew = function () {
+                $scope.closeAlert('newQuestionAlert');
+                $scope.navigate(1);
+            };
+
+            $scope.$on('pagination', function (event, data) {
+                $scope.pagination = data;
+            });
+
 
             $scope.$on("currentQuestions", function (event, data) {
                 $scope.alerts = questionService.alertStorage();
-                $scope.questions = sortObjectToArrayFilter(data, $scope.alerts.newQuestionAlert.num);
+                if ($scope.currPage == 1) {
+                    $scope.questions = sortObjectToArrayFilter(data, $scope.alerts.newQuestionAlert.num);
+                } else {
+                    $scope.questions = sortObjectToArrayFilter(data);
+                }
             });
 
             $scope.$on('newQAlertClosed', function (event, data) {
@@ -16,8 +47,9 @@ angular.module('qaApp')
                 $scope.questions = sortObjectToArrayFilter(globals.currentQuestions());
             });
 
-            $scope.changeTab('home');
-            $scope.changeState('qFeed');
+            if (stateService.tab() != 'home') {
+                $scope.changeTab('home');
+            }
 
             $scope.questions = sortObjectToArrayFilter(globals.currentQuestions(), $scope.alerts.newQuestionAlert.num);
             $scope.columnClass = stateService.qClass();
@@ -34,8 +66,9 @@ angular.module('qaApp')
             $scope.currentQuestion = stateService.questionOnView($routeParams.index);
             $scope.question = {};
 
-            $scope.changeTab('home');
-            $scope.changeState('qFull');
+            if ($scope.tab != 'home') {
+                $scope.changeTab('home');
+            }
 
             //2 view modes, edit and full
             $scope.viewMode = 'full';
@@ -75,7 +108,6 @@ angular.module('qaApp')
             };
 
             $scope.$on("currentQuestions", function (event, data) {
-                console.log(data[$scope.currentQuestion]["questionIndex"]);
                 if (data[$scope.currentQuestion]["questionIndex"] == $scope.currentQuestion) {
                     $scope.question = data[$scope.currentQuestion];
                 }

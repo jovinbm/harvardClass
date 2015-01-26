@@ -50,5 +50,31 @@
                 <i class="fa fa-pencil"></i> New Question
             </a>
         </div>
+        <ul class="nav nav-tabs">
+            <li ng-class="{'active': tab == 'home'}">
+                <a ng-href="#/1"
+                   ng-click="changeTab('home')"
+                   class="nav-tab-a">Home
+                </a>
+            </li>
+            <li ng-class="{'active': tab == 'trending'}">
+                <a ng-href="#/trending/full/"
+                   ng-click="changeTab('trending')"
+                   class="nav-tab-a">Trending
+                </a>
+            </li>
+            <li>
+                <a href="#"
+                   target="_self"
+                   class="nav-tab-a">Users
+                </a>
+            </li>
+            <li>
+                <a href="#"
+                   target="_self"
+                   class="nav-tab-a">Profile
+                </a>
+            </li>
+        </ul>
     </div>
 </div>

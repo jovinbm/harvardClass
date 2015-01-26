@@ -2,6 +2,7 @@
  * Created by jovinbm on 1/18/15.
  */
 var basic = require('../functions/basic.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
 var cuid = require('cuid');
 var Question = require("../database/questions/question_model.js");
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
@@ -70,74 +71,101 @@ module.exports = {
     },
 
 
-    pushQuestionToAsker: function (openId, questionObject, error_neg_1, error_0, success) {
+    pushQuestionToAsker: function (openId, index, error_neg_1, error_0, success) {
         HarvardUser.update({id: openId}, {
-            $push: {askedQuestionsIndexes: questionObject.questionIndex}
+            $addToSet: {askedQuestionsIndexes: index}
         }, function (err) {
             if (err) {
                 error_neg_1(-1, err);
             } else {
-                success(questionObject);
+                success();
             }
 
         });
     },
 
 
-    getQuestions: function (sort, currentQuestionIndex, limit, error_neg_1, error_0, success) {
-        Question.find({questionIndex: {$gt: currentQuestionIndex}})
+    getCount: function (error_neg_1, error_0, success) {
+        var questionCount;
+        Question.count({}, function (err, count) {
+            if (err) {
+                error_neg_1(-1, err);
+            } else if (count == null || count == undefined) {
+                questionCount = 0;
+                success(questionCount);
+            } else {
+                questionCount = count;
+                success(questionCount);
+            }
+        });
+    },
+
+
+    getQuestions: function (sort, page, limit, error_neg_1, error_0, success) {
+        Question.find()
             .sort({questionIndex: sort})
+            .skip((page - 1) * 20)
             .limit(limit)
             .exec(function (err, questionsArray) {
                 if (err) {
                     error_neg_1(-1, err);
                 } else if (questionsArray == null || questionsArray == undefined || questionsArray.length == 0) {
-                    error_0(0);
-                } else {
-                    success(questionsArray);
+                    questionsArray = [];
                 }
-            });
-    },
-
-
-    getQuestionsRange: function (sort, currentQuestionIndex, limit, lastQuestionActivity, error_neg_1, error_0, success) {
-        var indexAddition = 0;
-        Question.find({questionIndex: {$gt: currentQuestionIndex}})
-            .sort({questionIndex: sort})
-            .limit(limit)
-            .exec(function (err, questionsArray) {
-                if (err) {
-                    error_neg_1(-1, err);
-                } else {
-                    if (questionsArray == null || questionsArray == undefined || questionsArray.length == 0) {
-                        questionsArray = [];
+                var questionCount = 0;
+                Question.count({}, function (err, count) {
+                    if (err) {
+                        error_neg_1(-1, err);
+                    } else if (count == null || count == undefined) {
+                        questionCount = 0;
+                        success(questionsArray, questionCount);
                     } else {
-                        indexAddition = questionsArray.length;
+                        questionCount = count;
+                        success(questionsArray, questionCount);
                     }
-
-                    Question.find({
-                        lastActivity: {$gt: lastQuestionActivity},
-                        questionIndex: {$lte: currentQuestionIndex}
-                    })
-                        .sort({questionIndex: sort})
-                        .exec(function (err, questionsArray_byTime) {
-                            if (err) {
-                                error_neg_1(-1, err);
-                            } else if (questionsArray_byTime == null || questionsArray_byTime == undefined || questionsArray_byTime.length == 0) {
-                                if (questionsArray == []) {
-                                    error_0(0);
-                                } else {
-                                    success(questionsArray, indexAddition);
-                                }
-                            } else {
-                                questionsArray_byTime = questionsArray_byTime.concat(questionsArray);
-                                success(questionsArray_byTime, indexAddition);
-                            }
-                        })
-                }
-
+                });
             });
     },
+
+
+    /* getQuestionsRange: function (sort, currentQuestionIndex, limit, lastQuestionActivity, error_neg_1, error_0, success) {
+     var indexAddition = 0;
+     Question.find({questionIndex: {$gt: currentQuestionIndex}})
+     .sort({questionIndex: sort})
+     .limit(limit)
+     .exec(function (err, questionsArray) {
+     if (err) {
+     error_neg_1(-1, err);
+     } else {
+     if (questionsArray == null || questionsArray == undefined || questionsArray.length == 0) {
+     questionsArray = [];
+     } else {
+     indexAddition = questionsArray.length;
+     }
+
+     Question.find({
+     lastActivity: {$gt: lastQuestionActivity},
+     questionIndex: {$lte: currentQuestionIndex}
+     })
+     .sort({questionIndex: sort})
+     .exec(function (err, questionsArray_byTime) {
+     if (err) {
+     error_neg_1(-1, err);
+     } else if (questionsArray_byTime == null || questionsArray_byTime == undefined || questionsArray_byTime.length == 0) {
+     if (questionsArray == []) {
+     error_0(0);
+     } else {
+     success(questionsArray, indexAddition);
+     }
+     } else {
+     questionsArray_byTime = questionsArray_byTime.concat(questionsArray);
+     success(questionsArray_byTime, indexAddition);
+     }
+     })
+     }
+
+     });
+     },*/
 
 
     getOneQuestion: function (questionIndex, error_neg_1, error_0, success) {
@@ -164,7 +192,7 @@ module.exports = {
                 if (err) {
                     error_neg_1(-1, err);
                 } else if (topVotedArray.length == 0) {
-                    error_0(0);
+                    success([]);
                 } else {
                     success(topVotedArray);
                 }
@@ -174,7 +202,7 @@ module.exports = {
 
     pushUpvoteToUpvoter: function (openId, upvotedIndex, error_neg_1, error_0, success) {
         HarvardUser.update({id: openId}, {
-                $push: {votedQuestionIndexes: upvotedIndex}
+                $addToSet: {votedQuestionIndexes: upvotedIndex}
             }, function (err) {
                 if (err) {
                     error_neg_1(-1, err);

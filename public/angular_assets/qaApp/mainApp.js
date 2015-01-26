@@ -17,14 +17,14 @@ angular.module('qaApp', ['ngAnimate', 'textAngular', 'ngSanitize', 'ui.bootstrap
     })
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
-            .when('/', {
+            .when('/:page/', {
                 templateUrl: 'public/partials/views/home.html'
             })
             .when('/fullQuestion/:index/', {
                 templateUrl: 'public/partials/views/question_full.html'
             })
-            .when('/trendingFull/', {
+            .when('/trending/full/', {
                 templateUrl: 'public/partials/views/trending.html'
             })
-            .otherwise({redirectTo: '/'});
+            .otherwise({redirectTo: '/1'});
     }]);

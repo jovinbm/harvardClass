@@ -7,13 +7,14 @@ var Question = require("../database/questions/question_model.js");
 var Comment = require("../database/comments/comment_model.js");
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 var basic = require('../functions/basic.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');
 var commentDB = require('../db/comment_db.js');
 
 module.exports = {
 
     newComment: function (req, res, theHarvardUser, theComment) {
-        basic.consoleLogger('newComment: NEW_COMMENT event handler called');
+        consoleLogger('newComment: NEW_COMMENT event handler called');
         var thisCommentIndex;
         //query the recent question's index
         if (!(/^\s+$/.test(theComment.comment)) &&
@@ -27,7 +28,7 @@ module.exports = {
                                 "index": 1
                             });
                             res.status(200).send({msg: 'newComment success'});
-                            basic.consoleLogger('newComment: Success');
+                            consoleLogger('newComment: Success');
                         }
 
                         commentDB.pushCommentToCommenter(req.user.id, savedComment, error, error, done);
@@ -42,9 +43,9 @@ module.exports = {
 
             function error(status, err) {
                 if (status == -1) {
-                    basic.consoleLogger("ERROR: newComment event_Handler: " + err);
+                    consoleLogger("ERROR: newComment event_Handler: " + err);
                     res.status(500).send({msg: 'ERROR: newComment Event Handler: ', err: err});
-                    basic.consoleLogger("newComment failed!");
+                    consoleLogger("newComment failed!");
                 } else if (status == 0) {
                     //means this is the first comment. Save it
                     thisCommentIndex = 0;
@@ -62,22 +63,22 @@ module.exports = {
         } else {
             //the comment does not pass the checks
             res.status(200).send({msg: 'newComment did not pass checks'});
-            basic.consoleLogger('newComment: Not executed: Did not pass checks');
+            consoleLogger('newComment: Not executed: Did not pass checks');
         }
     },
 
 
     updateComment: function (req, res, theHarvardUser, theComment) {
-        basic.consoleLogger('updateComment: UPDATE_COMMENT event handler called');
+        consoleLogger('updateComment: UPDATE_COMMENT event handler called');
         var commentUniqueId = theComment.commentUniqueId;
         //query the recent question's index
         if (!(/^\s+$/.test(theComment.comment)) &&
             theComment.comment.length != 0) {
 
             function error(status, err) {
-                basic.consoleLogger("ERROR: updateComment event_Handler: " + err);
+                consoleLogger("ERROR: updateComment event_Handler: " + err);
                 res.status(500).send({msg: 'ERROR: updateComment Event Handler: ', err: err});
-                basic.consoleLogger("updateComment failed!");
+                consoleLogger("updateComment failed!");
             }
 
             function made(comment) {
@@ -88,7 +89,7 @@ module.exports = {
                             "index": 0
                         });
                         res.status(200).send({msg: 'updateComment success'});
-                        basic.consoleLogger('updateComment: Success');
+                        consoleLogger('updateComment: Success');
                     }
 
                     commentDB.getOneComment(commentUniqueId, error, error, done);
@@ -102,13 +103,13 @@ module.exports = {
         } else {
             //the comment does not pass the checks
             res.status(500).send({msg: 'updateComment did not pass checks'});
-            basic.consoleLogger('updateComment: Not executed: Did not pass checks');
+            consoleLogger('updateComment: Not executed: Did not pass checks');
         }
     },
 
 
     promote: function (req, res, theHarvardUser, questionIndex, promoteIndex, inc, uniqueId) {
-        basic.consoleLogger("promote: promote event handler called");
+        consoleLogger("promote: promote event handler called");
         var promotedArray = theHarvardUser.postedCommentUniqueIds;
         var errorCounter = 0;
         switch (inc) {
@@ -122,25 +123,25 @@ module.exports = {
                 break;
             default:
                 errorCounter++;
-                basic.consoleLogger("ERROR: promote event handler: switch statement got unexpected value");
+                consoleLogger("ERROR: promote event handler: switch statement got unexpected value");
                 res.status(500).send({
                     msg: 'ERROR: promote event handler: switch statement got unexpected value'
                 });
-                basic.consoleLogger('upvote: failed!');
+                consoleLogger('upvote: failed!');
         }
 
         function error(status, err) {
             if (status == -1) {
-                basic.consoleLogger("ERROR: promote event handler: Error while executing db operations" + err);
+                consoleLogger("ERROR: promote event handler: Error while executing db operations" + err);
                 /*complete the request by sending the client the internal server error*/
                 res.status(500).send({
                     msg: 'ERROR: promote event handler: Error while executing db operations',
                     err: err
                 });
-                basic.consoleLogger('promote: failed!');
+                consoleLogger('promote: failed!');
             } else if (status == 0) {
                 res.status(200).send({msg: "promote:Status:200 partial ERROR: query returned null/undefined"});
-                basic.consoleLogger('**partial ERROR!:Status:200 promote event handler: failure: query returned NULL/UNDEFINED: There also might be no promoted comments');
+                consoleLogger('**partial ERROR!:Status:200 promote event handler: failure: query returned NULL/UNDEFINED: There also might be no promoted comments');
             }
         }
 
@@ -156,7 +157,7 @@ module.exports = {
 
                     ioJs.emitToAll('topPromoted', topPromotedArrayOfObjects);
                     res.status(200).send({msg: 'promote success'});
-                    basic.consoleLogger('promote: Success');
+                    consoleLogger('promote: Success');
                 }
 
                 commentDB.findTopPromotedComments(-1, 3, questionIndex, error, error, found);
@@ -179,15 +180,14 @@ module.exports = {
     getComments: function (req, res, theHarvardUser, questionIndex, lastCommentIndex) {
         var regexp = new RegExp("q" + questionIndex + "c.");
         var commentLimit = 30;
-        basic.consoleLogger("getComments: getComments called");
-        var socketRoom = theHarvardUser.socketRoom;
+        consoleLogger("getComments: getComments called");
         //retrieve the comments
 
         function error(status, err) {
             if (status == -1) {
-                basic.consoleLogger("getComments event handler: Error while retrieving history" + err);
+                consoleLogger("getComments event handler: Error while retrieving history" + err);
                 res.status(500).send({msg: 'getComments: Error while retrieving top voted', err: err});
-                basic.consoleLogger('getComments: failed!');
+                consoleLogger('getComments: failed!');
             } else if (status == 0) {
                 //send an empty array
                 res.status(200).send({
@@ -195,7 +195,7 @@ module.exports = {
                     "index": 0,
                     "myPromotes": []
                 });
-                basic.consoleLogger('getComments: success: Did not find anything');
+                consoleLogger('getComments: success: Did not find anything');
             }
         }
 
@@ -208,7 +208,7 @@ module.exports = {
                     "index": lastCommentIndex + commentLimit,
                     "myPromotes": filteredPromoted
                 });
-                basic.consoleLogger('getComments: success: Sent comments');
+                consoleLogger('getComments: success: Sent comments');
             }
 
             commentDB.getComments(-1, questionIndex, lastCommentIndex, commentLimit, error, error, success)

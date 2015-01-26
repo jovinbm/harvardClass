@@ -1,75 +1,17 @@
 <div class="nav navbar navbar-default navbar-fixed-bottom ng-cloak">
     <div class="container">
-        <p class="navbar-text pull-left hidden-xs">
-            <i class="fa fa-copyright"></i> 2015 harvardclass.herokuapp.com
+        <p class="navbar-text pull-left">
+            <i class="fa fa-copyright"></i> 2015 HarvardClass
         </p>
-        <ul class="nav navbar-nav pull-right hidden-xs bottom-nav-pills">
-            <li>
-                <a href="#myModal"
-                   target="_self"
-                   data-toggle="modal">
-                    <i class="fa fa-pencil"></i> New Question
-                </a>
-            </li>
-            <li ng-click="changeTab('trending')"
-                ng-show="tab == 'home'">
-                <a href="#/trendingFull/">
-                    <i class="fa fa-line-chart"></i> Trending
-                </a>
-            </li>
-            <li ng-click="changeTab('home')"
-                ng-show="tab == 'trending'">
-                <a href="#/">
-                    <i class="fa fa-home"></i> Home
-                </a>
-            </li>
-            </li>
-            <li ng-show="appState == 'qFeed'">
-                <a href="#onlineUsers"
-                   target="_self"><i class="fa fa-users"></i> Users
-                </a>
-            </li>
-            <li ng-click="changeTab('home')"
-                ng-show="appState == 'qFull'">
-                <a href="#/">
-                    <i class="fa fa-home"></i> Home
-                </a>
-            </li>
-        </ul>
-
-        <div class="span12 text-center">
-            <ul class="nav nav-pills hidden-sm hidden-md hidden-lg bottom-nav-pills">
-                <li>
-                    <a href="#myModal"
-                       target="_self"
-                       data-toggle="modal">
-                        <i class="fa fa-pencil"></i> New
-                    </a>
-                </li>
-                <li ng-click="changeTab('trending')"
-                    ng-show="tab == 'home'">
-                    <a href="#/trendingFull/">
-                        <i class="fa fa-line-chart"></i> Trending
-                    </a>
-                </li>
-                <li ng-click="changeTab('home')"
-                    ng-show="tab == 'trending'">
-                    <a href="#/">
-                        <i class="fa fa-home"></i> Home
-                    </a>
-                </li>
-                <li ng-show="appState == 'qFeed'">
-                    <a href="#onlineUsers"
-                       target="_self"><i class="fa fa-users"></i> Users
-                    </a>
-                </li>
-                <li ng-click="changeTab('home')"
-                    ng-show="appState == 'qFull'">
-                    <a href="#/">
-                        <i class="fa fa-home"></i> Home
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <span class="hidden-sm hidden-md hidden-lg">
+            <a type="button"
+               class="navbar-btn btn btn-primary btn-xs pull-right"
+               href="#myModal"
+               target="_self"
+               role="button"
+               data-toggle="modal">
+                <i class="fa fa-pencil"></i> New Question
+            </a>
+        </span>
     </div>
 </div>

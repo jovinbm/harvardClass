@@ -2,6 +2,7 @@
  * Created by jovinbm on 1/18/15.
  */
 var basic = require('../functions/basic.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
 var Comment = require("../database/comments/comment_model.js");
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
@@ -83,7 +84,7 @@ module.exports = {
 
     pushCommentToCommenter: function (openId, commentObject, error_neg_1, error_0, success) {
         HarvardUser.update({id: openId}, {
-            $push: {postedCommentUniqueIds: commentObject.uniqueId}
+            $addToSet: {postedCommentUniqueIds: commentObject[0].uniqueId}
         }, function (err) {
             if (err) {
                 error_neg_1(-1, err);

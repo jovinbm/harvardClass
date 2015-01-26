@@ -2,6 +2,7 @@
  * Created by jovinbm on 1/18/15.
  */
 var basic = require('../functions/basic.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
 var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
 
 

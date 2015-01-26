@@ -13,9 +13,6 @@ angular.module('qaApp')
         var currentComments = {};
         var currentTop = [];
         var upvotedIndexes = [];
-        var currentQuestionIndex = -1;
-        var lastQuestionActivity = new Date().toISOString();
-
         return {
             customUsername: function (newCustomUsername) {
                 if (newCustomUsername) {
@@ -43,16 +40,12 @@ angular.module('qaApp')
                 }
             },
 
-            questionActivity: function (bool) {
-                if (bool) {
-                    lastQuestionActivity = new Date();
-                    return lastQuestionActivity;
+            currentQuestions: function (questionArray, broadcast, empty) {
+                if (empty) {
+                    currentQuestions = {};
+                    return currentQuestions;
                 }
-                return lastQuestionActivity
-            },
-
-            currentQuestions: function (questionArray, broadcast) {
-                if (questionArray) {
+                else if (questionArray) {
                     questionArray.forEach(function (questionObject) {
                         currentQuestions[questionObject.questionIndex] = questionObject;
                     });
@@ -130,16 +123,6 @@ angular.module('qaApp')
                     }
                     return usersOnline;
                 }
-            },
-
-            currentQuestionIndex: function (newCurrentQuestionIndex) {
-                if (newCurrentQuestionIndex) {
-                    currentQuestionIndex = currentQuestionIndex + newCurrentQuestionIndex;
-                    console.log(currentQuestionIndex);
-                } else {
-                    console.log(currentQuestionIndex);
-                    return currentQuestionIndex;
-                }
             }
         }
-    }])
+    }]);

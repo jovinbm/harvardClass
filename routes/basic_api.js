@@ -73,8 +73,7 @@ module.exports = {
 
     reconnect: function (req, res) {
         basic.consoleLogger('RECONNECT event received');
-        var currentQuestionIndex = req.body["currentQuestionIndex"];
-        var lastQuestionActivity = req.body["lastQuestionActivity"];
+        var page = req.body.page;
 
         function error(status, err) {
             if (status == -1 || status == 0) {
@@ -85,7 +84,7 @@ module.exports = {
 
         function success(theHarvardUser) {
             if (theHarvardUser.customLoggedInStatus == 1) {
-                basic_handlers.reconnect(req, res, theHarvardUser, currentQuestionIndex, lastQuestionActivity);
+                basic_handlers.reconnect(req, res, theHarvardUser, page);
             }
             //TODO -- redirect to custom login
         }

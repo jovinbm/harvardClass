@@ -5,7 +5,7 @@
 
 /*defaults*/
 body {
-    padding-top: 70px;
+    padding-top: 100px;
     padding-bottom: 70px;
     font-size: 12px;
 }
@@ -16,6 +16,11 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
     font-size: 12px;
+}
+
+ul > li > a.nav-tab-a {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .btn {
