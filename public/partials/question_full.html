@@ -19,24 +19,25 @@
     </div>
 
     <ul class="list-unstyled">
-        <li class="list-unstyled question-full-li"
+        <li class="list-unstyled question-full-li ng-cloak"
             ng-class="questionReference[currentQuestion].questionClass">
 
             <div ng-switch on="viewMode">
 
                 <!--full question view-->
                 <div ng-switch-when="full">
-                    <h4 class="text-outputs">
+                    <h4 class="text-outputs ng-cloak">
                         {{question.heading}}
                         <small class="by">by</small>
-                        <small class="by sender-name"> {{question.senderName}}</small>
-                        <small class="questionTime">on {{questionReference[currentQuestion].questionTime}}
+                        <small class="by sender-name ng-cloak"> {{question.senderName}}</small>
+                        <small class="questionTime ng-cloak">on {{questionReference[currentQuestion].questionTime}}
                         </small>
                     </h4>
 
-                    <p ta-bind ng-model="question.question" class="text-outputs animated fadeIn"></p>
+                    <p ta-bind ng-model="question.question"
+                       class="text-outputs animated fadeIn ng-cloak"></p>
 
-                    <div class="clearfix">
+                    <div class="clearfix ng-cloak">
                         <button type='button'
                                 class="pull-right"
                                 ng-if="questionReference[currentQuestion].upvoted == false"

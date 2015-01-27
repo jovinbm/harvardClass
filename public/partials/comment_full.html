@@ -1,5 +1,5 @@
 <ul class="list-unstyled">
-    <li class="list-unstyled comment-full-li clearfix"
+    <li class="list-unstyled comment-full-li clearfix ng-cloak"
         ng-repeat="eachComment in comments"
         ng-if="cmntsReference[eachComment.commentIndex]"
         ng-class="cmntsReference[eachComment.commentIndex].commentClass">
@@ -8,12 +8,12 @@
             <div class="comment-p-div">
                 <p ta-bind
                    ng-model="eachComment.comment"
-                   class="text-outputs comment-p animated fadeIn">
+                   class="text-outputs comment-p animated fadeIn ng-cloak">
                 </p>
             </div>
-            <small class="comment-name">{{eachComment.senderName}}</small>
+            <small class="comment-name ng-cloak">{{eachComment.senderName}}</small>
 
-            <small class="commentTime">{{cmntsReference[eachComment.commentIndex].commentTime}}</small>
+            <small class="commentTime ng-cloak">{{cmntsReference[eachComment.commentIndex].commentTime}}</small>
 
             <div class="pull-right">
                 <a ng-click="cmntsReference[eachComment.commentIndex].viewMode = 'editMode'"
