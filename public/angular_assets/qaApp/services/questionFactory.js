@@ -16,28 +16,28 @@ angular.module('qaApp')
                 }
             };
 
-            var pagination = {
-                "totalItems": 20,
-                "items-per-page": 20,
-                "currentPage": 1
-            };
-
             socket.on('newQuestion', function (questionObject) {
                 console.log("'newQuestion' event received factory");
                 if (questionObject.questionCount) {
-                    pagination['totalItems'] = questionObject.questionCount;
+                    pageObject['totalItems'] = questionObject.questionCount;
                 }
                 detailStorage.add(questionObject["question"], true);
                 if (questionObject.update == false) {
                     alerts.newQuestionAlert.num++;
                     alerts.newQuestionAlert.display = true;
                 }
-                if (pagination.currentPage == 1) {
+                if (pageObject.currentPage == 1) {
                     globals.currentQuestions(questionObject["question"]);
                 }
                 $rootScope.$broadcast('alertStorage', alerts);
                 $rootScope.$broadcast('currentQuestions', globals.currentQuestions());
             });
+
+            var pageObject = {
+                "totalItems": 10,
+                "items-per-page": 20,
+                "currentPage": 1
+            };
 
             return {
 
@@ -52,37 +52,35 @@ angular.module('qaApp')
                     }
                 },
 
-                getPagination: function () {
-                    return pagination;
+
+                totalQuestions: function (count) {
+                    if (count) {
+                        pageObject['totalItems'] = count;
+                        return count;
+                    }
+                    else {
+                        return pageObject['totalItems']
+                    }
                 },
 
                 getCurrPage: function () {
-                    return pagination.currentPage;
+                    return pageObject.currentPage
                 },
 
-                totalQuestions: function (count) {
-                    pagination['totalItems'] = count;
-                    $rootScope.$broadcast('pagination', pagination);
+                getItemsPerPage: function () {
+                    return pageObject['items-per-page']
                 },
 
                 navigate: function (page) {
-                    pagination.currentPage = page;
-                    $location.path('/' + page);
+                    pageObject.currentPage = page;
+                    $location.path('/' + page + '/');
                 },
 
-                loadChange: function (currPage) {
-                    $http.post('/api/getQuestions', {
-                        "page": currPage
-                    }).success(function (resp) {
-                        pagination.totalItems = resp.questionCount;
-                        detailStorage.add(resp.questionArray, true);
-                        globals.currentQuestions(resp.questionArray, true);
-                        $rootScope.$broadcast('pagination', pagination);
+                loadPage: function () {
+                    globals.currentQuestions(null, null, true);
+                    return $http.post('/api/getQuestions', {
+                        "page": pageObject.currentPage
                     })
-                        .error(function (errResponse) {
-                            $window.location.href = "/error500.html";
-                        });
-                    return currPage;
                 },
 
                 retrieveQuestion: function (index) {

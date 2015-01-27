@@ -81,14 +81,17 @@
         </li>
     </ul>
 
-    <div ng-if="pagination['totalItems'] > 20"
-         id="bottom-pagination">
-        <pagination total-items="pagination['totalItems']"
-                    items-per-page="pagination['items-per-page']"
-                    ng-model="currPage"
-                    max-size="5" class="pagination-sm"
-                    boundary-links="true" rotate="false"
-                    ng-change="navigate()">
-        </pagination>
-    </div>
+    <pagination total-items="totalNo"
+                items-per-page="itemsPerPage"
+                ng-model="pageNo"
+                max-size="5"
+                class="pagination-sm"
+                boundary-links="true"
+                previous-text="&lsaquo;"
+                next-text="&rsaquo;"
+                first-text="&laquo;"
+                last-text="&raquo;"
+                rotate="false"
+                ng-change="navigate()">
+    </pagination>
 </div>

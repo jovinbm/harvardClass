@@ -102,6 +102,7 @@ module.exports = {
 
 
     getQuestions: function (sort, page, limit, error_neg_1, error_0, success) {
+        var errors = 0;
         Question.find()
             .sort({questionIndex: sort})
             .skip((page - 1) * 20)
@@ -109,21 +110,24 @@ module.exports = {
             .exec(function (err, questionsArray) {
                 if (err) {
                     error_neg_1(-1, err);
+                    errors++;
                 } else if (questionsArray == null || questionsArray == undefined || questionsArray.length == 0) {
                     questionsArray = [];
                 }
-                var questionCount = 0;
-                Question.count({}, function (err, count) {
-                    if (err) {
-                        error_neg_1(-1, err);
-                    } else if (count == null || count == undefined) {
-                        questionCount = 0;
-                        success(questionsArray, questionCount);
-                    } else {
-                        questionCount = count;
-                        success(questionsArray, questionCount);
-                    }
-                });
+                if (errors == 0) {
+                    var questionCount = 0;
+                    Question.count({}, function (err, count) {
+                        if (err) {
+                            error_neg_1(-1, err);
+                        } else if (count == null || count == undefined) {
+                            questionCount = 0;
+                            success(questionsArray, questionCount);
+                        } else {
+                            questionCount = count;
+                            success(questionsArray, questionCount);
+                        }
+                    });
+                }
             });
     },
 

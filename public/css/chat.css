@@ -16,12 +16,12 @@ body {
     margin-bottom: 0;
 }
 
-ul > li.col-xs-3 {
+ul > li.col-xs-4 {
     padding-left: 0;
     padding-right: 0;
 }
 
-ul > li.col-xs-3 > a {
+ul > li.col-xs-4 > a {
     text-align: center;
     margin-left: 0;
     margin-right: 0;
@@ -31,10 +31,6 @@ ul > li.col-xs-3 > a {
 #desk-nav-header {
     height: 30px;
     margin-bottom: 0;
-}
-
-#bottom-pagination {
-    text-align: center;
 }
 
 #feed-search-form {

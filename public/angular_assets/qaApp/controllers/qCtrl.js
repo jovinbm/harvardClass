@@ -6,20 +6,29 @@ angular.module('qaApp')
     .controller('qFeedCtrl', ['$location', '$routeParams', '$scope', 'socket', 'socketService', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'questionService',
         function ($location, $routeParams, $scope, socket, socketService, globals, detailStorage, sortObjectToArrayFilter, stateService, questionService) {
             $scope.questions = [];
-            $scope.pagination = questionService.getPagination();
 
-            var newPage = function () {
-                $scope.questions = globals.currentQuestions(null, null, true);
-                return questionService.loadChange(questionService.getCurrPage());
-            };
+            $scope.pageNo = questionService.getCurrPage();
+            $scope.totalNo = questionService.totalQuestions();
+            $scope.itemsPerPage = questionService.getItemsPerPage();
 
-            $scope.currPage = newPage();
+            questionService.loadPage()
+                .success(function (resp) {
+                    detailStorage.add(resp.questionArray, true);
+                    globals.currentQuestions(resp.questionArray, true);
+
+                    $scope.pageNo = questionService.getCurrPage();
+                    $scope.totalNo = questionService.totalQuestions(parseInt(resp.questionCount));
+                    $scope.itemsPerPage = questionService.getItemsPerPage();
+                })
+                .error(function (errResponse) {
+                    $window.location.href = "/error500.html";
+                });
 
             $scope.navigate = function (newPage) {
                 if (newPage) {
-                    questionService.navigate(newPage);
+                    questionService.navigate(parseInt(newPage));
                 } else {
-                    questionService.navigate($scope.currPage);
+                    questionService.navigate(parseInt($scope.pageNo));
                 }
             };
 
@@ -27,10 +36,6 @@ angular.module('qaApp')
                 $scope.closeAlert('newQuestionAlert');
                 $scope.navigate(1);
             };
-
-            $scope.$on('pagination', function (event, data) {
-                $scope.pagination = data;
-            });
 
 
             $scope.$on("currentQuestions", function (event, data) {

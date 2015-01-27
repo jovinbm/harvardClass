@@ -15,17 +15,14 @@
 
 //todo -- edit comments
 
+//todo -- search
+
+//todo -- alert new comment available
+
+//todo -- delete my questions from my profile -- before posting, check to see that a question
+
 //todo -- delete a question
 
 //todo -- delete a comment
 
-//todo -- remove upvote
-
-//todo -- remove promote
-
-//todo -- search
-
-//todo -- alert new comment or question available
-
-//todo -- angular error handling -- flash messages(alerts) by bootstrap
-
+//todo -- implement search
