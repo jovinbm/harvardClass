@@ -180,7 +180,7 @@ module.exports = {
     getQuestions: function (req, res, theHarvardUser, page) {
         consoleLogger("getQuestions: getQuestions called");
         var temp = {};
-        var limit = 20;
+        var limit = 10;
 
         function error(status, err) {
             if (status == -1) {

@@ -11,7 +11,7 @@ module.exports = {
 
     startUp: function (req, res, theHarvardUser) {
         consoleLogger('startUp: STARTUP handler called');
-        var limit = 20;
+        var limit = 10;
         var page = 1;
         ioJs.emitToAll("usersOnline", online.getUsersOnline());
 
@@ -63,7 +63,7 @@ module.exports = {
 
     reconnect: function (req, res, theHarvardUser, page) {
         consoleLogger('reconnect: RECONNECT handler called');
-        var limit = 20;
+        var limit = 10;
         ioJs.emitToOne(theHarvardUser.socketRoom, "usersOnline", online.getUsersOnline());
 
         var temp = {};

@@ -105,7 +105,7 @@ module.exports = {
         var errors = 0;
         Question.find()
             .sort({questionIndex: sort})
-            .skip((page - 1) * 20)
+            .skip((page - 1) * 10)
             .limit(limit)
             .exec(function (err, questionsArray) {
                 if (err) {

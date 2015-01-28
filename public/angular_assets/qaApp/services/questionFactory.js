@@ -35,7 +35,7 @@ angular.module('qaApp')
 
             var pageObject = {
                 "totalItems": 10,
-                "items-per-page": 20,
+                "items-per-page": 10,
                 "currentPage": 1
             };
 
