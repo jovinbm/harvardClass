@@ -1,7 +1,16 @@
 /**
  * Created by jovinbm on 1/12/15.
  */
-angular.module('qaApp', ['ngAnimate', 'textAngular', 'ngSanitize', 'ui.bootstrap', 'ngRoute', 'angular-loading-bar'])
+angular.module('qaApp', [
+    'ngAnimate',
+    'textAngular',
+    'ngSanitize',
+    'ui.bootstrap',
+    'ngRoute',
+    'angular-loading-bar',
+    'angulartics',
+    'angulartics.google.analytics'
+])
     .run(function ($templateCache, $http) {
         $http.get('public/partials/questionFeed.html', {cache: $templateCache});
         $http.get('public/partials/question_full.html', {cache: $templateCache});
