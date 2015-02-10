@@ -5,7 +5,6 @@
     "node": "0.10.x",
     "npm": "2.1.x"
   },
-  "private": true,
   "scripts": {
     "start": "node app.js",
     "postinstall": "bower install"
