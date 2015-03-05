@@ -11,8 +11,7 @@
         <li class="list-group-item ng-cloak"
             ng-repeat="eachTop in topVotedQuestions"
             ng-class="[
-            questionReference[eachTop.questionIndex].questionClass,
-            questionReference[eachTop.questionIndex].listGroupClass
+            questionReference[eachTop.questionIndex].questionClass
             ]">
             <span class="badge voteNumber">
                 {{eachTop.votes}}

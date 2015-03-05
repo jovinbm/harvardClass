@@ -57,18 +57,9 @@
             <div class="question-buttons clearfix">
                 <button type='button'
                         class="pull-right"
-                        ng-if="questionReference[eachQuestion.questionIndex].upvoted == false"
                         ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
-                        ng-click="upVote(eachQuestion.questionIndex, $event)">
-
-                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-
-                </button>
-                <button type='button'
-                        class="pull-right"
-                        ng-if="questionReference[eachQuestion.questionIndex].upvoted == true"
-                        ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
-                        ng-click="downVote(eachQuestion.questionIndex, $event)">
+                        ng-click="upVote(
+                        eachQuestion.questionIndex, questionReference[eachQuestion.questionIndex].upvoted, $event)">
 
                     <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 

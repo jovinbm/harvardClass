@@ -40,18 +40,8 @@
                     <div class="clearfix ng-cloak">
                         <button type='button'
                                 class="pull-right"
-                                ng-if="questionReference[currentQuestion].upvoted == false"
                                 ng-class="questionReference[currentQuestion].buttonClass"
-                                ng-click="upVote(currentQuestion, $event)">
-
-                            <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-
-                        </button>
-                        <button type='button'
-                                class="pull-right"
-                                ng-if="questionReference[currentQuestion].upvoted == true"
-                                ng-class="questionReference[currentQuestion].buttonClass"
-                                ng-click="downVote(currentQuestion, $event)">
+                                ng-click="upVote(currentQuestion, questionReference[currentQuestion].upvoted, $event)">
 
                             <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
 

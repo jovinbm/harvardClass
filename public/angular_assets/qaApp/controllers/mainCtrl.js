@@ -70,28 +70,30 @@ angular.module('qaApp')
                 }
             };
 
-            $scope.upVote = function (index, $event) {
-                $scope.questionReference = detailStorage.disableButton(index);
-                questionService.postQuestionVote(parseInt(index), 1)
-                    .success(function (resp) {
-                        globals.addUpvoted(index);
-                        $scope.questionReference = detailStorage.updateReferenceIndexes(true);
-                    })
-                    .error(function (errResponse) {
-                        $window.location.href = "/error500.html";
-                    });
-            };
-
-            $scope.downVote = function (index, $event) {
-                $scope.questionReference = detailStorage.enableButton(index);
-                questionService.postQuestionVote(parseInt(index), -1)
-                    .success(function (resp) {
-                        globals.removeUpvoted(index);
-                        $scope.questionReference = detailStorage.updateReferenceIndexes(true, parseInt(index));
-                    })
-                    .error(function (errResponse) {
-                        $window.location.href = "/error500.html";
-                    });
+            $scope.upVote = function (index, state, $event) {
+                //state is true when button is already upvoted, false when not
+                if (state == false) {
+                    $scope.questionReference = detailStorage.disableButton(index);
+                    questionService.postQuestionVote(parseInt(index), 1)
+                        .success(function (resp) {
+                            globals.addUpvoted(index);
+                            $scope.questionReference = detailStorage.updateReferenceIndexes(true);
+                        })
+                        .error(function (errResponse) {
+                            $window.location.href = "/error500.html";
+                        });
+                }
+                if (state == true) {
+                    $scope.questionReference = detailStorage.enableButton(index);
+                    questionService.postQuestionVote(parseInt(index), -1)
+                        .success(function (resp) {
+                            globals.removeUpvoted(index);
+                            $scope.questionReference = detailStorage.updateReferenceIndexes(true, parseInt(index));
+                        })
+                        .error(function (errResponse) {
+                            $window.location.href = "/error500.html";
+                        });
+                }
             };
 
             $scope.$on('currentTop', function (event, topVotedArrayOfObjects) {
