@@ -24,7 +24,7 @@ var OpenIDStrategy = require('passport-openid').Strategy;
 LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 
-
+var consoleLogger = require('./functions/basic.js').consoleLogger;
 var routes = require('./routes/router.js');
 var basicAPI = require('./routes/basic_api.js');
 var questionAPI = require('./routes/question_api.js');
@@ -37,9 +37,9 @@ var authenticate = require('./functions/authenticate.js');
 
 mongoose.connect(dbURL);
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'connection error: Problem while attempting to connect to database'));
 db.once('open', function () {
-    basic.consoleLogger("Successfully connected to server");
+    consoleLogger("Successfully connected to database");
 });
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -135,5 +135,7 @@ app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.
 app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutAPI.logoutCustomChat);
 app.post('/api/logoutHarvardChat', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardChat);
 
-server.listen(port);
+server.listen(port, function () {
+    consoleLogger("Server listening at port " + port);
+});
 exports.io = io;
