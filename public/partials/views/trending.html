@@ -13,7 +13,7 @@
         </a>
     </div>
 
-    <h5 id="trending"><i class="fa fa-line-chart"></i> Trending</h5>
+    <h5 id="trending" class="question-heading"><i class="fa fa-line-chart"></i> Trending</h5>
 
     <ul class="list-group">
         <li class="list-group-item ng-cloak"
@@ -21,8 +21,9 @@
             ng-class="[questionReference[eachTop.questionIndex].questionClass]"
             ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
             <span class="badge voteNumber">{{eachTop.votes}}</span>
-            <h4 class="text-outputs">
-                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/">
+            <h4 class="text-outputs question-header">
+                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/"
+                   class="question-heading">
                     {{eachTop.heading}}
                 </a>
                 <small class="by">by</small>

@@ -39,8 +39,9 @@
             ng-repeat="eachQuestion in questions | limitTo : 10"
             ng-class="questionReference[eachQuestion.questionIndex].questionClass">
 
-            <h4 class="text-outputs">
-                <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}/">
+            <h4 class="text-outputs question-header">
+                <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}/"
+                   class="question-heading">
                     {{eachQuestion.heading}}
                 </a>
                 <small class="by">by</small>

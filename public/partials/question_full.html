@@ -26,8 +26,8 @@
 
                 <!--full question view-->
                 <div ng-switch-when="full">
-                    <h4 class="text-outputs ng-cloak">
-                        {{question.heading}}
+                    <h4 class="text-outputs question-header ng-cloak">
+                        <span class="question-heading">{{question.heading}}</span>
                         <small class="by">by</small>
                         <small class="by sender-name ng-cloak"> {{question.senderName}}</small>
                         <small class="questionTime ng-cloak">on {{questionReference[currentQuestion].questionTime}}

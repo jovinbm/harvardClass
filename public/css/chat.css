@@ -50,6 +50,17 @@ ul > li.col-xs-4 > a {
     font-size: 12px;
 }
 
+/*question show field*/
+.question-heading {
+    font-size: 17px;
+}
+
+.question-header {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    line-height: 0.5;
+}
+
 .btn {
     font-size: 10px;
 }
