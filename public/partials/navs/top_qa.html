@@ -5,8 +5,11 @@
      ng-controller="logInOutCtrl">
     <div class="container">
         <a ng-href="#/home"
-           class="navbar-brand">
-            <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+           class="navbar-brand"
+           id="brand-name">
+            <span class="glyphicon glyphicon-book"
+                  aria-hidden="true">
+            </span>
             HarvardClass
         </a>
 
@@ -74,21 +77,13 @@
 
         <div class="navbar-header"
              ng-if="tab == 'home' && qColumnState == 'qFeed'">
-            <a class="navbar-brand" ng-href="#/home">
+            <a class="navbar-brand"
+               ng-href="#/home"
+               id="brand-name">
                 <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                 HarvardClass
             </a>
-        </div>
-
-        <div class="navbar-header"
-             ng-if="(tab == 'home' && qColumnState == 'qFull') || tab == 'trending'">
-            <a ng-href="#/1"
-               ng-click="changeTab('home'); back();"
-               class="navbar-brand"><i class="fa fa-chevron-left"></i> Back
-            </a>
-        </div>
-
-        <span class="hidden-sm hidden-md hidden-lg">
+            <span class="hidden-sm hidden-md hidden-lg">
             <a type="button"
                class="navbar-btn btn btn-primary btn-xs pull-right"
                href="#myModal"
@@ -98,6 +93,15 @@
                 <i class="fa fa-pencil"></i> New Question
             </a>
         </span>
+        </div>
+
+        <div class="navbar-header"
+             ng-if="(tab == 'home' && qColumnState == 'qFull') || tab == 'trending'">
+            <a ng-href="#/1"
+               ng-click="changeTab('home'); back();"
+               class="navbar-brand"><i class="fa fa-chevron-left"></i> Back
+            </a>
+        </div>
 
     </div>
 
