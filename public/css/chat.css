@@ -151,3 +151,8 @@ ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a,
 #trending {
     color: #0b97c4;
 }
+
+/*new question alert in trending page*/
+#trending-newQ-alert {
+    margin-top: 10px;
+}

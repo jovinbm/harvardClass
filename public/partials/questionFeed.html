@@ -16,7 +16,7 @@
     </form>
 
     <div ng-if="alerts.newQuestionAlert.display == true">
-        <a ng-if="pagination.currentPage == 1">
+        <a ng-if="pageNo == 1">
             <alert class="animated fadeIn"
                    ng-model="alerts.newQuestionAlert"
                    type="{{alerts.newQuestionAlert.type}}"
@@ -24,7 +24,7 @@
                 {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
             </alert>
         </a>
-        <a ng-if="pagination.currentPage != 1">
+        <a ng-if="pageNo != 1">
             <alert class="animated fadeIn"
                    ng-model="alerts.newQuestionAlert"
                    type="{{alerts.newQuestionAlert.type}}"

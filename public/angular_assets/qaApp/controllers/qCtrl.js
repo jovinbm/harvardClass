@@ -40,7 +40,7 @@ angular.module('qaApp')
 
             $scope.$on("currentQuestions", function (event, data) {
                 $scope.alerts = questionService.alertStorage();
-                if ($scope.currPage == 1) {
+                if ($scope.pageNo == 1) {
                     $scope.questions = sortObjectToArrayFilter(data, $scope.alerts.newQuestionAlert.num);
                 } else {
                     $scope.questions = sortObjectToArrayFilter(data);
