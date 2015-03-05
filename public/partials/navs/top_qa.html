@@ -4,7 +4,7 @@
      role="navigation"
      ng-controller="logInOutCtrl">
     <div class="container">
-        <a href="/"
+        <a ng-href="#/home"
            class="navbar-brand">
             <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
             HarvardClass
@@ -74,7 +74,8 @@
 
         <div class="navbar-header"
              ng-if="tab == 'home' && qColumnState == 'qFeed'">
-            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+            <a class="navbar-brand" ng-href="#/home">
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                 HarvardClass
             </a>
         </div>

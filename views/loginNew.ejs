@@ -178,7 +178,8 @@
 
         <div class="pull-right">
             <a class="navbar-btn btn btn-warning btn-xs hidden-xs">Status: Development</a>
-            <a href="#myModal" role="button" class="navbar-btn btn btn-info btn-xs" data-toggle="modal">Shoot Me an Email</a>
+            <a href="#myModal" role="button" class="navbar-btn btn btn-info btn-xs" data-toggle="modal">Shoot Me an
+                Email</a>
         </div>
     </div>
 </div>
@@ -188,10 +189,6 @@
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">I'd Love to Hear From You</h3>
-            </div>
             <div class="modal-body">
                 <form class="emailForm" method="post" action="/sendEmail">
                     <div class="form-group"><label>Name</label><input class="form-control required"
@@ -201,6 +198,7 @@
                                                                       type="text" name="name"></div>
                     <div class="form-group"><label>Message</label><textarea class="form-control"
                                                                             placeholder="Your message here.."
+                                                                            rows="5"
                                                                             data-placement="top"
                                                                             data-trigger="manual"
                                                                             name="message"></textarea></div>

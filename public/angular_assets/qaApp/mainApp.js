@@ -26,6 +26,9 @@ angular.module('qaApp', [
     })
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
+            .when('/home/', {
+                redirectTo: '/1'
+            })
             .when('/:page/', {
                 templateUrl: 'public/partials/views/home.html'
             })
