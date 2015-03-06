@@ -26,3 +26,5 @@
 //todo -- delete a comment
 
 //todo -- implement search
+
+//upvoted indexes for current page only

@@ -96,13 +96,33 @@ angular.module('qaApp')
                 },
 
                 updateReferenceIndexes: function (broadcast, indexToRemove) {
+                    //array difference function
+                    Array.prototype.diff = function (a) {
+                        return this.filter(function (i) {
+                            return a.indexOf(i) < 0;
+                        });
+                    };
+
                     //check first that the detailPrototype is not empty
                     if (Object.keys(detailPrototype).length !== 0) {
+                        var detailPrototypeKeys = [];
+                        //convert the string keys to numbers
+                        Object.keys(detailPrototype).forEach(function (element, index) {
+                            detailPrototypeKeys[index] = parseInt(Object.keys(detailPrototype)[index]);
+                        });
                         var currentIndexes = globals.upvotedIndexes();
                         currentIndexes.forEach(function (index) {
                             detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-warning btn-xs upvote";
                             detailPrototype[index].listGroupClass = "list-group-item-warning";
                             detailPrototype[index].upvoted = true;
+                        });
+
+                        //downvote buttons not upvoted
+                        var notUpvoted = detailPrototypeKeys.diff(currentIndexes);
+                        notUpvoted.forEach(function (index) {
+                            detailPrototype[index].buttonClass = "a" + indexToRemove + "b" + " btn btn-info btn-xs upvote";
+                            detailPrototype[index].listGroupClass = "list-group-item-info";
+                            detailPrototype[index].upvoted = false;
                         });
                     }
                     if (indexToRemove || indexToRemove == 0) {
