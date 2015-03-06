@@ -149,11 +149,17 @@ angular.module('qaApp')
 
 
                 disableButton: function (index) {
+                    detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-primary btn-xs disabled upvoted";
+                    return detailPrototype;
+                },
+
+
+                toUpvotedClass: function (index) {
                     detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-default btn-xs upvoted";
                     return detailPrototype;
                 },
 
-                enableButton: function (index) {
+                toNotUpvotedClass: function (index) {
                     detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-default btn-xs upvote";
                     return detailPrototype;
                 }

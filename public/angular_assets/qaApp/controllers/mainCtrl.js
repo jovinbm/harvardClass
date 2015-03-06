@@ -78,14 +78,15 @@ angular.module('qaApp')
                         .success(function (resp) {
                             globals.addUpvoted(index);
                             $scope.questionReference = detailStorage.updateReferenceIndexes(true);
-                            $scope.questionReference[index].questionVotes++
+                            $scope.questionReference[index].questionVotes++;
+                            $scope.questionReference = detailStorage.toUpvotedClass(index);
                         })
                         .error(function (errResponse) {
                             $window.location.href = "/error500.html";
                         });
                 }
                 if (state == true) {
-                    $scope.questionReference = detailStorage.enableButton(index);
+                    $scope.questionReference = detailStorage.disableButton(index);
                     questionService.postQuestionVote(parseInt(index), -1)
                         .success(function (resp) {
                             globals.removeUpvoted(index);
@@ -93,6 +94,7 @@ angular.module('qaApp')
                             if ($scope.questionReference[index].questionVotes > 0) {
                                 $scope.questionReference[index].questionVotes--
                             }
+                            $scope.questionReference = detailStorage.toNotUpvotedClass(index);
                         })
                         .error(function (errResponse) {
                             $window.location.href = "/error500.html";
