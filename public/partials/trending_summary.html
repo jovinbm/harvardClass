@@ -8,18 +8,33 @@
         </a>
     </h5>
     <ul class="list-group">
-        <li class="list-group-item ng-cloak"
+        <li class="list-group-item trending-summary ng-cloak"
             ng-repeat="eachTop in topVotedQuestions"
             ng-class="[
             questionReference[eachTop.questionIndex].questionClass
             ]">
-            <span class="badge alert-info voteNumber">
-                {{eachTop.votes}}
-            </span>
+            <!--<span class="badge voteNumber">-->
+            <!--{{eachTop.votes}}-->
+            <!--</span>-->
             <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/">
                 <strong class="text-outputs">{{eachTop.heading}}</strong>
-                <small class="senderName">by {{eachTop.senderName}}</small>
             </a>
+            <small class="by">by</small>
+            <small class="senderName sender-name">{{eachTop.senderName}}</small>
+
+            <p>
+
+            <div class="clearfix">
+                <div class="btn-group btn-group-xs pull-right">
+                    <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/"
+                       class="btn btn-default btn-xs">View
+                    </a>
+                    <a href="#"
+                       target="_self"
+                       class="btn btn-default btn-xs">{{eachTop.votes}}</a>
+                </div>
+            </div>
+            </p>
         </li>
     </ul>
 </div>

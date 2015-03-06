@@ -78,6 +78,7 @@ angular.module('qaApp')
                         .success(function (resp) {
                             globals.addUpvoted(index);
                             $scope.questionReference = detailStorage.updateReferenceIndexes(true);
+                            $scope.questionReference[index].questionVotes++
                         })
                         .error(function (errResponse) {
                             $window.location.href = "/error500.html";
@@ -89,6 +90,9 @@ angular.module('qaApp')
                         .success(function (resp) {
                             globals.removeUpvoted(index);
                             $scope.questionReference = detailStorage.updateReferenceIndexes(true, parseInt(index));
+                            if ($scope.questionReference[index].questionVotes > 0) {
+                                $scope.questionReference[index].questionVotes--
+                            }
                         })
                         .error(function (errResponse) {
                             $window.location.href = "/error500.html";

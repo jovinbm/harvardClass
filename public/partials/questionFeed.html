@@ -55,20 +55,23 @@
             </div>
 
             <div class="question-buttons clearfix">
-                <button type='button'
-                        class="pull-right"
-                        ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
-                        ng-click="upVote(
+                <div class="btn-group btn-group-xs pull-right">
+                    <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}/"
+                       class="btn btn-default btn-xs">View
+                    </a>
+                    <a ng-class="questionReference[eachQuestion.questionIndex].buttonClass"
+                       ng-click="upVote(
                         eachQuestion.questionIndex, questionReference[eachQuestion.questionIndex].upvoted, $event)">
-
-                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-
-                </button>
-                <a ng-href="#/fullQuestion/{{eachQuestion.questionIndex}}/"
-                   type="button"
-                   class="btn btn-default btn-xs pull-right conv">
-                    <i class="fa fa-comments-o"></i>
-                </a>
+                        {{questionReference[eachQuestion.questionIndex].buttonWord}}
+                        <span class='glyphicon glyphicon-thumbs-up'
+                              aria-hidden='true'
+                              ng-if="!questionReference[eachQuestion.questionIndex].upvoted">
+                        </span>
+                    </a>
+                    <a href="#"
+                       target="_self"
+                       class="btn btn-default btn-xs">{{questionReference[eachQuestion.questionIndex].questionVotes}}</a>
+                </div>
             </div>
         </li>
     </ul>

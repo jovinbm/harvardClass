@@ -64,6 +64,7 @@ angular.module('qaApp')
                         //change time-string from mongodb to actual time
                         var mongoDate = new Date(questionObject.timeAsked);
                         temp.questionTime = mongoDate.toDateString() + " " + mongoDate.toLocaleTimeString();
+                        temp.questionVotes = questionObject.votes;
 
                         var upvotedIndexes = globals.upvotedIndexes();
                         var questionIndex = questionObject.questionIndex;
@@ -77,13 +78,15 @@ angular.module('qaApp')
 
                         /*if already updated, insert a new button class with a btn-warning class, and a disabled attribute*/
                         if (searchArrayIfExists(questionIndex, upvotedIndexes)) {
-                            temp.buttonClass = questionClass + "b" + " btn btn-warning btn-xs upvote";
+                            temp.buttonClass = questionClass + "b" + " btn btn-default btn-xs upvoted";
                             temp.listGroupClass = "list-group-item-warning";
                             temp.upvoted = true;
+                            temp.buttonWord = 'UPVOTED'
                         } else {
-                            temp.buttonClass = questionClass + "b" + " btn btn-info btn-xs upvote";
+                            temp.buttonClass = questionClass + "b" + " btn btn-default btn-xs upvote";
                             temp.listGroupClass = "list-group-item-info";
                             temp.upvoted = false;
+                            temp.buttonWord = 'UPVOTE'
                         }
 
                         detailPrototype[questionIndex] = temp;
@@ -112,23 +115,26 @@ angular.module('qaApp')
                         });
                         var currentIndexes = globals.upvotedIndexes();
                         currentIndexes.forEach(function (index) {
-                            detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-warning btn-xs upvote";
+                            detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-default btn-xs upvoted";
                             detailPrototype[index].listGroupClass = "list-group-item-warning";
                             detailPrototype[index].upvoted = true;
+                            detailPrototype[index].buttonWord = 'UPVOTED'
                         });
 
                         //downvote buttons not upvoted
                         var notUpvoted = detailPrototypeKeys.diff(currentIndexes);
                         notUpvoted.forEach(function (index) {
-                            detailPrototype[index].buttonClass = "a" + indexToRemove + "b" + " btn btn-info btn-xs upvote";
+                            detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-default btn-xs upvote";
                             detailPrototype[index].listGroupClass = "list-group-item-info";
                             detailPrototype[index].upvoted = false;
+                            detailPrototype[index].buttonWord = 'UPVOTE'
                         });
                     }
                     if (indexToRemove || indexToRemove == 0) {
-                        detailPrototype[indexToRemove].buttonClass = "a" + indexToRemove + "b" + " btn btn-info btn-xs upvote";
+                        detailPrototype[indexToRemove].buttonClass = "a" + indexToRemove + "b" + " btn btn-default btn-xs upvote";
                         detailPrototype[indexToRemove].listGroupClass = "list-group-item-info";
                         detailPrototype[indexToRemove].upvoted = false;
+                        detailPrototype[indexToRemove].buttonWord = 'UPVOTE'
                     }
                     if (broadcast) {
                         $rootScope.$broadcast('questionReference', detailPrototype);
@@ -143,12 +149,12 @@ angular.module('qaApp')
 
 
                 disableButton: function (index) {
-                    detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-warning btn-xs upvote";
+                    detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-default btn-xs upvoted";
                     return detailPrototype;
                 },
 
                 enableButton: function (index) {
-                    detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-info btn-xs upvote";
+                    detailPrototype[index].buttonClass = "a" + index + "b" + " btn btn-default btn-xs upvote";
                     return detailPrototype;
                 }
             }

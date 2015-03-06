@@ -10,7 +10,8 @@
     <div ng-if="alerts.newQuestionAlert.display == true"
          class="animated fadeIn">
         <a ng-href="#/1"
-           ng-click="closeAlert('newQuestionAlert')">
+           ng-click="closeAlert('newQuestionAlert')"
+           class="alert-new-post-sentence">
             <alert ng-model="alerts.newQuestionAlert"
                    type="{{alerts.newQuestionAlert.type}}">
                 {{alerts.newQuestionAlert.num}} new post(s) available. Click to show
@@ -38,25 +39,29 @@
                        class="text-outputs animated fadeIn ng-cloak"></p>
 
                     <div class="clearfix ng-cloak">
-                        <button type='button'
-                                class="pull-right"
-                                ng-class="questionReference[currentQuestion].buttonClass"
-                                ng-click="upVote(currentQuestion, questionReference[currentQuestion].upvoted, $event)">
-
-                            <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-
-                        </button>
-                        <a type="button"
-                           class="btn btn-primary btn-xs pull-right add"
-                           ng-click="changeCollapse()">
-                            <i class="fa fa-plus"></i> Add
-                        </a>
-                        <a ng-click="changeViewMode('edit')"
-                           type="button"
-                           class="btn btn-default btn-xs pull-right conv"
-                           ng-show="question.senderCuid == uniqueCuid">
-                            <i class="fa fa-pencil-square-o"></i>
-                        </a>
+                        <div class="btn-group btn-group-xs pull-right">
+                            <a ng-click="changeViewMode('edit')"
+                               class="btn btn-default btn-xs conv"
+                               ng-show="question.senderCuid == uniqueCuid">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                            <a class="btn btn-primary btn-xs add"
+                               ng-click="changeCollapse()">
+                                <i class="fa fa-plus"></i> Add
+                            </a>
+                            <a ng-class="questionReference[question.questionIndex].buttonClass"
+                               ng-click="upVote(
+                        question.questionIndex, questionReference[question.questionIndex].upvoted, $event)">
+                                {{questionReference[question.questionIndex].buttonWord}}
+                        <span class='glyphicon glyphicon-thumbs-up'
+                              aria-hidden='true'
+                              ng-if="!questionReference[question.questionIndex].upvoted">
+                        </span>
+                            </a>
+                            <a href="#"
+                               target="_self"
+                               class="btn btn-default btn-xs">{{questionReference[question.questionIndex].questionVotes}}</a>
+                        </div>
                     </div>
                 </div>
 

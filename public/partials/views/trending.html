@@ -18,9 +18,7 @@
     <ul class="list-group">
         <li class="list-group-item ng-cloak"
             ng-repeat="eachTop in topVotedQuestions"
-            ng-class="[questionReference[eachTop.questionIndex].questionClass]"
-            ng-disabled="questionReference[eachTop.questionIndex].ifDisabled">
-            <span class="badge alert-info voteNumber">{{eachTop.votes}}</span>
+            ng-class="[questionReference[eachTop.questionIndex].questionClass]">
             <h4 class="text-outputs question-header">
                 <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/"
                    class="question-heading">
@@ -39,18 +37,21 @@
             </p>
 
             <div class="clearfix">
-                <button type='button'
-                        class="pull-right"
-                        ng-class="questionReference[eachTop.questionIndex].buttonClass"
-                        ng-click="upVote(eachTop.questionIndex, questionReference[eachTop.questionIndex].upvoted, $event)">
-
-                    <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>
-                </button>
-                <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/"
-                   type="button"
-                   class="btn btn-default btn-xs pull-right conv">
-                    <i class="fa fa-comments-o"></i>
-                </a>
+                <div class="btn-group btn-group-xs pull-right">
+                    <a ng-href="#/fullQuestion/{{eachTop.questionIndex}}/"
+                       class="btn btn-default btn-xs">View
+                    </a>
+                    <a ng-class="questionReference[eachTop.questionIndex].buttonClass"
+                       ng-click="upVote(eachTop.questionIndex, questionReference[eachTop.questionIndex].upvoted, $event)">{{questionReference[eachTop.questionIndex].buttonWord}}
+                        <span class='glyphicon glyphicon-thumbs-up'
+                              aria-hidden='true'
+                              ng-if="!questionReference[eachTop.questionIndex].upvoted">
+                        </span>
+                    </a>
+                    <a href="#"
+                       target="_self"
+                       class="btn btn-default btn-xs">{{eachTop.votes}}</a>
+                </div>
             </div>
         </li>
     </ul>

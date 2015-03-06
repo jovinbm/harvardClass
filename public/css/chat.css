@@ -69,6 +69,10 @@ ul > li.col-xs-4 > a {
     margin-right: 3px;
 }
 
+.btn.upvote {
+    color: #0b97c4;
+}
+
 .conv {
     width: 40px;
 }
@@ -170,4 +174,16 @@ ul.nav.navbar-nav.pull-right.hidden-xs.bottom-nav-pills > li > a,
 /*new question alert in trending page*/
 #trending-newQ-alert {
     margin-top: 10px;
+}
+
+/*trending summary*/
+.trending-summary {
+    padding-bottom: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/*alert*/
+.alert-new-post-sentence:hover {
+    text-decoration: none;
 }
