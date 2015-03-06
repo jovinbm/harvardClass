@@ -113,10 +113,20 @@ module.exports = {
         var errorCounter = 0;
         switch (inc) {
             case 1:
-                upvotedArray.push(upvotedIndex);
+                //check to see if the user already upvoted this question to avoid repetition
+                if (upvotedArray.indexOf(upvotedIndex) > -1) {
+                    repetitionResponse();
+                    errorCounter++;
+                } else {
+                    upvotedArray.push(upvotedIndex);
+                }
                 break;
             case -1:
-                if (upvotedArray.indexOf(upvotedIndex) != -1) {
+                //check to see if the user already upvoted this question to avoid repetition
+                if (upvotedArray.indexOf(upvotedIndex) == -1) {
+                    repetitionResponse();
+                    errorCounter++;
+                } else if (upvotedArray.indexOf(upvotedIndex) != -1) {
                     upvotedArray.splice(upvotedArray.indexOf(upvotedIndex), 1);
                 }
                 break;
@@ -160,6 +170,11 @@ module.exports = {
             }
 
             questionDB.changeQuestionVotes(upvotedIndex, inc, error, error, done);
+        }
+
+        function repetitionResponse() {
+            res.status(200).send({msg: 'upvote success: There was an upvote/downvote repetition'});
+            consoleLogger('upvote success: There was an upvote/downvote repetition');
         }
 
         if (errorCounter == 0) {
