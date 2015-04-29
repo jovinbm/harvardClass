@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 var basic = require('../functions/basic.js');
 var question_handler = require('../handlers/question_handler.js');
 var userDB = require('../db/user_db.js');
@@ -20,14 +17,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                question_handler.getQuestions(req, res, theHarvardUser, page);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                question_handler.getQuestions(req, res, theUser, page);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -42,14 +39,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                question_handler.retrieveQuestion(req, res, theHarvardUser, questionIndex);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                question_handler.retrieveQuestion(req, res, theUser, questionIndex);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -64,14 +61,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                question_handler.newQuestion(req, res, theHarvardUser, theQuestion);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                question_handler.newQuestion(req, res, theUser, theQuestion);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -86,14 +83,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                question_handler.updateQuestion(req, res, theHarvardUser, theQuestion);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                question_handler.updateQuestion(req, res, theUser, theQuestion);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -109,10 +106,10 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                if (inc == -1 || theHarvardUser.votedQuestionIndexes.indexOf(upvotedIndex) == -1) {
-                    question_handler.upvote(req, res, theHarvardUser, upvotedIndex, inc);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                if (inc == -1 || theUser.votedQuestionIndexes.indexOf(upvotedIndex) == -1) {
+                    question_handler.upvote(req, res, theUser, upvotedIndex, inc);
                 } else {
                     //upvote process did not pass checks
                     res.status(200).send({msg: 'upvote did not pass checks'});
@@ -123,7 +120,7 @@ module.exports = {
             }
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     }
 
 

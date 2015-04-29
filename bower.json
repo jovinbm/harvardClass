@@ -1,18 +1,17 @@
 {
-  "name": "HarvardClass",
-  "version": "1.0.2",
-  "homepage": "https://harvardclass.herokuapp.com",
+  "name": "talkF",
+  "version": "0.0.1",
   "authors": [
     "Jovin Mwilanga <jovinbeda@hotmail.com>"
   ],
-  "description": "A question and answer website for Harvard University",
+  "description": "A question and answer forum",
   "moduleType": [
     "globals",
     "node"
   ],
   "keywords": [
-    "harvard",
-    "class"
+    "talkF",
+    "forum"
   ],
   "license": "MIT",
   "ignore": [
@@ -23,10 +22,8 @@
     "tests"
   ],
   "dependencies": {
-    "normalize.css": "~3.0.2",
     "toastr": "~2.1.0",
-    "bootstrap": "~3.3.2",
-    "angular-loading-bar": "~0.6.0",
-    "angulartics": "~0.17.2"
+    "angular-moment": "~0.10.0",
+    "ngFx": "~1.1.0"
   }
 }

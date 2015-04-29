@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/4/15.
- */
 var app = require('../app.js');
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;

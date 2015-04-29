@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/19/15.
- */
 angular.module('qaApp')
 
     .controller('qFeedCtrl', ['$location', '$routeParams', '$scope', 'socket', 'socketService', 'globals', 'detailStorage', 'sortObjectToArrayFilter', 'stateService', 'questionService',

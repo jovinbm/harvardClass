@@ -1,11 +1,7 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
-//import modules
 var app = require('../app.js');
 var Question = require("../database/questions/question_model.js");
 var Comment = require("../database/comments/comment_model.js");
-var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
+var User = require("../database/users/user_model.js");
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');
@@ -13,7 +9,7 @@ var commentDB = require('../db/comment_db.js');
 
 module.exports = {
 
-    newComment: function (req, res, theHarvardUser, theComment) {
+    newComment: function (req, res, theUser, theComment) {
         consoleLogger('newComment: NEW_COMMENT event handler called');
         var thisCommentIndex;
         //query the recent question's index
@@ -38,7 +34,7 @@ module.exports = {
                 }
 
 
-                commentDB.makeNewComment(theComment, index, theHarvardUser, made);
+                commentDB.makeNewComment(theComment, index, theUser, made);
             }
 
             function error(status, err) {
@@ -68,7 +64,7 @@ module.exports = {
     },
 
 
-    updateComment: function (req, res, theHarvardUser, theComment) {
+    updateComment: function (req, res, theUser, theComment) {
         consoleLogger('updateComment: UPDATE_COMMENT event handler called');
         var commentUniqueId = theComment.commentUniqueId;
         //query the recent question's index
@@ -108,9 +104,9 @@ module.exports = {
     },
 
 
-    promote: function (req, res, theHarvardUser, questionIndex, promoteIndex, inc, uniqueId) {
+    promote: function (req, res, theUser, questionIndex, promoteIndex, inc, uniqueId) {
         consoleLogger("promote: promote event handler called");
-        var promotedArray = theHarvardUser.postedCommentUniqueIds;
+        var promotedArray = theUser.postedCommentUniqueIds;
         var errorCounter = 0;
         switch (inc) {
             case 1:
@@ -152,7 +148,7 @@ module.exports = {
 
                     //++++++++++++++++++++++++++++++++++
                     //TODO -implement on client side the receive of promoted (to up or down icon)
-                    ioJs.emitToOne(theHarvardUser.socketRoom, 'promotesUniqueIds', promotedArray);
+                    ioJs.emitToOne(theUser.socketRoom, 'promotesUniqueIds', promotedArray);
                     //+++++++++++++++++++++++++++++++++
 
                     ioJs.emitToAll('topPromoted', topPromotedArrayOfObjects);
@@ -177,7 +173,7 @@ module.exports = {
     },
 
 
-    getComments: function (req, res, theHarvardUser, questionIndex, lastCommentIndex) {
+    getComments: function (req, res, theUser, questionIndex, lastCommentIndex) {
         var regexp = new RegExp("q" + questionIndex + "c.");
         var commentLimit = 30;
         consoleLogger("getComments: getComments called");
@@ -214,7 +210,7 @@ module.exports = {
             commentDB.getComments(-1, questionIndex, lastCommentIndex, commentLimit, error, error, success)
         }
 
-        basic.filterArray(theHarvardUser.promotedCommentsUniqueIds, regexp, getComments)
+        basic.filterArray(theUser.promotedCommentsUniqueIds, regexp, getComments)
     }
 
 };

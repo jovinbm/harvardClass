@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="indexApp" ng-controller="MainController">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Negus Math - College Level Advanced Mathematics for Kenya Students"/>
+    <meta name="author" content="Jovin Mwilanga"/>
+    <link rel="author" href="https://plus.google.com/+JovinMwilanga"/>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
+
+    <!--animate.css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"/>
+
+    <!--loads font awesome-->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <!--angular loading bar css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css"/>
+
+    <!--toastr-->
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- loads custom css file -->
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/index/index.css">
+
+    <title>Negus Math - College Level Advanced Mathematics for Kenya Students</title>
+</head>
+
+<body>
+
+<!--start of nav-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <!--button to target the navbar-right which will appear on collapse of navbar items-->
+            <button type="button" class='navbar-toggle collapsed' data-toggle="collapse"
+                    data-target=".navHeaderCollapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#top"
+               du-smooth-scroll du-scrollspy
+               class="navbar-brand">
+                <i class="fa fa-leanpub"></i>
+                NEGUS MATH
+            </a>
+        </div>
+
+        <!--this navbar will be collapsed on mobile-->
+        <div class="collapse navbar-collapse navHeaderCollapse">
+            <ul class="nav navbar-nav navbar-right ng-cloak">
+                <li>
+                    <a href="#services" du-smooth-scroll du-scrollspy>About</a>
+                </li>
+                <li ng-if="!clientIsRegistered">
+                    <a href="#login"
+                       du-smooth-scroll du-scrollspy
+                       ng-click="changeUserLoginState('register')">Register</a>
+                </li>
+                <li ng-if="!clientIsRegistered">
+                    <a href="#login"
+                       du-smooth-scroll du-scrollspy
+                       ng-click="changeUserLoginState('signIn')">Sign In</a>
+                </li>
+                <li class="dropdown"
+                    ng-if="clientIsRegistered">
+
+                    <a href="#"
+                       target="_self"
+                       class="dropdown-toggle" data-toggle="dropdown">
+                        {{userData.firstName}}<b class="caret"></b>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"
+                               target="_self"
+                               ng-click="logoutClient()">Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--end of nav-->
+
+<div>
+    <header id="top">
+        <div class="container">
+            <div class="intro-text animated pulse ng-cloak">
+                <div class="intro-heading">NEGUS MATH</div>
+                <div class="intro-lead-in">College Level Advanced Mathematics for Kenya Students</div>
+                <div ng-if="!clientIsRegistered"
+                     class="ng-cloak">
+                    <a href="#login"
+                       du-smooth-scroll du-scrollspy
+                       ng-click="changeUserLoginState('register')"
+                       class="btn btn-xl">REGISTER
+                    </a>
+                    <a href="#login"
+                       du-smooth-scroll du-scrollspy
+                       ng-click="changeUserLoginState('signIn')"
+                       class="btn btn-xl">SIGN IN
+                    </a>
+                </div>
+                <div ng-if="clientIsRegistered"
+                     class="ng-cloak">
+                    <a href="/clientHome.html"
+                       class="btn btn-xl">Continue to the forums
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">What we do</h2>
+
+                    <h3 class="section-subheading text-muted">We are a non-profit organisation focused on helping
+                        students with potential Mathematics talents all across Sub-Saharan Africa achieve their goals.
+                        We want to spread awareness of College Level Mathematics to every corner of Africa, something
+                        that has been missing for decades.</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="login"
+             ng-if="!clientIsRegistered">
+
+        <!--login form-->
+        <div class="container ng-cloak"
+             ng-if="userLoginState == 'signIn'">
+
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Sign In</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container">
+
+                    <div ng-class="bannerClass"
+                         class="ng-cloak"
+                         ng-if="showBanner">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>{{bannerMessage}}</strong>
+                    </div>
+
+                    <div class="col-lg-12">
+
+                        <!--data-dv attributes for bootstrap validator plugin-->
+                        <div class="row">
+                            <form name="localLoginForm"
+                                  id="localLoginForm">
+
+                                <!--Username field-->
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="username"
+                                           placeholder="Enter your username here"
+                                           ng-model="loginFormModel.username"
+                                           ng-minlength="4"
+                                           ng-maxlength="10"
+                                           ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                           required
+                                           ng-disabled="isLoading || universalDisable"
+                                           name="username">
+
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.username.$error.required"
+                                  ng-if='localLoginForm.username.$dirty'>
+                                <small>This is a required field:</small>
+                            </span>
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.username.$error.minlength"
+                                  ng-if='localLoginForm.username.$dirty'>
+                                <small>Minimum length required is 4:</small>
+                            </span>
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.username.$error.maxlength"
+                                  ng-if='localLoginForm.username.$dirty'>
+                                <small>Maximum length required is 10:</small>
+                            </span>
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.username.$error.pattern"
+                                  ng-if='localLoginForm.username.$dirty'>
+                                <small>Only letters, numbers and underscores allowed:</small>
+                            </span>
+                                </div>
+
+                                <!--password field-->
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password"
+                                           name="password"
+                                           class="form-control"
+                                           id="password"
+                                           placeholder="Enter password here"
+                                           ng-model="loginFormModel.password"
+                                           ng-minlength="4"
+                                           ng-maxlength="20"
+                                           ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                           required
+                                           ng-disabled="isLoading || universalDisable">
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.password.$error.required"
+                                  ng-if='localLoginForm.password.$dirty'>
+                                <small>This is a required field:</small>
+                            </span>
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.password.$error.minlength"
+                                  ng-if='localLoginForm.password.$dirty'>
+                                <small>Minimum length required is 4:</small>
+                            </span>
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.password.$error.maxlength"
+                                  ng-if='localLoginForm.password.$dirty'>
+                                <small>Maximum length required is 20:</small>
+                            </span>
+                            <span class="form-error-notice"
+                                  ng-show="localLoginForm.password.$error.pattern"
+                                  ng-if='localLoginForm.password.$dirty'>
+                                <small>Only letters, numbers and underscores allowed:</small>
+                            </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-default btn-lg btn-block"
+                                            ng-disabled="localLoginForm.$invalid"
+                                            ng-click="submitLocalLoginForm()">SIGN IN
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="padding-top-20 padding-bottom-15">
+                                Don't have an account yet?
+                            </div>
+
+                            <a class="btn btn-xl"
+                               href="#login"
+                               du-smooth-scroll du-scrollspy
+                               ng-click="changeUserLoginState('register')">CREATE AN ACCOUNT
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end of login form-->
+
+
+        <!--registration form-->
+        <div class="container ng-cloak"
+             ng-if="userLoginState == 'register'">
+
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Create a new account</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container">
+
+                    <div class="col-lg-12">
+
+                        <div class="container">
+
+                            <div ng-class="registrationBannerClass"
+                                 ng-if="showRegistrationBanner">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong>{{registrationBannerMessage}}</strong>
+                            </div>
+
+                            <div class="row">
+                                <form name="registrationForm"
+                                      id="registrationForm">
+
+                                    <!--Email field-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="email">Email</label>
+                                        <input type="email"
+                                               class="form-control"
+                                               id="email"
+                                               placeholder="username@domain.com"
+                                               ng-model="registrationDetails.email"
+                                               ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="email">
+            <span class="form-error-notice"
+                  ng-show="registrationForm.email.$error.required"
+                  ng-if='registrationForm.message.$dirty'>
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.email.$error.pattern"
+                  ng-if='registrationForm.email.$dirty'>
+                <small>This is not a valid email</small>
+            </span>
+                                    </div>
+
+
+                                    <!--FirstName field-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="firstName">First name</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="firstName"
+                                               placeholder="Jane"
+                                               ng-model="registrationDetails.firstName"
+                                               ng-minlength="2"
+                                               ng-maxlength="30"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="firstName">
+            <span class="form-error-notice"
+                  ng-show="registrationForm.firstName.$error.required"
+                  ng-if='registrationForm.firstname.$dirty'>
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.firstName.$error.minlength"
+                  ng-if='registrationForm.firstname.$dirty'>
+                <small>Minimum length required is 2:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.firstName.$error.maxlength"
+                  ng-if='registrationForm.firstname.$dirty'>
+                <small>Maximum length required is 30:</small>
+            </span>
+                                    </div>
+
+                                    <!--LastName field-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="LastName">Last name</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="LastName"
+                                               placeholder="Doe"
+                                               ng-model="registrationDetails.lastName"
+                                               ng-minlength="2"
+                                               ng-maxlength="30"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="lastName">
+            <span class="form-error-notice"
+                  ng-show="registrationForm.lastName.$error.required"
+                  ng-if='registrationForm.lastName.$dirty'>
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.lastName.$error.minlength"
+                  ng-if='registrationForm.lastName.$dirty'>
+                <small>Minimum length required is 2:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.lastName.$error.maxlength"
+                  ng-if='registrationForm.lastName.$dirty'>
+                <small>Maximum length required is 30:</small>
+            </span>
+                                    </div>
+
+                                    <!--Username field-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="username">Public username</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="username"
+                                               placeholder="JaneDoe"
+                                               ng-model="registrationDetails.username"
+                                               ng-minlength="4"
+                                               ng-maxlength="10"
+                                               ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="username">
+            <span class="form-error-notice"
+                  ng-show="registrationForm.username.$error.required"
+                  ng-if='registrationForm.username.$dirty'>
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.username.$error.minlength"
+                  ng-if='registrationForm.username.$dirty'>
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.username.$error.maxlength"
+                  ng-if='registrationForm.username.$dirty'>
+                <small>Maximum length required is 10:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.username.$error.pattern"
+                  ng-if='registrationForm.username.$dirty'>
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+                                    </div>
+
+                                    <!--password field-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="clientUpdatePassword1">New Password</label>
+                                        <input type="password"
+                                               name="password1"
+                                               class="form-control"
+                                               id="clientUpdatePassword1"
+                                               placeholder=""
+                                               ng-model="registrationDetails.password1"
+                                               ng-minlength="4"
+                                               ng-maxlength="20"
+                                               ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                               required
+                                               ng-disabled="isLoading || universalDisable">
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password1.$error.required"
+                          ng-if='registrationForm.password1.$dirty'>
+                        <small>This is a required field:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password1.$error.minlength"
+                          ng-if='registrationForm.password1.$dirty'>
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password1.$error.maxlength"
+                          ng-if='registrationForm.password1.$dirty'>
+                        <small>Maximum length required is 20:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password1.$error.pattern"
+                          ng-if='registrationForm.password1.$dirty'>
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationDetails.password1 != registrationDetails.password2"
+                          ng-if="registrationForm.password1.$dirty && registrationForm.password2.$dirty">
+                        <small>Passwords do not match:</small>
+                    </span>
+                                    </div>
+
+                                    <!--confirm password-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="clientUpdatePassword2">Confirm Password</label>
+                                        <input type="password"
+                                               name="password2"
+                                               class="form-control"
+                                               id="clientUpdatePassword2"
+                                               placeholder=""
+                                               ng-model="registrationDetails.password2"
+                                               ng-minlength="4"
+                                               ng-maxlength="20"
+                                               ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                               required
+                                               ng-disabled="isLoading || universalDisable">
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password2.$error.required"
+                          ng-if='registrationForm.password2.$dirty'>
+                        <small>This is a required field:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password2.$error.minlength"
+                          ng-if='registrationForm.password2.$dirty'>
+                        <small>Minimum length required is 4:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password2.$error.maxlength"
+                          ng-if='registrationForm.password2.$dirty'>
+                        <small>Maximum length required is 20:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationForm.password2.$error.pattern"
+                          ng-if='registrationForm.password2.$dirty'>
+                        <small>Only letters, numbers and underscores allowed:</small>
+                    </span>
+                    <span class="form-error-notice"
+                          ng-show="registrationDetails.password1 != registrationDetails.password2"
+                          ng-if="registrationForm.password1.$dirty && registrationForm.password2.$dirty">
+                        <small>Passwords do not match:</small>
+                    </span>
+                                    </div>
+
+                                    <!--invitation code-->
+                                    <div class="form-group ng-cloak">
+                                        <label for="code">Invitation code</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               id="code"
+                                               ng-model="registrationDetails.invitationCode"
+                                               ng-minlength="4"
+                                               ng-maxlength="10"
+                                               ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="invitationCode">
+            <span class="form-error-notice"
+                  ng-show="registrationForm.invitationCode.$error.required"
+                  ng-if='registrationForm.invitationCode.$dirty'>
+                <small>This is a required field:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.invitationCode.$error.minlength"
+                  ng-if='registrationForm.invitationCode.$dirty'>
+                <small>Minimum length required is 4:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.invitationCode.$error.maxlength"
+                  ng-if='registrationForm.invitationCode.$dirty'>
+                <small>Maximum length required is 10:</small>
+            </span>
+            <span class="form-error-notice"
+                  ng-show="registrationForm.invitationCode.$error.pattern"
+                  ng-if='registrationForm.invitationCode.$dirty'>
+                <small>Only letters, numbers and underscores allowed:</small>
+            </span>
+                                    </div>
+
+                                    <div class="form-group ng-cloak">
+                                        <button class="btn btn-default btn-lg btn-block"
+                                                ng-disabled="registrationForm.$invalid || isLoading || universalDisable"
+                                                ng-click="createAccount()">CREATE MY ACCOUNT
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+
+
+                            <div class="row text-center">
+                                <div class="padding-top-20 padding-bottom-15">
+                                    Have an account?
+                                </div>
+
+                                <a class="btn btn-xl"
+                                   href="#login"
+                                   du-smooth-scroll du-scrollspy
+                                   ng-click="changeUserLoginState('signIn')">SIGN IN
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end of registration form-->
+    </section>
+
+
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Contact Us</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="contactForm"
+                          name="contactForm">
+                        <div class="row">
+                            <div class="container text-center">
+                                <div class="col-lg-12 text-center">
+
+                                    <div class="form-group">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Your Name *"
+                                               ng-model="contactUsModel.name"
+                                               ng-minlength="4"
+                                               ng-maxlength="30"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="name">
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.name.$error.required"
+                                              ng-if='contactForm.name.$dirty'><small>This is a
+                                                required field:
+                                            </small>
+                                        </span>
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.name.$error.minlength"
+                                              ng-if='contactForm.name.$dirty'><small>Minimum
+                                                length required is 2:
+                                            </small>
+                                        </span>
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.name.$error.maxlength"
+                                              ng-if='contactForm.name.$dirty'><small>Maximum
+                                                length required is 30:
+                                            </small>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="email"
+                                               class="form-control"
+                                               placeholder="Your Email *"
+                                               ng-model="contactUsModel.email"
+                                               ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="email">
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.email.$error.required"
+                                              ng-if='contactForm.email.$dirty'><small>This is a
+                                                required field:
+                                            </small>
+                                        </span>
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.email.$error.pattern"
+                                              ng-if='contactForm.email.$dirty'><small>This is not a valid email:
+                                            </small>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <textarea class="form-control"
+                                                  placeholder="Your Message *"
+                                                  ng-model="contactUsModel.message"
+                                                  ng-required
+                                                  ng-disabled="isLoading || universalDisable"
+                                                  name="message">
+                                            <span class="form-error-notice"
+                                                  ng-show="contactForm.message.$error.required"
+                                                  ng-if='contactForm.message.$dirty'><small>This is a
+                                                    required field:
+                                                </small>
+                                            </span>
+                                        </textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <!--<button class="btn btn-xl"-->
+                                <!--ng-disabled="contactForm.$invalid"-->
+                                <!--ng-click="sendContactUs()">Send Message-->
+                                <!--</button>-->
+                                <button class="btn btn-xl"
+                                        ng-click="sendContactUs()">Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 clearfix text-center">
+                    <span class="copyright pull-left">Copyright &copy; Digital Literacy Project (DLP) Inc</span>
+                    <ul class="list-inline quicklinks pull-right">
+                        <li><a href="http://dlp.io/terms.html" target="_blank">Privacy Policy</a>
+                        </li>
+                        <li><a href="http://dlp.io/terms.html" target="_blank">Terms of Use</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<!-- socket.io javascript -->
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+
+<!-- jquery -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!--AngularJS SCRIPTS-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-animate.min.js"></script>
+
+<!--angular ui-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+
+<!--angular analytics-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics-ga.min.js"></script>
+
+
+<!-- Bootstrap.js -->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!--angular loading bar js-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
+
+<!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
+<!--angular-ui-router-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
+
+<!--toastr js-->
+<script src="/bower_components/toastr/toastr.min.js"></script>
+
+<!--moment js-->
+<script type="text/javascript"
+        src="/bower_components/angular-moment/angular-moment.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/moment/min/moment.min.js"></script>
+
+<!--angular scroll-spy-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.6.5/angular-scroll.min.js"></script>
+
+<!--ng-fx animations-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/ngFx/dist/ngFx.min.js"></script>
+
+
+<script type="text/javascript" src="/public/angular_assets/indexApp/indexApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/indexApp/directives.js"></script>
+<script type="text/javascript" src="/public/angular_assets/indexApp/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/indexApp/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/indexApp/services/socketIoService.js"></script>
+<script type="text/javascript" src="/public/angular_assets/indexApp/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/indexApp/services/globals.js"></script>
+
+</body>
+</html>

@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/14/15.
- */
 angular.module('qaApp')
     .filter("sortObjectToArray", [function () {
         return function (obj, spliceToEndPosition) {

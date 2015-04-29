@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 12/25/14.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');

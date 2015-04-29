@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 12/25/14.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');
@@ -9,15 +6,15 @@ var questionDB = require('../db/question_db.js');
 
 module.exports = {
 
-    startUp: function (req, res, theHarvardUser) {
+    startUp: function (req, res, theUser) {
         consoleLogger('startUp: STARTUP handler called');
         var limit = 10;
         var page = 1;
         ioJs.emitToAll("usersOnline", online.getUsersOnline());
 
         var temp = {};
-        temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
-        temp['uniqueCuid'] = theHarvardUser.uniqueCuid;
+        temp['upvotedIndexes'] = theUser.votedQuestionIndexes;
+        temp['uniqueCuid'] = theUser.uniqueCuid;
 
         function getQuestionsErr(status, err) {
             if (status == -1) {
@@ -61,14 +58,14 @@ module.exports = {
     },
 
 
-    reconnect: function (req, res, theHarvardUser, page) {
+    reconnect: function (req, res, theUser, page) {
         consoleLogger('reconnect: RECONNECT handler called');
         var limit = 10;
-        ioJs.emitToOne(theHarvardUser.socketRoom, "usersOnline", online.getUsersOnline());
+        ioJs.emitToOne(theUser.socketRoom, "usersOnline", online.getUsersOnline());
 
         var temp = {};
-        temp['uniqueCuid'] = theHarvardUser.uniqueCuid;
-        temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
+        temp['uniqueCuid'] = theUser.uniqueCuid;
+        temp['upvotedIndexes'] = theUser.votedQuestionIndexes;
 
         function getQuestionsErr(status, err) {
             if (status == -1) {

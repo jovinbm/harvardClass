@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="clientHomeApp" ng-controller="MainController">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Negus Math - College Level Advanced Mathematics for Kenya Students"/>
+    <meta name="author" content="Jovin Mwilanga"/>
+    <link rel="author" href="https://plus.google.com/+JovinMwilanga"/>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/paper/bootstrap.min.css">
+
+    <!--jquery ui-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
+
+    <!--animate.css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"/>
+
+    <!--loads font awesome-->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <!--angular loading bar css-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css"/>
+
+    <!--toastr-->
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- loads custom css file -->
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/client/client_home.css">
+
+    <title>Negus Math - College Level Advanced Mathematics for Kenya Students</title>
+</head>
+
+<body>
+
+<!--start of nav-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <!--button to target the navbar-right which will appear on collapse of navbar items-->
+            <button type="button" class='navbar-toggle collapsed' data-toggle="collapse"
+                    data-target=".navHeaderCollapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#top"
+               du-smooth-scroll du-scrollspy
+               class="navbar-brand">
+                <i class="fa fa-leanpub"></i>
+                NEGUS
+            </a>
+        </div>
+
+        <!--this navbar will be collapsed on mobile-->
+        <div class="collapse navbar-collapse navHeaderCollapse">
+            <ul class="nav navbar-nav navbar-right ng-cloak">
+
+                <li class="dropdown">
+
+                    <a href="#"
+                       target="_self"
+                       class="dropdown-toggle" data-toggle="dropdown">
+                        {{userData.firstName}}<b class="caret"></b>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"
+                               target="_self"
+                               ng-click="logoutClient()">Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--end of nav-->
+
+<div>
+    <header id="top">
+        <div class="container">
+            <section id="theGame">r
+                <h2 class="section-heading">Are you a color guru?</h2>
+
+                <h3 class="section-subheading">Use the sliders to match the color in the right color block with the
+                    color in the left</h3>
+            </section>
+        </div>
+    </header>
+
+
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Contact Us</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="contactForm"
+                          name="contactForm">
+                        <div class="row">
+                            <div class="container text-center">
+                                <div class="col-lg-12 text-center">
+
+                                    <div class="form-group">
+                                        <input type="text"
+                                               class="form-control"
+                                               placeholder="Your Name *"
+                                               ng-model="contactUsModel.name"
+                                               ng-minlength="4"
+                                               ng-maxlength="30"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="name">
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.name.$error.required"
+                                              ng-if='contactForm.name.$dirty'><small>This is a
+                                                required field:
+                                            </small>
+                                        </span>
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.name.$error.minlength"
+                                              ng-if='contactForm.name.$dirty'><small>Minimum
+                                                length required is 2:
+                                            </small>
+                                        </span>
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.name.$error.maxlength"
+                                              ng-if='contactForm.name.$dirty'><small>Maximum
+                                                length required is 30:
+                                            </small>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="email"
+                                               class="form-control"
+                                               placeholder="Your Email *"
+                                               ng-model="contactUsModel.email"
+                                               ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i"
+                                               required
+                                               ng-disabled="isLoading || universalDisable"
+                                               name="email">
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.email.$error.required"
+                                              ng-if='contactForm.email.$dirty'><small>This is a
+                                                required field:
+                                            </small>
+                                        </span>
+                                        <span class="form-error-notice"
+                                              ng-show="contactForm.email.$error.pattern"
+                                              ng-if='contactForm.email.$dirty'><small>This is not a valid email:
+                                            </small>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <textarea class="form-control"
+                                                  placeholder="Your Message *"
+                                                  ng-model="contactUsModel.message"
+                                                  ng-required
+                                                  ng-disabled="isLoading || universalDisable"
+                                                  name="message">
+                                            <span class="form-error-notice"
+                                                  ng-show="contactForm.message.$error.required"
+                                                  ng-if='contactForm.message.$dirty'><small>This is a
+                                                    required field:
+                                                </small>
+                                            </span>
+                                        </textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <!--<button class="btn btn-xl"-->
+                                <!--ng-disabled="contactForm.$invalid"-->
+                                <!--ng-click="sendContactUs()">Send Message-->
+                                <!--</button>-->
+                                <button class="btn btn-xl"
+                                        ng-click="sendContactUs()">Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 clearfix text-center">
+                    <span class="copyright pull-left">Copyright &copy; Digital Literacy Project (DLP) Inc</span>
+                    <ul class="list-inline quicklinks pull-right">
+                        <li><a href="http://dlp.io/terms.html" target="_blank">Privacy Policy</a>
+                        </li>
+                        <li><a href="http://dlp.io/terms.html" target="_blank">Terms of Use</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<!-- socket.io javascript -->
+<script type="text/javascript" src="socket.io/socket.io.js"></script>
+
+<!-- jquery -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!--jquery-ui-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<!--AngularJS SCRIPTS-->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular.min.js"></script>
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.8/angular-animate.min.js"></script>
+
+<!--angular ui-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+
+<!--angular analytics-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angulartics/0.17.2/angulartics-ga.min.js"></script>
+
+
+<!-- Bootstrap.js -->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<!--angular loading bar js-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.js"></script>
+
+<!-- loads respond.js: enables responsive web designs in browsers that don't support CSS3 Media Queries - in particular, Internet Explorer 8 and under. -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
+<!--angular-ui-router-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
+
+<!--toastr js-->
+<script src="/bower_components/toastr/toastr.min.js"></script>
+
+<!--moment js-->
+<script type="text/javascript"
+        src="/bower_components/angular-moment/angular-moment.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/moment/min/moment.min.js"></script>
+
+<!--angular scroll-spy-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.6.5/angular-scroll.min.js"></script>
+
+<!--ng-fx animations-->
+<script type="text/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+<script type="text/javascript"
+        src="/bower_components/ngFx/dist/ngFx.min.js"></script>
+
+
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/clientHomeApp.js"></script>
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/directives.js"></script>
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/filters.js"></script>
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/controllers/mainCtrl.js"></script>
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/services/socketIoService.js"></script>
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/services/mainFactory.js"></script>
+<script type="text/javascript" src="/public/angular_assets/clientHomeApp/services/globals.js"></script>
+
+</body>
+</html>

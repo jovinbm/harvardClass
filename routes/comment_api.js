@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 var basic = require('../functions/basic.js');
 var comment_handler = require('../handlers/comment_handler.js');
 var userDB = require('../db/user_db.js');
@@ -20,14 +17,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                comment_handler.getComments(req, res, theHarvardUser, questionIndex, lastCommentIndex);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                comment_handler.getComments(req, res, theUser, questionIndex, lastCommentIndex);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -42,14 +39,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                comment_handler.newComment(req, res, theHarvardUser, theComment);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                comment_handler.newComment(req, res, theUser, theComment);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -64,14 +61,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                comment_handler.updateComment(req, res, theHarvardUser, theComment);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                comment_handler.updateComment(req, res, theUser, theComment);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -89,10 +86,10 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                if (inc == -1 || theHarvardUser.promotedCommentsUniqueIds.indexOf(uniqueId) == -1) {
-                    comment_handler.promote(req, res, theHarvardUser, questionIndex, promoteIndex, inc, uniqueId);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                if (inc == -1 || theUser.promotedCommentsUniqueIds.indexOf(uniqueId) == -1) {
+                    comment_handler.promote(req, res, theUser, questionIndex, promoteIndex, inc, uniqueId);
                 } else {
                     //promote process did not pass checks
                     res.status(200).send({msg: 'promote did not pass checks'});
@@ -103,7 +100,7 @@ module.exports = {
             }
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     }
 
 };

@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/19/15.
- */
 angular.module('qaApp')
 
     .factory('socket', ['$location', '$rootScope',
@@ -87,16 +84,9 @@ angular.module('qaApp')
     .factory('logoutService', ['$http',
         function ($http) {
             return {
-                logoutCustomChat: function () {
-                    return $http.post('/api/logoutCustomChat');
-                },
 
-                logoutHarvardChat: function () {
-                    return $http.post('/api/logoutHarvardChat');
-                },
-
-                logoutHarvardLogin: function () {
-                    return $http.post('/api/logoutHarvardLogin');
+                logoutClient: function () {
+                    return $http.post('/api/logoutClient');
                 }
             }
         }]);

@@ -1,17 +1,14 @@
-/**
- * Created by jovinbm on 1/13/15.
- */
 angular.module('qaApp')
     .directive('topQaNav', [function () {
         return {
-            templateUrl: 'public/partials/navs/top_qa.html',
+            templateUrl: 'views/client/partials/navs/top_qa.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('bottomQaNav', [function () {
         return {
-            templateUrl: 'public/partials/navs/bottom_qa.html',
+            templateUrl: 'views/client/partials/navs/bottom_qa.html',
             link: function ($scope, $element, $attrs) {
             }
         }
@@ -28,28 +25,28 @@ angular.module('qaApp')
     })
     .directive('questionModal', [function () {
         return {
-            templateUrl: 'public/partials/modals/question_input.html',
+            templateUrl: 'views/client/partials/modals/question_input.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('questionFeed', [function () {
         return {
-            templateUrl: 'public/partials/questionFeed.html',
+            templateUrl: 'views/client/partials/questionFeed.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('questionFull', [function () {
         return {
-            templateUrl: 'public/partials/question_full.html',
+            templateUrl: 'views/client/partials/question_full.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('questionEdit', [function () {
         return {
-            templateUrl: 'public/partials/modals/question_edit.html',
+            templateUrl: 'views/client/partials/modals/question_edit.html',
             link: function ($scope, $element, $attrs) {
             }
         }
@@ -57,7 +54,7 @@ angular.module('qaApp')
     .directive('commentFull', ['$window', 'socket', 'socketService', 'globals', 'sortObjectToArrayFilter', 'commentService',
         function ($window, socket, socketService, globals, sortObjectToArrayFilter, commentService) {
             return {
-                templateUrl: 'public/partials/comment_full.html',
+                templateUrl: 'views/client/partials/comment_full.html',
                 link: function ($scope, $element, $attrs) {
                     $scope.questionIndex = $scope.currentQuestion;
                     $scope.cmntsReference = {};
@@ -148,28 +145,28 @@ angular.module('qaApp')
         }])
     .directive('commentEdit', ['commentService', function (commentService) {
         return {
-            templateUrl: 'public/partials/modals/comment_edit.html',
+            templateUrl: 'views/client/partials/modals/comment_edit.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('trendingSummary', [function () {
         return {
-            templateUrl: 'public/partials/trending_summary.html',
+            templateUrl: 'views/client/partials/trending_summary.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('trendingFull', [function () {
         return {
-            templateUrl: 'public/partials/trending.html',
+            templateUrl: 'views/client/partials/trending.html',
             link: function ($scope, $element, $attrs) {
             }
         }
     }])
     .directive('onlineFeed', [function () {
         return {
-            templateUrl: 'public/partials/online.html',
+            templateUrl: 'views/client/partials/online.html',
             link: function ($scope, $element, $attrs) {
             }
         }

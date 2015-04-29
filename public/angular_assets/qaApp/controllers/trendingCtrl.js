@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/19/15.
- */
 angular.module('qaApp')
 
     .controller('TrendingSummaryCtrl', ['$scope', 'socket', 'globals', 'stateService',

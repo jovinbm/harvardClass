@@ -1,19 +1,4 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 angular.module('qaApp')
-    .controller('HeadCtrl', ['$scope', function ($scope) {
-        $scope.title = 'Harvard Class';
-        $scope.changeTitle = function (activity) {
-            if (activity > 0) {
-                $scope.title = "(" + activity + ") HarvardClass";
-            } else {
-                $scope.title = "HarvardClass";
-            }
-        }
-
-
-    }])
     .controller('MainController', ['$window', '$location', '$scope', '$rootScope', 'socket', 'socketService', 'questionService', 'globals', 'detailStorage', 'stateService', 'mainService',
         function ($window, $location, $scope, $rootScope, socket, socketService, questionService, globals, detailStorage, stateService, mainService) {
 
@@ -131,5 +116,18 @@ angular.module('qaApp')
                 $scope.uniqueCuid = data.uniqueCuid;
                 $scope.questionReference = data.questionReference;
             });
+
+            //===============logout functions===============
+            $scope.logoutClient = function () {
+                logoutService.logoutClient()
+                    .success(function (resp) {
+                        $scope.responseStatusHandler(resp);
+                    })
+                    .error(function (errResponse) {
+                        $scope.responseStatusHandler(errResponse);
+                    });
+            };
+
+            //=============end of logout===================
 
         }]);

@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/12/15.
- */
 var email = require("emailjs");
 var mailServer = email.server.connect({
     user: "jovinbeda@gmail.com",
@@ -14,20 +11,6 @@ var userDB = require('../db/user_db.js');
 
 
 module.exports = {
-    sendEmail: function (req, res) {
-        res.redirect('login.html');
-        var message = {
-            text: "Name: " + req.body.name + ", Email: " + req.body.email + ", Message: " + req.body.message,
-            from: req.body.email,
-            to: "jovinbeda@gmail.com",
-            subject: "HARVARDCLASS WEBSITE"
-        };
-        mailServer.send(message, function (err) {
-            basic.consoleLogger(err || "EMAIL: Message sent to jovinbeda@gmail.com");
-        });
-    },
-
-
     getSocketRoom: function (req, res) {
         function error(status, err) {
             if (status == -1 || status == 0) {
@@ -36,18 +19,18 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
                 res.send({
-                    socketRoom: theHarvardUser.socketRoom,
-                    customUsername: theHarvardUser.customUsername,
-                    uniqueCuid: theHarvardUser.uniqueCuid
+                    socketRoom: theUser.socketRoom,
+                    customUsername: theUser.customUsername,
+                    uniqueCuid: theUser.uniqueCuid
                 });
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -60,14 +43,14 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                basic_handlers.startUp(req, res, theHarvardUser);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                basic_handlers.startUp(req, res, theUser);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     },
 
 
@@ -82,13 +65,13 @@ module.exports = {
             }
         }
 
-        function success(theHarvardUser) {
-            if (theHarvardUser.customLoggedInStatus == 1) {
-                basic_handlers.reconnect(req, res, theHarvardUser, page);
+        function success(theUser) {
+            if (theUser.customLoggedInStatus == 1) {
+                basic_handlers.reconnect(req, res, theUser, page);
             }
             //TODO -- redirect to custom login
         }
 
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        userDB.findUser(req.user.id, error, error, success);
     }
 };

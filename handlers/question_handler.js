@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');
@@ -9,7 +6,7 @@ var questionDB = require('../db/question_db.js');
 module.exports = {
 
 
-    newQuestion: function (req, res, theHarvardUser, theQuestion) {
+    newQuestion: function (req, res, theUser, theQuestion) {
         consoleLogger('newQuestion: NEW_QUESTION event handler called');
         var thisQuestionIndex;
         var savedQuestion;
@@ -38,7 +35,7 @@ module.exports = {
                     questionDB.saveNewQuestion(question, error, error, saved);
                 }
 
-                questionDB.makeNewQuestion(theQuestion, index, theHarvardUser, made);
+                questionDB.makeNewQuestion(theQuestion, index, theUser, made);
             }
 
             function error(status, err) {
@@ -65,7 +62,7 @@ module.exports = {
         }
     },
 
-    updateQuestion: function (req, res, theHarvardUser, theQuestion) {
+    updateQuestion: function (req, res, theUser, theQuestion) {
         consoleLogger('updateQuestion: UPDATE_QUESTION event handler called');
         var thisQuestionIndex = theQuestion.questionIndex;
         if (!(/^\s+$/.test(theQuestion.heading)) &&
@@ -97,7 +94,7 @@ module.exports = {
                 questionDB.updateQuestion(question, thisQuestionIndex, error, error, updated);
             }
 
-            questionDB.makeQuestionUpdate(theQuestion, theHarvardUser, made);
+            questionDB.makeQuestionUpdate(theQuestion, theUser, made);
 
         } else {
             //the question does not pass the checks
@@ -107,9 +104,9 @@ module.exports = {
     },
 
 
-    upvote: function (req, res, theHarvardUser, upvotedIndex, inc) {
+    upvote: function (req, res, theUser, upvotedIndex, inc) {
         consoleLogger("upvote: upvote event handler called");
-        var upvotedArray = theHarvardUser.votedQuestionIndexes;
+        var upvotedArray = theUser.votedQuestionIndexes;
         var errorCounter = 0;
         switch (inc) {
             case 1:
@@ -149,7 +146,7 @@ module.exports = {
                 consoleLogger('upvote: failed!');
             } else if (status == 0) {
                 //this will mostly be returned be the findTopVotedQuestions query
-                ioJs.emitToOne(theHarvardUser.socketRoom, "upvotedIndexes", upvotedArray);
+                ioJs.emitToOne(theUser.socketRoom, "upvotedIndexes", upvotedArray);
                 ioJs.emitToAll('topVoted', []);
                 res.status(200).send({msg: "upvote: partial ERROR: Status:200: query returned null/undefined: There might also be no top voted object"});
                 consoleLogger('**partial ERROR!: Status:200 upvote event handler: failure: query returned NULL/UNDEFINED: There might be no top voted object');
@@ -161,7 +158,7 @@ module.exports = {
                 function found(topVotedArrayOfObjects) {
 
                     ioJs.emitToAll('topVoted', topVotedArrayOfObjects);
-                    ioJs.emitToOne(theHarvardUser.socketRoom, 'upvotedIndexes', upvotedArray);
+                    ioJs.emitToOne(theUser.socketRoom, 'upvotedIndexes', upvotedArray);
                     res.status(200).send({msg: 'upvote success'});
                     consoleLogger('upvote: Success');
                 }
@@ -192,7 +189,7 @@ module.exports = {
     ,
 
 
-    getQuestions: function (req, res, theHarvardUser, page) {
+    getQuestions: function (req, res, theUser, page) {
         consoleLogger("getQuestions: getQuestions called");
         var temp = {};
         var limit = 10;
@@ -222,7 +219,7 @@ module.exports = {
     },
 
 
-    retrieveQuestion: function (req, res, theHarvardUser, questionIndex) {
+    retrieveQuestion: function (req, res, theUser, questionIndex) {
         consoleLogger("getQuestions: getQuestions called");
         var temp = {};
 
@@ -236,7 +233,7 @@ module.exports = {
                 consoleLogger('retrieveQuestion: failed!');
             } else if (status == 0) {
                 temp['question'] = [];
-                temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
+                temp['upvotedIndexes'] = theUser.votedQuestionIndexes;
                 res.status(200).send(temp);
                 consoleLogger('retrieveQuestion: Did not find any questions');
             }
@@ -245,7 +242,7 @@ module.exports = {
 
         function success(question) {
             temp['question'] = question;
-            temp['upvotedIndexes'] = theHarvardUser.votedQuestionIndexes;
+            temp['upvotedIndexes'] = theUser.votedQuestionIndexes;
             res.status(200).send(temp);
         }
 

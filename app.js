@@ -1,10 +1,4 @@
-/**
- * Created by jovinbm on 12/25/14.
- */
-//var dbURL = 'mongodb://localhost:27017/hvd';
-var dbURL = 'mongodb://jovinbm:paka1995@ds043210.mongolab.com:43210/harvardclass';
-//var dbURL = 'mongodb://jovinbm:paka1995@ds043200.mongolab.com:43200/harvardclassdev';
-
+var databaseURL = 'mongodb://math:kenya@ds031972.mongolab.com:31972/math';
 
 //THE APP
 var express = require('express');
@@ -20,22 +14,33 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
-var OpenIDStrategy = require('passport-openid').Strategy;
 LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 
+var basic = require('./functions/basic.js');
 var consoleLogger = require('./functions/basic.js').consoleLogger;
+var middleware = require('./functions/middleware.js');
 var routes = require('./routes/router.js');
 var basicAPI = require('./routes/basic_api.js');
 var questionAPI = require('./routes/question_api.js');
 var commentAPI = require('./routes/comment_api.js');
+var loginAPI = require('./routes/login_api.js');
 var logoutAPI = require('./routes/logout_api.js');
-var basic = require('./functions/basic.js');
-var online = require('./functions/online.js');
-var authenticate = require('./functions/authenticate.js');
 
+var receivedLogger = function (module) {
+    var rL = require('./functions/basic.js').receivedLogger;
+    rL('app.js', module);
+};
+var successLogger = function (module, text) {
+    var sL = require('./functions/basic.js').successLogger;
+    return sL('app.js', module, text);
+};
+var errorLogger = function (module, text, err) {
+    var eL = require('./functions/basic.js').errorLogger;
+    return eL('app.js', module, text, err);
+};
 
-mongoose.connect(dbURL);
+mongoose.connect(databaseURL);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error: Problem while attempting to connect to database'));
 db.once('open', function () {
@@ -43,12 +48,15 @@ db.once('open', function () {
 });
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
-app.set('view engine', 'ejs');
+
+app.use("/bower_components", express.static(path.join(__dirname, '/bower_components')));
+app.use("/public", express.static(path.join(__dirname, '/public')));
+app.use("/views", express.static(path.join(__dirname, '/views')));
+app.use("/error", express.static(path.join(__dirname, '/public/error')));
+
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use("/public", express.static(path.join(__dirname, '/public')));
-app.use("/bower_components", express.static(path.join(__dirname, '/bower_components')));
 app.use(cookieParser());
 app.use(session({
     key: 'hstatickey',
@@ -62,78 +70,65 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //configure passport
-require('./passport/passport.js')(passport, OpenIDStrategy, LocalStrategy);
+require('./passport/passport.js')(passport, LocalStrategy);
 
-//insert any new client into a unique room = to his socketID
 io.on('connection', function (socket) {
     socket.on('joinRoom', function (data) {
         var room = data.room;
-
-        function success() {
-            //emit event to continue execution on client
-            socket.emit('joined');
-        }
-
         socket.join(room);
-        var user = {
-            socketId: [socket.id],
-            customUsername: data.customUsername
-        };
-        online.addUser(room, user, success);
+        socket.emit('joined');
     });
-
-    socket.on('disconnect', function () {
-        online.removeUser(socket.id);
-    });
-
 });
 
-
-app.post('/harvardId/login', passport.authenticate('openid'));
-app.post('/loginNew',
-    passport.authenticate('local', {
-        successRedirect: '/login1.html',
-        failureRedirect: '/loginNew.html'
-    }));
-app.get('/harvardId',
-    passport.authenticate('openid', {
-        successRedirect: '/login1.html',
-        failureRedirect: '/login.html'
-    }));
-
-
-app.get('/', routes.loginHtml);
-app.get('/login.html', routes.loginHtml);
-app.get('/loginNew.html', routes.loginNewHtml);
-app.get('/login1.html', authenticate.ensureAuthenticated, routes.login_1_Html);
-app.get('/chat.html', authenticate.ensureAuthenticated, routes.chatHtml);
-app.post('/studentLogin', routes.studentLogin);
+//app.post('/contactUs', basicAPI.contactUs);
 app.get('/socket.io/socket.io.js', function (req, res) {
     res.sendfile("socket.io/socket.io.js");
 });
-app.get('/error500.html', function (req, res) {
-    res.sendfile("public/error/error500.html");
+
+//getting files
+app.get('/', routes.index_Html);
+app.get('/index.html', routes.index_Html);
+app.get('/clientHome.html', middleware.ensureAuthenticatedAngular, middleware.addUserData, routes.clientHome_Html);
+
+//login api
+app.post('/createAccount', loginAPI.createAccount);
+app.post('/localUserLogin', loginAPI.localUserLogin);
+app.get('/api/getUserData', loginAPI.getUserData);
+
+//logout api
+app.post('/api/logoutClient', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutClient);
+app.get('/api/getMyRoom', middleware.ensureAuthenticatedAngular, basicAPI.getSocketRoom);
+app.post('/api/startUp', middleware.ensureAuthenticatedAngular, basicAPI.startUp);
+app.post('/api/reconnect', middleware.ensureAuthenticatedAngular, basicAPI.reconnect);
+
+app.post('/api/getQuestions', middleware.ensureAuthenticatedAngular, questionAPI.getQuestions);
+app.post('/api/retrieveQuestion', middleware.ensureAuthenticatedAngular, questionAPI.retrieveQuestion);
+app.post('/api/newQuestion', middleware.ensureAuthenticatedAngular, questionAPI.newQuestion);
+app.post('/api/updateQuestion', middleware.ensureAuthenticatedAngular, questionAPI.updateQuestion);
+app.post('/api/upvote', middleware.ensureAuthenticatedAngular, questionAPI.upvote);
+
+app.post('/api/getComments', middleware.ensureAuthenticatedAngular, commentAPI.getComments);
+app.post('/api/newComment', middleware.ensureAuthenticatedAngular, commentAPI.newComment);
+app.post('/api/updateComment', middleware.ensureAuthenticatedAngular, commentAPI.updateComment);
+app.post('/api/promote', middleware.ensureAuthenticatedAngular, commentAPI.promote);
+
+//logout api
+app.post('/api/logoutClient', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutClient);
+
+//error handlers
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
-app.post('/sendEmail', basicAPI.sendEmail);
-app.get('/api/getMyRoom', authenticate.ensureAuthenticated, basicAPI.getSocketRoom);
-app.post('/api/startUp', authenticate.ensureAuthenticated, basicAPI.startUp);
-app.post('/api/reconnect', authenticate.ensureAuthenticated, basicAPI.reconnect);
-
-app.post('/api/getQuestions', authenticate.ensureAuthenticated, questionAPI.getQuestions);
-app.post('/api/retrieveQuestion', authenticate.ensureAuthenticated, questionAPI.retrieveQuestion);
-app.post('/api/newQuestion', authenticate.ensureAuthenticated, questionAPI.newQuestion);
-app.post('/api/updateQuestion', authenticate.ensureAuthenticated, questionAPI.updateQuestion);
-app.post('/api/upvote', authenticate.ensureAuthenticated, questionAPI.upvote);
-
-app.post('/api/getComments', authenticate.ensureAuthenticated, commentAPI.getComments);
-app.post('/api/newComment', authenticate.ensureAuthenticated, commentAPI.newComment);
-app.post('/api/updateComment', authenticate.ensureAuthenticated, commentAPI.updateComment);
-app.post('/api/promote', authenticate.ensureAuthenticated, commentAPI.promote);
-
-app.post('/api/logoutHarvardLogin', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardLogin);
-app.post('/api/logoutCustomChat', authenticate.ensureAuthenticated, logoutAPI.logoutCustomChat);
-app.post('/api/logoutHarvardChat', authenticate.ensureAuthenticated, logoutAPI.logoutHarvardChat);
+// error handlers
+app.use(function (err, req, res, next) {
+    consoleLogger(errorLogger('404 Handler', 'New 404 DEVELOPMENT error'));
+    res.status(err.status);
+    res.sendFile(path.join(__dirname, './public/error/', '404.html'));
+});
 
 server.listen(port, function () {
     consoleLogger("Server listening at port " + port);

@@ -1,10 +1,7 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var Comment = require("../database/comments/comment_model.js");
-var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
+var User = require("../database/users/user_model.js");
 
 module.exports = {
 
@@ -24,15 +21,15 @@ module.exports = {
     },
 
 
-    makeNewComment: function (commentObject, commentIndex, theHarvardUser, success) {
+    makeNewComment: function (commentObject, commentIndex, theUser, success) {
         var comment = new Comment({
             uniqueId: "q" + commentObject.questionIndex + "c" + commentIndex,
             questionIndex: commentObject.questionIndex,
             commentIndex: commentIndex,
-            senderName: theHarvardUser.customUsername,
-            senderDisplayName: theHarvardUser.displayName,
-            senderEmail: theHarvardUser.email,
-            senderCuid: theHarvardUser.uniqueCuid,
+            senderName: theUser.customUsername,
+            senderDisplayName: theUser.displayName,
+            senderEmail: theUser.email,
+            senderCuid: theUser.uniqueCuid,
             comment: commentObject.comment,
             shortComment: commentObject.shortComment,
             promotes: 0
@@ -83,7 +80,7 @@ module.exports = {
 
 
     pushCommentToCommenter: function (openId, commentObject, error_neg_1, error_0, success) {
-        HarvardUser.update({id: openId}, {
+        User.update({id: openId}, {
             $addToSet: {postedCommentUniqueIds: commentObject[0].uniqueId}
         }, function (err) {
             if (err) {
@@ -97,7 +94,7 @@ module.exports = {
 
 
     pushPromoteToUser: function (openId, questionIndex, uniqueId, error_neg_1, error_0, success) {
-        HarvardUser.update({id: openId}, {
+        User.update({id: openId}, {
                 $addToSet: {promotedCommentsUniqueIds: uniqueId}
             }, function (err) {
                 if (err) {
@@ -111,7 +108,7 @@ module.exports = {
 
 
     pullPromoteFromUser: function (openId, questionIndex, uniqueId, error_neg_1, error_0, success) {
-        HarvardUser.update({id: openId}, {
+        User.update({id: openId}, {
                 $pull: {promotedCommentsUniqueIds: uniqueId}
             }, function (err) {
                 if (err) {

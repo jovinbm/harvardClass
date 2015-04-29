@@ -1,101 +1,33 @@
-/**
- * Created by jovinbm on 12/25/14.
- */
+var path = require('path');
 var basic = require('../functions/basic.js');
-var userDB = require('../db/user_db.js');
+var consoleLogger = require('../functions/basic.js').consoleLogger;
+
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('router', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('router', module, text);
+};
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('router', module, text, err);
+};
 
 module.exports = {
-    loginHtml: function (req, res) {
-        if (req.user) {
-            res.redirect("login1.html");
-        } else {
-            res.render('login');
-        }
+    index_Html: function (req, res) {
+        var module = 'index_Html';
+        receivedLogger(module);
+
+        res.render('index/index.ejs');
     },
 
-    loginNewHtml: function (req, res) {
-        if (req.user) {
-            res.redirect("login1.html");
-        } else {
-            res.render('loginNew');
-        }
-    },
+    clientHome_Html: function (req, res) {
+        var module = 'clientHome_Html';
+        receivedLogger(module);
 
-
-    login_1_Html: function (req, res) {
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.loog_1_Html: getting customLoggedInStatus: " + err);
-                res.redirect("login.html");
-            }
-        }
-
-        function success(theHarvardUser) {
-            //if logged in in both harvard and custom login take them to chat directly
-            if (req.user && theHarvardUser.customLoggedInStatus == 1) {
-                res.redirect('chat.html');
-            }
-            else if (req.user) {
-                res.render('login1', {displayName: 'Hello, ' + theHarvardUser.displayName});
-            } else {
-                res.redirect("login.html");
-            }
-        }
-
-        userDB.findHarvardUser(req.user.id, error, error, success);
-    },
-
-
-    studentLogin: function (req, res) {
-        //if user got here without doing a harvard login, redirect them back to harvard login
-        if (!req.user) {
-            res.redirect("login.html");
-        }
-
-        //get the customLoggedInStatus
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.login_1_Html: " + err);
-                res.redirect("login.html");
-            }
-        }
-
-        function success(theHarvardUser) {
-            function successUpdate() {
-                res.redirect("chat.html");
-            }
-
-            //if logged in in both harvard and custom login take them to chat directly
-            if (req.user && theHarvardUser.customLoggedInStatus == 1) {
-                res.redirect('chat.html');
-            } else {
-                userDB.updateCuCls(req.user.id, req.body.customUsername, 1, error, error, successUpdate)
-            }
-        }
-
-        userDB.findHarvardUser(req.user.id, error, error, success);
-    },
-
-
-    chatHtml: function (req, res) {
-        //get the customUsername
-        function error(status, err) {
-            if (status == -1 || status == 0) {
-                basic.consoleLogger("ERROR: exports.chatHtml: " + err);
-                res.redirect("login.html");
-            }
-        }
-
-        function success(theHarvardUser) {
-            if (req.user && theHarvardUser.customLoggedInStatus == 1) {
-                res.render('chat');
-            } else if (req.user) {
-                res.redirect("login1.html");
-            } else {
-                res.redirect("login.html");
-            }
-        }
-
-        userDB.findHarvardUser(req.user.id, error, error, success);
+        res.render('client/clientHome.ejs');
     }
 };

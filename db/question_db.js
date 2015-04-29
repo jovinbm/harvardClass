@@ -1,24 +1,21 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var cuid = require('cuid');
 var Question = require("../database/questions/question_model.js");
-var HarvardUser = require("../database/harvardUsers/harvard_user_model.js");
+var User = require("../database/users/user_model.js");;
 
 
 module.exports = {
 
 
-    makeNewQuestion: function (questionObject, questionIndex, theHarvardUser, success) {
+    makeNewQuestion: function (questionObject, questionIndex, theUser, success) {
         var question = new Question({
             uniqueId: cuid(),
             questionIndex: questionIndex,
-            senderName: theHarvardUser.customUsername,
-            senderDisplayName: theHarvardUser.displayName,
-            senderEmail: theHarvardUser.email,
-            senderCuid: theHarvardUser.uniqueCuid,
+            senderName: theUser.customUsername,
+            senderDisplayName: theUser.displayName,
+            senderEmail: theUser.email,
+            senderCuid: theUser.uniqueCuid,
             heading: questionObject.heading,
             question: questionObject.question,
             shortQuestion: questionObject.shortQuestion,
@@ -27,7 +24,7 @@ module.exports = {
         success(question);
     },
 
-    makeQuestionUpdate: function (questionObject, theHarvardUser, success) {
+    makeQuestionUpdate: function (questionObject, theUser, success) {
         var question = {
             "heading": questionObject.heading,
             "question": questionObject.question,
@@ -72,7 +69,7 @@ module.exports = {
 
 
     pushQuestionToAsker: function (openId, index, error_neg_1, error_0, success) {
-        HarvardUser.update({id: openId}, {
+        User.update({id: openId}, {
             $addToSet: {askedQuestionsIndexes: index}
         }, function (err) {
             if (err) {
@@ -205,7 +202,7 @@ module.exports = {
 
 
     pushUpvoteToUpvoter: function (openId, upvotedIndex, error_neg_1, error_0, success) {
-        HarvardUser.update({id: openId}, {
+        User.update({id: openId}, {
                 $addToSet: {votedQuestionIndexes: upvotedIndex}
             }, function (err) {
                 if (err) {
@@ -219,7 +216,7 @@ module.exports = {
 
 
     pullUpvoteFromUpvoter: function (openId, upvotedIndex, error_neg_1, error_0, success) {
-        HarvardUser.update({id: openId}, {
+        User.update({id: openId}, {
                 $pull: {votedQuestionIndexes: upvotedIndex}
             }, function (err) {
                 if (err) {

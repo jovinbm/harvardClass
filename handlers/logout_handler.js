@@ -1,46 +1,34 @@
-/**
- * Created by jovinbm on 1/18/15.
- */
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
-var online = require('../functions/online.js');
+
+var receivedLogger = function (module) {
+    var rL = require('../functions/basic.js').receivedLogger;
+    rL('logout_handler', module);
+};
+
+var successLogger = function (module, text) {
+    var sL = require('../functions/basic.js').successLogger;
+    return sL('logout_handler', module, text);
+};
+
+var errorLogger = function (module, text, err) {
+    var eL = require('../functions/basic.js').errorLogger;
+    return eL('logout_handler', module, text, err);
+};
 
 module.exports = {
 
+    logoutClient: function (req, res) {
+        var module = 'logoutClient';
+        receivedLogger(module);
 
-    logoutHarvardLogin: function (req, res) {
-        consoleLogger('LOGOUT HARVARD LOGIN event handler called');
-        //delete the harvard cs50 ID session
         req.logout();
-        //send a success so that the user will be logged out and redirected
-        res.status(200).send({msg: 'LogoutHarvardLogin success'});
-        consoleLogger('logoutHarvardLogin: Success');
-    },
-
-
-    logoutCustomChat: function (req, res, theHarvardUser) {
-        consoleLogger('LOGOUT CUSTOM CHAT event handler called');
-
-        function success() {
-            res.status(200).send({msg: 'LogoutCustomChat success'});
-            consoleLogger('logoutCustomChat: Success');
-        }
-
-        online.removeUser(null, theHarvardUser.socketRoom, success)
-    },
-
-
-    logoutHarvardChat: function (req, res, theHarvardUser) {
-        consoleLogger('LOGOUT HARVARD CHAT event handler called');
-
-        function success() {
-            req.logout();
-            res.status(200).send({msg: 'LogoutCustomChat success'});
-            consoleLogger('logoutCustomChat: Success');
-        }
-
-        online.removeUser(null, theHarvardUser.socketRoom, success);
+        consoleLogger(successLogger(module));
+        res.status(200).send({
+            code: 200,
+            notify: false,
+            redirect: true,
+            redirectPage: "/index.html"
+        });
     }
-
-
 };

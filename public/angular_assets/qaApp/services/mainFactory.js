@@ -1,6 +1,3 @@
-/**
- * Created by jovinbm on 1/24/15.
- */
 angular.module('qaApp')
     .factory('mainService', ['$window', '$rootScope', 'socket', 'socketService', 'globals', 'detailStorage', 'questionService',
         function ($window, $rootScope, socket, socketService, globals, detailStorage, questionService) {
