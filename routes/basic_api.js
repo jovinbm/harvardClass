@@ -1,10 +1,4 @@
 var email = require("emailjs");
-var mailServer = email.server.connect({
-    user: "jovinbeda@gmail.com",
-    password: "uxccpufouacqxrzm",
-    host: "smtp.gmail.com",
-    ssl: true
-});
 var basic = require('../functions/basic.js');
 var basic_handlers = require('../handlers/basic_handlers.js');
 var userDB = require('../db/user_db.js');

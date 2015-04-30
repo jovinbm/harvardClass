@@ -22,8 +22,7 @@ var consoleLogger = require('./functions/basic.js').consoleLogger;
 var middleware = require('./functions/middleware.js');
 var routes = require('./routes/router.js');
 var basicAPI = require('./routes/basic_api.js');
-var questionAPI = require('./routes/question_api.js');
-var commentAPI = require('./routes/comment_api.js');
+var postAPI = require('./routes/post_api.js');
 var loginAPI = require('./routes/login_api.js');
 var logoutAPI = require('./routes/logout_api.js');
 
@@ -88,7 +87,7 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 //getting files
 app.get('/', routes.index_Html);
 app.get('/index.html', routes.index_Html);
-app.get('/clientHome.html', middleware.ensureAuthenticatedAngular, middleware.addUserData, routes.clientHome_Html);
+app.get('/adminHome.html', middleware.ensureAuthenticatedAngular, middleware.addUserData, routes.adminHome_Html);
 
 //login api
 app.post('/createAccount', loginAPI.createAccount);
@@ -101,16 +100,11 @@ app.get('/api/getMyRoom', middleware.ensureAuthenticatedAngular, basicAPI.getSoc
 app.post('/api/startUp', middleware.ensureAuthenticatedAngular, basicAPI.startUp);
 app.post('/api/reconnect', middleware.ensureAuthenticatedAngular, basicAPI.reconnect);
 
-app.post('/api/getQuestions', middleware.ensureAuthenticatedAngular, questionAPI.getQuestions);
-app.post('/api/retrieveQuestion', middleware.ensureAuthenticatedAngular, questionAPI.retrieveQuestion);
-app.post('/api/newQuestion', middleware.ensureAuthenticatedAngular, questionAPI.newQuestion);
-app.post('/api/updateQuestion', middleware.ensureAuthenticatedAngular, questionAPI.updateQuestion);
-app.post('/api/upvote', middleware.ensureAuthenticatedAngular, questionAPI.upvote);
-
-app.post('/api/getComments', middleware.ensureAuthenticatedAngular, commentAPI.getComments);
-app.post('/api/newComment', middleware.ensureAuthenticatedAngular, commentAPI.newComment);
-app.post('/api/updateComment', middleware.ensureAuthenticatedAngular, commentAPI.updateComment);
-app.post('/api/promote', middleware.ensureAuthenticatedAngular, commentAPI.promote);
+app.post('/api/getQuestions', middleware.ensureAuthenticatedAngular, postAPI.getQuestions);
+app.post('/api/retrieveQuestion', middleware.ensureAuthenticatedAngular, postAPI.retrieveQuestion);
+app.post('/api/newQuestion', middleware.ensureAuthenticatedAngular, postAPI.newQuestion);
+app.post('/api/updateQuestion', middleware.ensureAuthenticatedAngular, postAPI.updateQuestion);
+app.post('/api/upvote', middleware.ensureAuthenticatedAngular, postAPI.upvote);
 
 //logout api
 app.post('/api/logoutClient', middleware.ensureAuthenticatedAngular, middleware.addUserData, logoutAPI.logoutClient);

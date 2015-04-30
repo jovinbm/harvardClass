@@ -1,4 +1,4 @@
-angular.module('clientHomeApp')
+angular.module('adminHomeApp')
     .factory('mainService', ['$log', '$window', '$rootScope', 'socket', 'socketService', 'globals',
         function ($log, $window, $rootScope, socket, socketService, globals) {
 

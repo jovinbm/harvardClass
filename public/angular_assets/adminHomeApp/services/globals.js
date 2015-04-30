@@ -1,4 +1,4 @@
-angular.module('clientHomeApp')
+angular.module('adminHomeApp')
 
     .factory('globals', ['$window', '$rootScope', 'socketService',
         function ($window, $rootScope, socketService) {

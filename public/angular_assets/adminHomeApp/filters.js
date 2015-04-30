@@ -1,4 +1,4 @@
-angular.module('clientHomeApp')
+angular.module('adminHomeApp')
     .filter("timeago", function () {
         //time: the time
         //local: compared to what time? default: now

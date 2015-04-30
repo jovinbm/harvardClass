@@ -1,7 +1,7 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');
-var questionDB = require('../db/question_db.js');
+var postDB = require('../db/post_db.js');
 
 module.exports = {
 
@@ -29,13 +29,13 @@ module.exports = {
                         }
 
                         savedQuestion = question;
-                        questionDB.pushQuestionToAsker(req.user.id, thisQuestionIndex, error, error, done);
+                        postDB.pushQuestionToAsker(req.user.id, thisQuestionIndex, error, error, done);
                     }
 
-                    questionDB.saveNewQuestion(question, error, error, saved);
+                    postDB.saveNewQuestion(question, error, error, saved);
                 }
 
-                questionDB.makeNewQuestion(theQuestion, index, theUser, made);
+                postDB.makeNewQuestion(theQuestion, index, theUser, made);
             }
 
             function error(status, err) {
@@ -53,7 +53,7 @@ module.exports = {
                 save(thisQuestionIndex);
             }
 
-            questionDB.getCount(error, error, success);
+            postDB.getCount(error, error, success);
 
         } else {
             //the question does not pass the checks
@@ -88,13 +88,13 @@ module.exports = {
                         consoleLogger('updateQuestion: Success');
                     }
 
-                    questionDB.getOneQuestion(thisQuestionIndex, error, error, done);
+                    postDB.getOneQuestion(thisQuestionIndex, error, error, done);
                 }
 
-                questionDB.updateQuestion(question, thisQuestionIndex, error, error, updated);
+                postDB.updateQuestion(question, thisQuestionIndex, error, error, updated);
             }
 
-            questionDB.makeQuestionUpdate(theQuestion, theUser, made);
+            postDB.makeQuestionUpdate(theQuestion, theUser, made);
 
         } else {
             //the question does not pass the checks
@@ -163,10 +163,10 @@ module.exports = {
                     consoleLogger('upvote: Success');
                 }
 
-                questionDB.findTopVotedQuestions(-1, 10, error, error, found);
+                postDB.findTopVotedQuestions(-1, 10, error, error, found);
             }
 
-            questionDB.changeQuestionVotes(upvotedIndex, inc, error, error, done);
+            postDB.changeQuestionVotes(upvotedIndex, inc, error, error, done);
         }
 
         function repetitionResponse() {
@@ -177,10 +177,10 @@ module.exports = {
         if (errorCounter == 0) {
             switch (inc) {
                 case 1:
-                    questionDB.pushUpvoteToUpvoter(req.user.id, upvotedIndex, error, error, success);
+                    postDB.pushUpvoteToUpvoter(req.user.id, upvotedIndex, error, error, success);
                     break;
                 case -1:
-                    questionDB.pullUpvoteFromUpvoter(req.user.id, upvotedIndex, error, error, success);
+                    postDB.pullUpvoteFromUpvoter(req.user.id, upvotedIndex, error, error, success);
                     break;
             }
         }
@@ -215,7 +215,7 @@ module.exports = {
             consoleLogger("getQuestions: Success")
         }
 
-        questionDB.getQuestions(-1, page, limit, error, error, success)
+        postDB.getQuestions(-1, page, limit, error, error, success)
     },
 
 
@@ -246,7 +246,7 @@ module.exports = {
             res.status(200).send(temp);
         }
 
-        questionDB.getOneQuestion(questionIndex, error, error, success)
+        postDB.getOneQuestion(questionIndex, error, error, success)
     }
 
 

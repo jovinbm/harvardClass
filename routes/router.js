@@ -24,10 +24,10 @@ module.exports = {
         res.render('index/index.ejs');
     },
 
-    clientHome_Html: function (req, res) {
-        var module = 'clientHome_Html';
+    adminHome_Html: function (req, res) {
+        var module = 'adminHome_Html';
         receivedLogger(module);
 
-        res.render('client/clientHome.ejs');
+        res.render('admin/adminHome.ejs');
     }
 };

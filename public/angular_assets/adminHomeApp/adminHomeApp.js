@@ -1,4 +1,4 @@
-angular.module('clientHomeApp', [
+angular.module('adminHomeApp', [
     'ui.bootstrap',
     'angular-loading-bar',
     'angulartics',

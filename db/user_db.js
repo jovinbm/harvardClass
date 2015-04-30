@@ -2,6 +2,7 @@ var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var User = require("../database/users/user_model.js");
 var bcrypt = require('bcrypt');
+
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;
     rL('user_db.js', module);

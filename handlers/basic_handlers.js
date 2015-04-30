@@ -1,8 +1,7 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var ioJs = require('../functions/io.js');
-var online = require('../functions/online.js');
-var questionDB = require('../db/question_db.js');
+var postDB = require('../db/post_db.js');
 
 module.exports = {
 
@@ -10,7 +9,6 @@ module.exports = {
         consoleLogger('startUp: STARTUP handler called');
         var limit = 10;
         var page = 1;
-        ioJs.emitToAll("usersOnline", online.getUsersOnline());
 
         var temp = {};
         temp['upvotedIndexes'] = theUser.votedQuestionIndexes;
@@ -42,7 +40,7 @@ module.exports = {
         }
 
         function getTop() {
-            questionDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
+            postDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
         }
 
         function success(questionsArray, questionCount) {
@@ -54,7 +52,7 @@ module.exports = {
             getTop();
         }
 
-        questionDB.getQuestions(-1, page, limit, getQuestionsErr, getQuestionsErr, success)
+        postDB.getQuestions(-1, page, limit, getQuestionsErr, getQuestionsErr, success)
     },
 
 
@@ -93,7 +91,7 @@ module.exports = {
         }
 
         function getTop() {
-            questionDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
+            postDB.findTopVotedQuestions(-1, 10, getTopErr, getTopErr, done);
         }
 
         function success(questionsArray, questionCount) {
@@ -105,7 +103,7 @@ module.exports = {
             getTop();
         }
 
-        questionDB.getQuestions(-1, page, limit, getQuestionsErr, getQuestionsErr, success)
+        postDB.getQuestions(-1, page, limit, getQuestionsErr, getQuestionsErr, success)
     }
 
 

@@ -1,4 +1,4 @@
-angular.module('clientHomeApp')
+angular.module('adminHomeApp')
 
     .factory('socket', ['$log', '$location', '$rootScope',
         function ($log, $location, $rootScope) {

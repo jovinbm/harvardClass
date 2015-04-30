@@ -32,6 +32,7 @@ module.exports = {
 
         //check if the user with the uniqueCuid in the request exists
         if (req.isAuthenticated()) {
+            consoleLogger("HERE");
             userDB.findUserWithUniqueCuid(req.user.uniqueCuid, serverError, serverError, success);
         } else {
             thisIsANewUser = true;
@@ -139,7 +140,13 @@ module.exports = {
 
         var invitationCode = req.body.invitationCode;
 
-        if (invitationCode == 'kenyamath') {
+        if (invitationCode == 'kenyamath' || invitationCode == 'kenyaadmin') {
+
+            var isAdmin = 'no';
+
+            if (invitationCode == 'kenyadmin') {
+                isAdmin = 'yes';
+            }
 
             var email = req.body.email;
             var firstName = req.body.firstName;
@@ -214,7 +221,8 @@ module.exports = {
                                 username: username,
                                 password: hashedPassword,
                                 uniqueCuid: uniqueCuid,
-                                isRegistered: "yes"
+                                isRegistered: "yes",
+                                isAdmin: isAdmin
                             });
 
                             //log this user into session

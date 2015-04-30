@@ -99,11 +99,9 @@ div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
 }
 
 .navbar-default {
-    background-color: #222;
-}
-
-.navbar-default {
-    background-color: #222;
+    /*background-color: #222;*/
+    background-color: rgb(55, 73, 84);
+    /*background-color: rgb(154, 165, 176);*/
 }
 
 .navbar-default .navbar-brand {

@@ -2,13 +2,11 @@ module.exports = {
 
     // this function just prints on the console
     consoleLogger: function (data) {
-        //uncomment if no debugging needed
-        //console.log(data);
+        console.log(data);
     },
 
     receivedLogger: function (filename, module) {
-        //uncomment if no debugging needed
-        //console.log(filename + ": " + module + " RECEIVED");
+        console.log(filename + ": " + module + " RECEIVED");
     },
 
     successLogger: function (filename, module, text) {

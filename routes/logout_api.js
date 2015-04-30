@@ -1,6 +1,6 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
-var logout_handler = require('../handlers/logout_handler.js');
+var logout_handler = require('../handlers/logout_handlers.js');
 
 var receivedLogger = function (module) {
     var rL = require('../functions/basic.js').receivedLogger;

@@ -1,15 +1,14 @@
 var basic = require('../functions/basic.js');
 var consoleLogger = require('../functions/basic.js').consoleLogger;
 var cuid = require('cuid');
-var Question = require("../database/questions/question_model.js");
-var User = require("../database/users/user_model.js");;
+var Post = require("../database/posts/post_schema.js");
+var User = require("../database/users/user_model.js");
 
 
 module.exports = {
 
-
     makeNewQuestion: function (questionObject, questionIndex, theUser, success) {
-        var question = new Question({
+        var question = new Post({
             uniqueId: cuid(),
             questionIndex: questionIndex,
             senderName: theUser.customUsername,
@@ -50,7 +49,7 @@ module.exports = {
 
 
     updateQuestion: function (questionObject, questionIndex, error_neg_1, error_0, success) {
-        Question.update({questionIndex: questionIndex},
+        Post.update({questionIndex: questionIndex},
             {
                 $set: {
                     question: questionObject["question"],
@@ -84,7 +83,7 @@ module.exports = {
 
     getCount: function (error_neg_1, error_0, success) {
         var questionCount;
-        Question.count({}, function (err, count) {
+        Post.count({}, function (err, count) {
             if (err) {
                 error_neg_1(-1, err);
             } else if (count == null || count == undefined) {
@@ -100,7 +99,7 @@ module.exports = {
 
     getQuestions: function (sort, page, limit, error_neg_1, error_0, success) {
         var errors = 0;
-        Question.find()
+        Post.find()
             .sort({questionIndex: sort})
             .skip((page - 1) * 10)
             .limit(limit)
@@ -113,7 +112,7 @@ module.exports = {
                 }
                 if (errors == 0) {
                     var questionCount = 0;
-                    Question.count({}, function (err, count) {
+                    Post.count({}, function (err, count) {
                         if (err) {
                             error_neg_1(-1, err);
                         } else if (count == null || count == undefined) {
@@ -170,7 +169,7 @@ module.exports = {
 
 
     getOneQuestion: function (questionIndex, error_neg_1, error_0, success) {
-        Question.find({questionIndex: questionIndex})
+        Post.find({questionIndex: questionIndex})
             .sort({questionIndex: -1})
             .limit(1)
             .exec(function (err, question) {
@@ -186,7 +185,7 @@ module.exports = {
 
 
     findTopVotedQuestions: function (sort, limit, error_neg_1, error_0, success) {
-        Question.find({votes: {$gt: 0}})
+        Post.find({votes: {$gt: 0}})
             .sort({votes: sort})
             .limit(limit)
             .exec(function (err, topVotedArray) {
@@ -230,7 +229,7 @@ module.exports = {
 
 
     changeQuestionVotes: function (upvotedIndex, inc, error_neg_1, error_0, success) {
-        Question.update({questionIndex: upvotedIndex}, {$inc: {votes: inc}}, function (err) {
+        Post.update({questionIndex: upvotedIndex}, {$inc: {votes: inc}}, function (err) {
             if (err) {
                 error_neg_1(-1, err);
             } else {
