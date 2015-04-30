@@ -27,6 +27,9 @@
     <!--toastr-->
     <link rel="stylesheet" href="/bower_components/toastr/toastr.min.css">
 
+    <!--textAgular-->
+    <link rel='stylesheet' href='/bower_components/textAngular/src/textAngular.css'>
+
 
     <!-- Custom Fonts -->
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
@@ -76,7 +79,7 @@
 
                 <li>
                     <a href="#"
-                       target="_self">Trending
+                       target="_self">HOT
                     </a>
                 </li>
 
@@ -107,7 +110,7 @@
 
             <a type="button"
                class="btn btn-primary btn-sm navbar-btn pull-right"
-               href="#"
+               href ng-click="showNewPost()"
                target="_self"
                role="button">
                 <i class="fa fa-pencil"></i> New Post
@@ -120,9 +123,66 @@
 
 <div>
 
-    <section id="postStream">
+    <section id="newPostSection" ng-show="newPost">
         <div class="container">
-            <div class="col-lg-8">
+            <div class="row">
+                <div id="newPost">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading"><i class="fa fa-leanpub"></i> NEW POST <span class="pull-right">{{currentTime}}</span>
+                        </div>
+
+                        <div class="panel-body">
+                            <ul class="list-unstyled animated fadeIn">
+                                <li class="list-unstyled clearfix">
+                                    <div class="card">
+
+                                        <div class="card-content">
+
+                                            <div class="padding-bottom-15">
+                                                <div class="input-group input-group-lg">
+                                                    <span class="input-group-addon" id="heading-addon">Heading</span>
+                                                    <input type="text" class="form-control" placeholder="Enter heading"
+                                                           aria-describedby="heading-addon">
+                                                </div>
+                                            </div>
+
+                                            <div text-angular ng-model="htmlVariable"></div>
+
+                                        </div>
+
+                                        <div class="card-action clearfix">
+
+                                            <div class="pull-right">
+                                                <a href="#"
+                                                   target="new_blank"
+                                                   class="btn btn-default btn-sm"
+                                                   href ng-click="hideNewPost()">Save
+                                                    Draft</a>
+                                                <a href="#"
+                                                   target="new_blank"
+                                                   class="btn btn-default btn-sm"
+                                                   href ng-click="hideNewPost()">Cancel</a>
+                                                <a href="#" target="new_blank" class="btn btn-default btn-sm">Save</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="col-lg-8" id="postStream">
 
                 <div class="panel panel-default">
 
@@ -479,6 +539,7 @@
         </div>
     </section>
 
+
     <section id="contact">
         <div class="container">
             <div class="row">
@@ -660,8 +721,9 @@
         src="/bower_components/ngFx/dist/ngFx.min.js"></script>
 
 <!--text angular-->
-<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
-<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+<script type="text/javascript" src='/bower_components/textAngular/dist/textAngular-rangy.min.js'></script>
+<script type="text/javascript" src='/bower_components/textAngular/dist/textAngular-sanitize.min.js'></script>
+<script type="text/javascript" src='/bower_components/textAngular/dist/textAngular.min.js'></script>
 
 
 <script type="text/javascript" src="/public/angular_assets/adminHomeApp/adminHomeApp.js"></script>

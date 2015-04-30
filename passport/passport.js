@@ -65,7 +65,7 @@ module.exports = function (passport, LocalStrategy) {
 
                         //means user does not exist(status here is 1, theUser is empty
                         consoleLogger(errorLogger(module, 'Failed! the account the user tried to sign in to was not found'));
-                        done('We could not find a registered user with the credentials you provided. Please check and try again', false, 'We could not find a registered user with the credentials you provided. Please check and try again');
+                        done('We could not find a registered user with the credentials you provided. Please check and try again or create a new account', false, 'We could not find a registered user with the credentials you provided. Please check and try again');
                     }
 
                 }

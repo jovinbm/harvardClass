@@ -141,6 +141,19 @@ angular.module('adminHomeApp')
 
             //***************end time functions***********************
 
+
+            //====================element controllers==========holding states for hidden and visible elements
+            //new post
+            $scope.newPost = false;
+            $scope.showNewPost = function () {
+                $scope.newPost = true;
+            };
+            $scope.hideNewPost = function () {
+                $scope.newPost = false;
+            };
+            //end of new post
+            //====================end of element controllers
+
             //initial requests
             socketService.getUserData()
                 .success(function (resp) {
@@ -164,143 +177,6 @@ angular.module('adminHomeApp')
                 console.log("JOIN SUCCESS");
             });
 
-            //===============the sliders
-
-            $scope.myPoints = 0;
-            $scope.checkInterval = 100;
-            $scope.level = 1;
-
-            function rgbToHex(r, g, b) {
-                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-            }
-
-            $scope.color_block = {
-                red: Math.floor(Math.random() * 255) + 1,
-                green: Math.floor(Math.random() * 255) + 1,
-                blue: Math.floor(Math.random() * 255) + 1
-            };
-
-            function prepareNewColorBlock() {
-                $scope.color_block.red = Math.floor(Math.random() * 255) + 1;
-                $scope.color_block.green = Math.floor(Math.random() * 255) + 1;
-                $scope.color_block.blue = Math.floor(Math.random() * 255) + 1;
-            }
-
-            $scope.checkMatch = function () {
-                var errors = 0;
-                if (($scope.color_block.red < $scope.colorpicker.red - $scope.checkInterval) || ($scope.color_block.red > $scope.colorpicker.red + $scope.checkInterval)) {
-                    errors++;
-                }
-
-                if (($scope.color_block.green < $scope.colorpicker.green - $scope.checkInterval) || ($scope.color_block.green > $scope.colorpicker.green + $scope.checkInterval)) {
-                    errors++;
-                }
-
-                if (($scope.color_block.blue < $scope.colorpicker.blue - $scope.checkInterval) || ($scope.color_block.blue > $scope.colorpicker.blue + $scope.checkInterval)) {
-                    errors++;
-                }
-
-                if (errors > 0) {
-                    $scope.showToast('warning', 'Hmm, not quite right, please try again');
-                } else {
-                    $scope.showToast('success', 'Nailed it!');
-                    $scope.myPoints++;
-
-                    if ($scope.myPoints >= 0 && $scope.myPoints <= 4) {
-                        if ($scope.checkInterval != 100) {
-                            $scope.checkInterval = 100;
-                        }
-                    }
-
-                    if ($scope.myPoints >= 5 && $scope.myPoints <= 9) {
-                        if ($scope.checkInterval != 50) {
-                            $scope.checkInterval = 50;
-                            $scope.level++;
-                        }
-                    }
-
-                    if ($scope.myPoints >= 10 && $scope.myPoints <= 14) {
-                        if ($scope.checkInterval != 25) {
-                            $scope.checkInterval = 25;
-                            $scope.level++;
-                        }
-                    }
-
-                    if ($scope.myPoints >= 15 && $scope.myPoints <= 19) {
-                        if ($scope.checkInterval != 10) {
-                            $scope.checkInterval = 10;
-                            $scope.level++;
-                        }
-                    }
-
-                    if ($scope.myPoints >= 20 && $scope.myPoints <= 24) {
-                        if ($scope.checkInterval != 5) {
-                            $scope.checkInterval = 5;
-                            $scope.level++;
-                        }
-                    }
-
-                    if ($scope.myPoints >= 25 && $scope.myPoints <= 29) {
-                        if ($scope.checkInterval != 2) {
-                            $scope.checkInterval = 2;
-                            $scope.level++;
-                        }
-                    }
-
-                    if ($scope.myPoints >= 30) {
-                        if ($scope.checkInterval != 0) {
-                            $scope.checkInterval = 0;
-                            $scope.level++;
-                        }
-                    }
-
-                    changeHexValue();
-                    prepareNewColorBlock()
-                }
-            };
-
-            function changeHexValue() {
-                $scope.colorpicker.hexValue = rgbToHex($scope.colorpicker.red, $scope.colorpicker.green, $scope.colorpicker.blue);
-            }
-
-            function refreshSwatch(ev, ui) {
-                var red = $scope.colorpicker.red,
-                    green = $scope.colorpicker.green,
-                    blue = $scope.colorpicker.blue;
-                changeHexValue();
-                colorpicker.refreshSwatch(red, green, blue);
-            }
-
-            // Slider options with event handlers
-            $scope.slider = {
-                'options': {
-                    start: function (event, ui) {
-                        $log.info('Event: Slider start - set with slider options', event);
-                    },
-                    stop: function (event, ui) {
-                        $log.info('Event: Slider stop - set with slider options', event);
-                    }
-                }
-            };
-
-            $scope.colorpicker = {
-                red: 255,
-                green: 140,
-                blue: 60,
-                hexValue: "",
-                options: {
-                    orientation: 'horizontal',
-                    min: 0,
-                    max: 255,
-                    range: 'min',
-                    change: refreshSwatch,
-                    slide: refreshSwatch
-                }
-            };
-
-            changeHexValue();
-
-            //end of sliders
 
             //===============logout functions===============
             $scope.logoutClient = function () {

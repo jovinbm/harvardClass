@@ -27,55 +27,36 @@ module.exports = {
         var module = 'getUserData';
         receivedLogger(module);
 
-        //this variable is used as reference for either deleting the session if the user is new
-        var thisIsANewUser = false;
-
         //check if the user with the uniqueCuid in the request exists
         if (req.isAuthenticated()) {
-            consoleLogger("HERE");
             userDB.findUserWithUniqueCuid(req.user.uniqueCuid, serverError, serverError, success);
         } else {
-            thisIsANewUser = true;
-            //create this user in
-            consoleLogger("=============NEW USER detected");
-            var theUser = {};
-            theUser.uniqueCuid = cuid();
-            var newUser = new User(theUser);
-            userDB.saveUser(newUser, serverError, serverError, success);
+            //means this is just a random unregistered visitor
+            consoleLogger(successLogger(module));
+            res.status(200).send({
+                userData: {}
+            });
         }
 
         function success(theSavedUser) {
-            if (thisIsANewUser) {
-                req.logIn(theSavedUser, function (err) {
-                    if (err) {
-                        consoleLogger(errorLogger(module, err, err));
-                        return res.status(500).send({
-                            code: 500,
-                            notify: true,
-                            type: 'error',
-                            msg: "A problem occurred while retrieving your personalized settings. Please reload this page"
-                        });
-                    } else {
-                        //remove private data
-                        theSavedUser.password = "";
-                        consoleLogger(successLogger(module));
-                        return res.status(200).send({
-                            userData: theSavedUser
-                        });
-                    }
-                });
-            } else {
-                loggedIn();
-            }
-
-            function loggedIn() {
-                //remove private data
-                theSavedUser.password = "";
-                consoleLogger(successLogger(module));
-                res.status(200).send({
-                    userData: theSavedUser
-                });
-            }
+            req.logIn(theSavedUser, function (err) {
+                if (err) {
+                    consoleLogger(errorLogger(module, err, err));
+                    return res.status(500).send({
+                        code: 500,
+                        notify: true,
+                        type: 'error',
+                        msg: "A problem occurred while retrieving your personalized settings. Please reload this page"
+                    });
+                } else {
+                    //remove private data
+                    theSavedUser.password = "";
+                    consoleLogger(successLogger(module));
+                    return res.status(200).send({
+                        userData: theSavedUser
+                    });
+                }
+            });
         }
 
         function serverError() {

@@ -87,7 +87,7 @@ app.get('/socket.io/socket.io.js', function (req, res) {
 //getting files
 app.get('/', routes.index_Html);
 app.get('/index.html', routes.index_Html);
-app.get('/adminHome.html', middleware.ensureAuthenticatedAngular, middleware.addUserData, routes.adminHome_Html);
+app.get('/adminHome.html', middleware.ensureAuthenticated, middleware.addUserData, routes.adminHome_Html);
 
 //login api
 app.post('/createAccount', loginAPI.createAccount);
