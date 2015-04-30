@@ -129,6 +129,18 @@ angular.module('adminHomeApp')
 
             //===============end of toastr show functions===============
 
+            //************time functions****************
+            $scope.currentTime = "";
+
+            //set current Date
+            $scope.currentTime = moment().format("ddd, MMM D, H:mm");
+            var updateCurrentTime = function () {
+                $scope.currentTime = moment().format("ddd, MMM D, H:mm");
+            };
+            $interval(updateCurrentTime, 20000, 0, true);
+
+            //***************end time functions***********************
+
             //initial requests
             socketService.getUserData()
                 .success(function (resp) {

@@ -7,7 +7,9 @@ angular.module('adminHomeApp', [
     'ui.router',
     'duScroll',
     'ngFx',
-    'ngAnimate'
+    'ngAnimate',
+    'textAngular',
+    'ngSanitize'
 ])
     .run(function ($templateCache, $http) {
         //views

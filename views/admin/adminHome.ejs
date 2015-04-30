@@ -19,7 +19,7 @@
 
     <!--loads font awesome-->
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+          href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 
     <!--angular loading bar css-->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.6.0/loading-bar.min.css"/>
@@ -37,6 +37,7 @@
 
     <!-- loads custom css file -->
     <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/cards.css">
     <link rel="stylesheet" href="/public/css/admin/admin_home.css">
 
     <title>Negus Math - College Level Advanced Mathematics for Kenya Students</title>
@@ -67,6 +68,24 @@
         <div class="collapse navbar-collapse navHeaderCollapse">
             <ul class="nav navbar-nav navbar-right ng-cloak">
 
+                <li>
+                    <a href="#"
+                       target="_self">Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#"
+                       target="_self">Trending
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#"
+                       target="_self">Users
+                    </a>
+                </li>
+
                 <li class="dropdown">
 
                     <a href="#"
@@ -85,23 +104,380 @@
                     </ul>
                 </li>
             </ul>
+
+            <a type="button"
+               class="btn btn-primary btn-sm navbar-btn pull-right"
+               href="#"
+               target="_self"
+               role="button">
+                <i class="fa fa-pencil"></i> New Post
+            </a>
+
         </div>
     </div>
 </nav>
 <!--end of nav-->
 
 <div>
-    <header id="top">
+
+    <section id="postStream">
         <div class="container">
-            <section id="theGame">r
-                <h2 class="section-heading">Are you a color guru?</h2>
+            <div class="col-lg-8">
 
-                <h3 class="section-subheading">Use the sliders to match the color in the right color block with the
-                    color in the left</h3>
-            </section>
+                <div class="panel panel-default">
+
+                    <div class="panel-heading"><i class="fa fa-leanpub"></i> LATEST POSTS <span class="pull-right">{{currentTime}}</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <ul class="list-unstyled animated fadeIn">
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+
+                                        <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
+
+                                        <h6 class="text-muted">
+                                            <small><a href="#" target="_self">Salash Tolan</a> on {{currentTime}}
+                                                <span class="pull-right"><a href="#" target="_self">37
+                                                        comments</a></span>
+                                            </small>
+                                        </h6>
+
+                                        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+                                            veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                                            ipsam
+                                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                                            consequuntur
+                                            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                                            quisquam
+                                            est,
+                                            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
+                                            non
+                                            numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+                                            quaerat
+                                            voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                                            corporis
+                                            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+                                            vel
+                                            eum
+                                            iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+                                            consequatur,
+                                            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+
+                                    </div>
+
+                                    <div class="card-action clearfix">
+
+                                        <div class="pull-right">
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Pin</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Edit</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Delete</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+
+                                        <h4>Relativistic dynamics - Solution to Sample Question </h4>
+
+                                        <h6 class="text-muted">
+                                            <small><a href="#" target="_self">Salash Tolan</a> on {{currentTime}}
+                                                <span class="pull-right"><a href="#" target="_self">37
+                                                        comments</a></span>
+                                            </small>
+                                        </h6>
+
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe class="embed-responsive-item"
+                                                    src="https://www.youtube.com/embed/adKP2CzKaFM" frameborder="0"
+                                                    allowfullscreen></iframe>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="card-action clearfix">
+
+                                        <div class="pull-right">
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Pin</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Edit</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Delete</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+
+                                        <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
+
+                                        <h6 class="text-muted">
+                                            <small><a href="#" target="_self">Salash Tolan</a> on {{currentTime}}
+                                                <span class="pull-right"><a href="#" target="_self">37
+                                                        comments</a></span>
+                                            </small>
+                                        </h6>
+
+                                        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+                                            veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                                            ipsam
+                                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                                            consequuntur
+                                            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                                            quisquam
+                                            est,
+                                            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
+                                            non
+                                            numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+                                            quaerat
+                                            voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                                            corporis
+                                            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+                                            vel
+                                            eum
+                                            iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+                                            consequatur,
+                                            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+
+                                    </div>
+
+                                    <div class="card-action clearfix">
+
+                                        <div class="pull-right">
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Pin</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Edit</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Delete</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+
+                                        <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
+
+                                        <h6 class="text-muted">
+                                            <small><a href="#" target="_self">Salash Tolan</a> on {{currentTime}}
+                                                <span class="pull-right"><a href="#" target="_self">37
+                                                        comments</a></span>
+                                            </small>
+                                        </h6>
+
+                                        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+                                            veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                                            ipsam
+                                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                                            consequuntur
+                                            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                                            quisquam
+                                            est,
+                                            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
+                                            non
+                                            numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+                                            quaerat
+                                            voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                                            corporis
+                                            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+                                            vel
+                                            eum
+                                            iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+                                            consequatur,
+                                            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+
+                                    </div>
+
+                                    <div class="card-action clearfix">
+
+                                        <div class="pull-right">
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Pin</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Edit</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Delete</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+
+                                        <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
+
+                                        <h6 class="text-muted">
+                                            <small><a href="#" target="_self">Salash Tolan</a> on {{currentTime}}
+                                                <span class="pull-right"><a href="#" target="_self">37
+                                                        comments</a></span>
+                                            </small>
+                                        </h6>
+
+                                        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+                                            veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                                            ipsam
+                                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                                            consequuntur
+                                            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                                            quisquam
+                                            est,
+                                            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
+                                            non
+                                            numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+                                            quaerat
+                                            voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                                            corporis
+                                            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+                                            vel
+                                            eum
+                                            iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+                                            consequatur,
+                                            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+
+                                    </div>
+
+                                    <div class="card-action clearfix">
+
+                                        <div class="pull-right">
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Pin</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Edit</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Delete</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+
+                                        <h4>The standard Lorem Ipsum passage, used since the 1500s</h4>
+
+                                        <h6 class="text-muted">
+                                            <small><a href="#" target="_self">Salash Tolan</a> on {{currentTime}}
+                                                <span class="pull-right"><a href="#" target="_self">37
+                                                        comments</a></span>
+                                            </small>
+                                        </h6>
+
+                                        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+                                            veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                                            ipsam
+                                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                                            consequuntur
+                                            magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                                            quisquam
+                                            est,
+                                            qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
+                                            non
+                                            numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+                                            quaerat
+                                            voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                                            corporis
+                                            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem
+                                            vel
+                                            eum
+                                            iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+                                            consequatur,
+                                            vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+
+
+                                    </div>
+
+                                    <div class="card-action clearfix">
+
+                                        <div class="pull-right">
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Pin</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Edit</a>
+                                            <a href="#" target="new_blank" class="btn btn-default btn-sm">Delete</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-4" id="sidebar">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading"><i class="fa fa-youtube-play"></i> THIS WEEKS VIDEO
+                    </div>
+
+                    <div class="panel-body">
+                        <ul class="list-unstyled animated fadeIn">
+                            <li class="list-unstyled clearfix">
+                                <div class="card">
+
+                                    <div class="card-content">
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe class="embed-responsive-item"
+                                                    src="https://www.youtube.com/embed/adKP2CzKaFM" frameborder="0"
+                                                    allowfullscreen></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4" id="sidebar">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading"><i class="fa fa-fire"></i> HOT THIS WEEK
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">
+                                Relativistic Dynamics - Solution to sample question <br>
+                                37 COMMENTS
+                            </a>
+                            <a href="#" class="list-group-item">The Standard Lorem Ipsum passage, used since 1500s<br>
+                                37 COMMENTS
+                            </a>
+                            <a href="#" class="list-group-item">Morbi leo risus <br>
+                                37 COMMENTS
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </header>
-
+    </section>
 
     <section id="contact">
         <div class="container">
@@ -282,6 +658,10 @@
         src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
 <script type="text/javascript"
         src="/bower_components/ngFx/dist/ngFx.min.js"></script>
+
+<!--text angular-->
+<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
 
 
 <script type="text/javascript" src="/public/angular_assets/adminHomeApp/adminHomeApp.js"></script>

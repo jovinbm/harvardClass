@@ -1,89 +1,14 @@
 body {
     padding-top: 60px;
-}
-
-.btn-create-account {
-    padding: 20px 40px;
-    border-radius: 3px;
-    text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-}
-
-header {
-    text-align: center;
-    color: #fff;
+    /*color: #fff;*/
     background-attachment: scroll;
-    background-image: url(/public/imgs/cover/white_thing_bridge.jpeg);
+    background-image: url(/public/imgs/cover/ocean.jpg);
     background-position: center center;
     background-repeat: none;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    height: 1500px;
-}
-
-header .intro-text {
-    padding-top: 100px;
-    padding-bottom: 50px;
-}
-
-header .intro-text .intro-lead-in {
-    margin-bottom: 25px;
-    font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 22px;
-    font-style: italic;
-    line-height: 22px;
-}
-
-header .intro-text .intro-heading {
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 50px;
-    font-weight: 700;
-    line-height: 50px;
-}
-
-header .local_login_heading {
-    margin-bottom: 10px;
-    margin-top: 10px;
-    text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 50px;
-}
-
-.local_login_div {
-    margin: 0 auto;
-}
-
-@media (min-width: 768px) {
-    header .intro-text {
-        padding-top: 350px;
-        padding-bottom: 350px;
-    }
-
-    header .intro-text .intro-lead-in {
-        margin-bottom: 25px;
-        font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 40px;
-        font-style: italic;
-        line-height: 40px;
-    }
-
-    header .intro-text .intro-heading {
-        margin-bottom: 50px;
-        text-transform: uppercase;
-        font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 75px;
-        font-weight: 700;
-        line-height: 75px;
-    }
 }
 
 .btn-xl {
@@ -114,8 +39,13 @@ header .local_login_heading {
     background-image: none;
 }
 
+.panel-heading {
+    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+}
+
 section {
-    padding: 80px 0;
+    padding: 40px 0;
 }
 
 section h2.section-heading {
@@ -143,7 +73,7 @@ section h3.section-subheading {
 
 @media (min-width: 768px) {
     section {
-        padding: 80px 0;
+        padding: 40px 0;
     }
 }
 
@@ -155,12 +85,6 @@ section h3.section-subheading {
 .service-heading {
     margin: 20px 0;
     text-transform: none;
-}
-
-section#login {
-    background-color: rgb(31, 168, 166);
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 section#contact {

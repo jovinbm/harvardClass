@@ -219,6 +219,7 @@ div.alert.alert-success, div.alert.alert-warning, div.alert.alert-info {
 footer {
     padding: 25px 0;
     text-align: center;
+    background: #fff;
 }
 
 footer span.copyright {
